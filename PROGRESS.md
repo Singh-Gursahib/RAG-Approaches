@@ -6,7 +6,7 @@
 
 ## Current Phase
 
-**Phase 9 — Full Experimental Sweep & Analysis** *(✅ complete; awaiting `Go Phase 10`)*
+**Phase 10 — Paper Draft & Reproducibility Package** *(✅ complete; project end-state)*
 
 > See [IMPLEMENTATION_PLAN.md §7](IMPLEMENTATION_PLAN.md) for the full 10-phase plan.
 
@@ -14,11 +14,14 @@
 
 ## Next Action
 
-Await user `Go Phase 10`. Phase 10 produces the first draft of the research paper (LaTeX + figures + reproducibility tarball script) drawing on:
-- `paper/tables/sweep_headline.csv` — multi-seed aggregate
-- `paper/figures/{pareto_cost_quality,forest_em,forest_f1,per_probe_em,win_loss}.pdf` — 5 paper-ready PDFs
-- `FINDINGS.md` — 5 numbered findings ready to lift into prose
-- `paper/outline.md` — section structure
+Project is feature-complete. Open questions for the user (optional follow-ups):
+- Run the 19 deferred long-context techniques on the same harness?
+- Probe the corpus-size regime where Full-Context starts losing to RAG?
+- Submit the paper somewhere?
+
+To rebuild the paper after editing: `make paper` (or `./paper/build.sh`).
+To rebuild figures + paper end-to-end: `make paper-regen` (or `./paper/build.sh --regen`).
+To rebuild the dashboard: `make ui`.
 
 **Phase 9 headline (sorted by F1, full 3-seed coverage)**:
 
@@ -67,7 +70,7 @@ Hallucination = 1.000 across all 7. Sanity = 1.000 except recursive_summary (0.2
 | 7 | Evaluation Hardening | ✅ Done |
 | 8 | Next.js Dashboard | ✅ Done |
 | 9 | Full Experimental Sweep & Analysis | ✅ Done |
-| 10 | Paper Draft & Repro Package | ⚪ Pending |
+| 10 | Paper Draft & Repro Package | ✅ Done |
 
 Legend: ✅ Done · 🟡 In Progress · 🟠 Blocked · ⚪ Pending · 🔴 Failed
 
@@ -88,6 +91,7 @@ Legend: ✅ Done · 🟡 In Progress · 🟠 Blocked · ⚪ Pending · 🔴 Fail
 
 > Append a one-line dated entry per work session. Most recent first.
 
+- **2026-05-12** — **Phase 10 complete.** Wrote 11-page LaTeX paper `paper/draft.tex` (author: Gursahib Singh, title: "When does retrieval stop helping?"). Generated 6 additional plain-English figures (`scripts/make_paper_figures_extra.py`): cost-quality quadrant with labeled regions, probe-type F1 heatmap, cost bar with EM/F1 annotations, seed-variance bar, honesty-vs-capability scatter, approach pipeline diagram. Wrote `paper/build.sh` and Makefile targets (`make paper`, `make paper-regen`) using `tectonic`. PDF compiles cleanly to **11 pages, 208KB**; author and title metadata embedded. All findings expressed in plain English with "In plain English" and "Key takeaway" callout boxes throughout for non-technical readers. Project is feature-complete.
 - **2026-05-12** — **Phase 9 recovery.** API key cap was lifted; sliding_window seeds 1–2 re-run cleanly (EM 0.706, 0.647; F1 0.881, 0.868). Full 21-run sweep now complete. Re-aggregated, re-built figures, re-generated dashboard. **Leaderboard reordered:** full_context now leads on F1 mean (0.881) over sliding_window (0.875 ± 0.025); sliding_window has 3× the seed variance of single-call approaches because of its 4-step state-carry pipeline. Cumulative spend: **$1.0875 / $5.00 (21.7%)**.
 - **2026-05-12** — **Phase 9 first attempt.** Multi-seed sweep at T=0.3: 21 attempted, 19 usable. 6 approaches × 3 seeds + sliding_window × 1 (seeds 1–2 hit Google's account-level monthly spending cap during the run and were archived to `archive/contaminated_runs/`). Built `scripts/sweep.py`, `scripts/aggregate_seeds.py`, `scripts/make_paper_figures.py`, enhanced `scripts/build_dashboard_data.py` to prefer sweep data. Generated 5 paper PDFs (`paper/figures/*.pdf`) and headline CSV (`paper/tables/sweep_headline.csv`). Dashboard rebuilt against sweep aggregates; all 13 routes pass production build. **Key finding:** at T=0.3 with short factoid answers, seed variance is near-zero (EM std ≤ 0.017 for all approaches, F1 std ≤ 0.012). Multi-seed sweeps mostly *validate* determinism for this regime rather than add power. Cumulative spend: **$0.8929 / $5.00 (17.9%)**.
 - **2026-05-12** — **Phase 8 complete.** Built Next.js 14 dashboard at `frontend/web/` (Apple-clean light theme, generous whitespace, Fraunces display + Manrope body + JetBrains Mono numerals). 4 pages: Overview (hero + leaderboard + Pareto + per-probe radar + 6 findings), Pareto (interactive EM/F1 toggle + per-approach cards), Compare (approach selector + win/loss matrix + per-question diff), Approach detail (forest plots + probe breakdown + per-question table). Recharts for scatter/radar; hand-built CSS for forest plots + heatmap matrix. Build produces 13 static routes (first-load JS 87–209KB). New `scripts/build_dashboard_data.py` aggregates `runs/<id>/` into `frontend/web/lib/data.json` (single build-time source for all pages). `make ui` regenerates data and launches dev server. No API spend; cumulative still **$0.2594 / $5.00**.

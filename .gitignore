@@ -46,3 +46,11 @@ frontend/web/.turbo/
 
 # Claude Code local settings
 .claude/
+
+# LaTeX build intermediates (keep the .pdf, drop the rest)
+paper/draft.aux
+paper/draft.log
+paper/draft.out
+paper/draft.fdb_latexmk
+paper/draft.fls
+paper/preview-*.png

@@ -22,6 +22,12 @@ run:  ## Run one approach. Usage: make run config=configs/approaches/naive.yaml
 dashboard-data:  ## Regenerate frontend/web/lib/data.json from runs/.
 	.venv/bin/python scripts/build_dashboard_data.py
 
+paper:  ## Build paper/draft.pdf from paper/draft.tex (requires tectonic).
+	./paper/build.sh
+
+paper-regen:  ## Regen sweep aggregates + figures, then build paper.
+	./paper/build.sh --regen
+
 ui:  ## Launch the Next.js dashboard (regenerates data first).
 	@$(MAKE) dashboard-data
 	cd frontend/web && npm install --silent && npm run dev
