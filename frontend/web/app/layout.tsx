@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Fraunces, Manrope, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/Header";
+import { data } from "@/lib/data";
 
 const fraunces = Fraunces({
   subsets: ["latin"],
@@ -44,7 +45,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 </p>
               </div>
               <p className="text-xs text-ink-faint font-mono uppercase tracking-widest">
-                gemini-3-flash-preview · single seed · N=34
+                {data.project.model} ·{" "}
+                {data.is_sweep
+                  ? `${data.headline[0]?.n_seeds ?? 3} seeds @ T=${(data.temperature ?? 0.3).toFixed(1)}`
+                  : "single seed @ T=0"}
+                {" "}· N={data.eval_set.n_questions}
               </p>
             </div>
           </footer>

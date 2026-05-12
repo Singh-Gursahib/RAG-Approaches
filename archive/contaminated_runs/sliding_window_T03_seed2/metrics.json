@@ -1,0 +1,48 @@
+{
+  "run_id": "sliding_window_T03_seed2",
+  "approach": "sliding_window",
+  "n_questions": 34,
+  "em": 0.0,
+  "f1": 0.0,
+  "accuracy": 0.0,
+  "per_type": {
+    "distractor": {
+      "n": 8,
+      "em": 0.0,
+      "f1": 0.0,
+      "accuracy": 0.0
+    },
+    "hallucination": {
+      "n": 6,
+      "em": 0.0,
+      "f1": 0.0,
+      "accuracy": 0.0
+    },
+    "multi_hop": {
+      "n": 8,
+      "em": 0.0,
+      "f1": 0.0,
+      "accuracy": 0.0
+    },
+    "needle": {
+      "n": 8,
+      "em": 0.0,
+      "f1": 0.0,
+      "accuracy": 0.0
+    },
+    "sanity": {
+      "n": 4,
+      "em": 0.0,
+      "f1": 0.0,
+      "accuracy": 0.0
+    }
+  },
+  "cost_usd": 0,
+  "tokens_in": 0,
+  "tokens_out": 0,
+  "latency_p50_ms": 0,
+  "latency_p95_ms": 0,
+  "wall_clock_s": 580.4815211249515,
+  "cumulative_spend_usd": 0.8929466000000006,
+  "budget_cap_usd": 5.0
+}

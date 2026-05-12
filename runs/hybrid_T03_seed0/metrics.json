@@ -1,0 +1,48 @@
+{
+  "run_id": "hybrid_T03_seed0",
+  "approach": "hybrid",
+  "n_questions": 34,
+  "em": 0.6470588235294118,
+  "f1": 0.8085434173669469,
+  "accuracy": 0.6470588235294118,
+  "per_type": {
+    "distractor": {
+      "n": 8,
+      "em": 0.375,
+      "f1": 0.7738095238095237,
+      "accuracy": 0.375
+    },
+    "hallucination": {
+      "n": 6,
+      "em": 1.0,
+      "f1": 1.0,
+      "accuracy": 1.0
+    },
+    "multi_hop": {
+      "n": 8,
+      "em": 0.375,
+      "f1": 0.5375,
+      "accuracy": 0.375
+    },
+    "needle": {
+      "n": 8,
+      "em": 0.75,
+      "f1": 0.875,
+      "accuracy": 0.75
+    },
+    "sanity": {
+      "n": 4,
+      "em": 1.0,
+      "f1": 1.0,
+      "accuracy": 1.0
+    }
+  },
+  "cost_usd": 0.012157699999999997,
+  "tokens_in": 38959,
+  "tokens_out": 188,
+  "latency_p50_ms": 2042.360750027001,
+  "latency_p95_ms": 3113.8156671077013,
+  "wall_clock_s": 75.02823533304036,
+  "cumulative_spend_usd": 0.35010830000000015,
+  "budget_cap_usd": 5.0
+}

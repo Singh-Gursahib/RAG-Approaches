@@ -43,3 +43,6 @@ frontend/web/.next/
 frontend/web/out/
 frontend/web/next-env.d.ts
 frontend/web/.turbo/
+
+# Claude Code local settings
+.claude/

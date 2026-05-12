@@ -19,7 +19,13 @@ export default function OverviewPage() {
     <>
       {/* HERO */}
       <section className="pt-20 pb-12 animate-fade-up">
-        <p className="eyebrow">Long-context strategy comparison · single seed · N=34</p>
+        <p className="eyebrow">
+          Long-context strategy comparison ·{" "}
+          {data.is_sweep
+            ? `${data.headline[0]?.n_seeds ?? 3} seeds @ T=${data.temperature?.toFixed(1) ?? "0.3"}`
+            : "single seed @ T=0"}
+          {" "}· N={data.eval_set.n_questions}
+        </p>
         <h1 className="mt-5 font-display tracking-tightest text-[72px] sm:text-[92px] lg:text-[112px] leading-[0.92] text-ink">
           Seven strategies,
           <br />

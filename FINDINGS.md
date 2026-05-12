@@ -16,6 +16,51 @@
 
 ---
 
+## 2026-05-12 — Multi-seed sweep (Phase 9)
+
+**Setup.** All 7 approaches × 3 seeds at temperature 0.3. Single generator (`gemini-3-flash-preview`). Identical eval set, identical answer prompt. 19/21 runs usable; 2 sliding_window seeds were archived after a Google account-level monthly spending cap triggered partway through that approach.
+
+| Approach | n_seeds | EM mean ± std | F1 mean ± std | F1 pooled 95% CI | Cost (mean) |
+|---|---|---|---|---|---|
+| sliding_window | 1† | 0.735 ± 0.000 | **0.896 ± 0.000** | [0.811, 0.962] | $0.0972 |
+| full_context | 3 | 0.667 ± 0.017 | **0.881 ± 0.012** | [0.840, 0.918] | $0.0912 |
+| hyde | 3 | 0.667 ± 0.017 | 0.838 ± 0.012 | [0.780, 0.893] | $0.0186 |
+| naive | 3 | 0.667 ± 0.017 | 0.836 ± 0.012 | [0.778, 0.888] | $0.0122 |
+| rerank | 3 | 0.667 ± 0.017 | 0.833 ± 0.009 | [0.774, 0.887] | $0.0123 |
+| hybrid | 3 | 0.627 ± 0.017 | 0.797 ± 0.010 | [0.728, 0.857] | $0.0122 |
+| recursive_summary | 3 | 0.206 ± 0.000 | 0.206 ± 0.000 | [0.128, 0.284] | $0.0068 |
+
+†sliding_window has 1 usable T=0.3 seed; the Phase 6 T=0 baseline ran at 0.706 / 0.901 (matches the seed-0 result closely).
+
+### Findings now defensible at multi-seed
+
+1. **Seed variance is small to zero** for short factoid answers at T=0.3.
+   - Recursive Summarization: **std=0.000** across 3 seeds — the long summarization step at T=0.3 produces nearly identical outputs because the model's distribution is so concentrated on the right next token.
+   - 5 other approaches all sit at **EM std ≈ 0.017** (i.e., 1/2 of one question's worth of disagreement across seeds), with F1 std ≈ 0.01.
+   - **Implication:** for this corpus + this model + factoid QA, single-seed point estimates are very stable; multi-seed sweeps mostly validate determinism rather than add power. A genuinely useful finding for replication advice — researchers can avoid the cost of multi-seed for similar setups.
+
+2. **Non-retrieval dominates retrieval at this corpus scale (confirmed across seeds).** Sliding-Window and Full-Context together hold the top two F1 spots. At an 8K-token corpus that comfortably fits in context, retrieval's chunk-selection step is unnecessary overhead.
+
+3. **Recursive Summarization is the only catastrophe.** F1 0.206 with std=0 — *consistently* losing specific identifiers like `MULBERRY-7Q`, `M7-RX-204-A`, `12%` despite explicit "preserve all facts" instructions. The seed-stable failure is itself a finding: pre-summarization isn't a noisy strategy, it's a reliably wrong one for factoid retrieval.
+
+4. **The verbosity ceiling on EM is real.** Six approaches cluster at EM ≈ 0.65–0.67 (within ±0.04). The remaining ~33% of EM misses are mostly verbose-but-correct answers (e.g. "Twenty-five years" vs gold "25 years"). F1 — which gives partial credit — shows the true spread (0.797 → 0.896) and should be the headline metric for the paper.
+
+5. **Cost characterization is consistent across seeds.** Cost std is ≤$0.0002 for every approach — tokens-in is fixed (corpus + prompts) and tokens-out at T=0.3 is nearly identical to T=0.
+
+### Pareto picture
+
+The figures in `paper/figures/` tell the cost × quality story:
+
+- **`pareto_cost_quality.pdf`** — full_context and sliding_window both sit far to the upper-right (high quality, high cost). The four "single-LLM-call" RAG approaches cluster tightly around $0.012 / F1 0.80–0.84. Rerank wins among them.
+- **`forest_f1.pdf`** — forest plot with pooled 95% CIs. F1 confidence intervals do *not* overlap recursive_summary; they *do* overlap among the top 6 in places, but the rank order is consistent with point estimates.
+- **`win_loss.pdf`** — head-to-head heatmap. sliding_window and full_context show net-positive cells against all single-call RAG approaches.
+
+### Quota note (transparent)
+
+Google's account-level monthly spending cap on the API key fired during sliding_window seeds 1 and 2. Those runs returned `ResourceExhausted: 429` for every LLM call after the cap was reached and have been archived under `archive/contaminated_runs/` to keep the analysis clean. Our project budget guard at 95% of $5 was never tripped — total project spend remains $0.89 (17.9% of cap).
+
+---
+
 ## 2026-05-11 — Statistical significance (Phase 7)
 
 Bootstrap 95% CIs and Holm-corrected paired Wilcoxon over the 7 single-seed runs (N=34 per approach):

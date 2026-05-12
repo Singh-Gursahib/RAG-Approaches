@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-05-12T16:06:47.502545+00:00",
+  "generated_at": "2026-05-12T19:22:13.507655+00:00",
   "project": {
     "name": "RAG_Ureap",
     "budget_cap_usd": 5.0,
-    "cumulative_spend_usd": 0.2594,
-    "spend_pct": 5.19,
-    "total_llm_calls": 402,
+    "cumulative_spend_usd": 0.8929,
+    "spend_pct": 17.86,
+    "total_llm_calls": 1349,
     "model": "gemini-3-flash-preview"
   },
   "corpus": {
@@ -46,167 +46,188 @@
   },
   "headline": [
     {
-      "approach": "sliding_window",
-      "run_id": "sliding_window_20260512_004119_9480ef",
-      "n": 34,
-      "em": 0.7058823529411765,
-      "em_lo": 0.5588235294117647,
-      "em_hi": 0.8529411764705882,
-      "f1": 0.900700280112045,
-      "f1_lo": 0.8399159663865546,
-      "f1_hi": 0.9546218487394957,
-      "cost_usd": 0.09721689999999997,
-      "tokens_in": 318223,
-      "tokens_out": 700,
-      "p50_ms": 7996.8707910738885,
-      "p95_ms": 10452.82966690138,
-      "wall_s": 288.369977416005
-    },
-    {
       "approach": "full_context",
-      "run_id": "full_context_20260512_003505_dc03cd",
+      "run_id": "full_context_T03_pooled",
       "n": 34,
-      "em": 0.6764705882352942,
-      "em_lo": 0.5294117647058824,
-      "em_hi": 0.8235294117647058,
-      "f1": 0.8859943977591036,
-      "f1_lo": 0.823515406162465,
-      "f1_hi": 0.9457983193277312,
-      "cost_usd": 0.09113930000000002,
+      "n_seeds": 3,
+      "em": 0.6666666666666666,
+      "em_lo": 0.5686274509803921,
+      "em_hi": 0.7549019607843137,
+      "em_seed_std": 0.016980890270283114,
+      "f1": 0.8808759867583397,
+      "f1_lo": 0.8400096553773023,
+      "f1_hi": 0.9174796282149223,
+      "f1_seed_std": 0.011776357667962548,
+      "cost_usd": 0.09115263333333334,
       "tokens_in": 302281,
-      "tokens_out": 182,
-      "p50_ms": 2536.991709144786,
-      "p95_ms": 4701.360250124708,
-      "wall_s": 233.40503166709095
-    },
-    {
-      "approach": "rerank",
-      "run_id": "rerank_20260512_002410_3c14e1",
-      "n": 34,
-      "em": 0.6470588235294118,
-      "em_lo": 0.47058823529411764,
-      "em_hi": 0.7941176470588235,
-      "f1": 0.8363211951447246,
-      "f1_lo": 0.7411437908496733,
-      "f1_hi": 0.9186274509803921,
-      "cost_usd": 0.012323399999999998,
-      "tokens_in": 39428,
-      "tokens_out": 198,
-      "p50_ms": 2910.50887433812,
-      "p95_ms": 3794.2612080369145,
-      "wall_s": 106.3232583750505
-    },
-    {
-      "approach": "naive",
-      "run_id": "naive_20260512_000900_094414",
-      "n": 34,
-      "em": 0.6470588235294118,
-      "em_lo": 0.47058823529411764,
-      "em_hi": 0.7941176470588235,
-      "f1": 0.8232492997198879,
-      "f1_lo": 0.712874649859944,
-      "f1_hi": 0.9121988795518207,
-      "cost_usd": 0.0122186,
-      "tokens_in": 39162,
-      "tokens_out": 188,
-      "p50_ms": 2149.197624763474,
-      "p95_ms": 3070.1257919427007,
-      "wall_s": 77.04163387487642
-    },
-    {
-      "approach": "hyde",
-      "run_id": "hyde_20260512_001934_8b5af6",
-      "n": 34,
-      "em": 0.6470588235294118,
-      "em_lo": 0.47058823529411764,
-      "em_hi": 0.7941176470588235,
-      "f1": 0.7980392156862745,
-      "f1_lo": 0.6833088235294118,
-      "f1_hi": 0.9029411764705882,
-      "cost_usd": 0.019293599999999998,
-      "tokens_in": 43387,
-      "tokens_out": 2511,
-      "p50_ms": 5206.74033369869,
-      "p95_ms": 6850.726958131418,
-      "wall_s": 183.72223008284345
+      "tokens_out": 187,
+      "p50_ms": 18866.39520828612,
+      "p95_ms": 65349.26302769842,
+      "wall_s": 1043.999979277607
     },
     {
       "approach": "hybrid",
-      "run_id": "hybrid_20260512_001727_bc93e2",
+      "run_id": "hybrid_T03_pooled",
       "n": 34,
-      "em": 0.6176470588235294,
-      "em_lo": 0.4411764705882353,
-      "em_hi": 0.7647058823529411,
-      "f1": 0.7938375350140056,
-      "f1_lo": 0.677156862745098,
-      "f1_hi": 0.8928571428571429,
-      "cost_usd": 0.012160199999999998,
+      "n_seeds": 3,
+      "em": 0.6274509803921569,
+      "em_lo": 0.5294117647058824,
+      "em_hi": 0.7254901960784313,
+      "em_seed_std": 0.016980890270283114,
+      "f1": 0.7971055088702149,
+      "f1_lo": 0.7277976190476192,
+      "f1_hi": 0.8568183940242764,
+      "f1_seed_std": 0.010204245095422245,
+      "cost_usd": 0.01216353333333333,
       "tokens_in": 38959,
-      "tokens_out": 189,
-      "p50_ms": 2084.6024160273373,
-      "p95_ms": 2705.1247088238597,
-      "wall_s": 73.09833679185249
+      "tokens_out": 190,
+      "p50_ms": 2057.842916343361,
+      "p95_ms": 7813.444639012839,
+      "wall_s": 107.1348524026107
+    },
+    {
+      "approach": "hyde",
+      "run_id": "hyde_T03_pooled",
+      "n": 34,
+      "n_seeds": 3,
+      "em": 0.6666666666666666,
+      "em_lo": 0.5784313725490197,
+      "em_hi": 0.7549019607843137,
+      "em_seed_std": 0.016980890270283114,
+      "f1": 0.8379551820728293,
+      "f1_lo": 0.780092203548086,
+      "f1_hi": 0.8930520541549953,
+      "f1_seed_std": 0.012245094114506682,
+      "cost_usd": 0.018593000000000002,
+      "tokens_in": 43326,
+      "tokens_out": 2238,
+      "p50_ms": 4998.922055820003,
+      "p95_ms": 7370.3397909800215,
+      "wall_s": 184.3926710692855
+    },
+    {
+      "approach": "naive",
+      "run_id": "naive_T03_pooled",
+      "n": 34,
+      "n_seeds": 3,
+      "em": 0.6666666666666666,
+      "em_lo": 0.5686274509803921,
+      "em_hi": 0.7549019607843137,
+      "em_seed_std": 0.016980890270283114,
+      "f1": 0.8363211951447247,
+      "f1_lo": 0.777578197945845,
+      "f1_hi": 0.8882913165266105,
+      "f1_seed_std": 0.012336330776586208,
+      "cost_usd": 0.012206933333333335,
+      "tokens_in": 39162,
+      "tokens_out": 183,
+      "p50_ms": 2531.8575693915286,
+      "p95_ms": 7936.944569693878,
+      "wall_s": 138.06672940263525
     },
     {
       "approach": "recursive_summary",
-      "run_id": "recursive_summary_20260512_003929_c6c8c0",
+      "run_id": "recursive_summary_T03_pooled",
       "n": 34,
-      "em": 0.20588235294117646,
-      "em_lo": 0.08823529411764706,
-      "em_hi": 0.35294117647058826,
-      "f1": 0.22058823529411764,
-      "f1_lo": 0.08823529411764706,
-      "f1_hi": 0.36764705882352944,
-      "cost_usd": 0.006774999999999999,
-      "tokens_in": 19925,
-      "tokens_out": 319,
-      "p50_ms": 1945.118750212714,
-      "p95_ms": 2884.263915941119,
-      "wall_s": 91.89801020896994
+      "n_seeds": 3,
+      "em": 0.2058823529411765,
+      "em_lo": 0.12745098039215685,
+      "em_hi": 0.28431372549019607,
+      "em_seed_std": 3.3993498887762956e-17,
+      "f1": 0.2058823529411765,
+      "f1_lo": 0.12745098039215685,
+      "f1_hi": 0.28431372549019607,
+      "f1_seed_std": 3.3993498887762956e-17,
+      "cost_usd": 0.006809700000000002,
+      "tokens_in": 20015,
+      "tokens_out": 322,
+      "p50_ms": 3178.941249692192,
+      "p95_ms": 12746.052778015533,
+      "wall_s": 221.55832247195454
+    },
+    {
+      "approach": "rerank",
+      "run_id": "rerank_T03_pooled",
+      "n": 34,
+      "n_seeds": 3,
+      "em": 0.6666666666666666,
+      "em_lo": 0.5784313725490197,
+      "em_hi": 0.7549019607843137,
+      "em_seed_std": 0.016980890270283114,
+      "f1": 0.8330532212885156,
+      "f1_lo": 0.7742273576097106,
+      "f1_hi": 0.8871171802054155,
+      "f1_seed_std": 0.00849044513514159,
+      "cost_usd": 0.0122959,
+      "tokens_in": 39428,
+      "tokens_out": 187,
+      "p50_ms": 2756.200486328453,
+      "p95_ms": 3785.7995559461415,
+      "wall_s": 100.96281252762613
+    },
+    {
+      "approach": "sliding_window",
+      "run_id": "sliding_window_T03_pooled",
+      "n": 34,
+      "n_seeds": 1,
+      "em": 0.7352941176470589,
+      "em_lo": 0.5882352941176471,
+      "em_hi": 0.8823529411764706,
+      "em_seed_std": 0.0,
+      "f1": 0.8957983193277312,
+      "f1_lo": 0.8104621848739496,
+      "f1_hi": 0.9621848739495796,
+      "f1_seed_std": 0.0,
+      "cost_usd": 0.09719130000000001,
+      "tokens_in": 318221,
+      "tokens_out": 690,
+      "p50_ms": 8528.140790062025,
+      "p95_ms": 10681.573291076347,
+      "wall_s": 292.14593979204074
     }
   ],
   "per_probe": [
     {
       "approach": "full_context",
-      "run_id": "full_context_20260512_003505_dc03cd",
+      "run_id": "full_context_T03_pooled",
       "probe_type": "needle",
-      "n": 8,
+      "n": 24,
       "em": 0.625,
-      "em_lo": 0.25,
-      "em_hi": 0.875,
+      "em_lo": 0.4166666666666667,
+      "em_hi": 0.8333333333333334,
       "f1": 0.8125,
-      "f1_lo": 0.625,
-      "f1_hi": 0.9375
+      "f1_lo": 0.7083333333333334,
+      "f1_hi": 0.9166666666666666
     },
     {
       "approach": "full_context",
-      "run_id": "full_context_20260512_003505_dc03cd",
+      "run_id": "full_context_T03_pooled",
       "probe_type": "multi_hop",
-      "n": 8,
-      "em": 0.625,
-      "em_lo": 0.25,
-      "em_hi": 0.875,
-      "f1": 0.8875,
-      "f1_lo": 0.7625,
-      "f1_hi": 0.975
+      "n": 24,
+      "em": 0.5833333333333334,
+      "em_lo": 0.375,
+      "em_hi": 0.75,
+      "f1": 0.8657467532467532,
+      "f1_lo": 0.7802489177489177,
+      "f1_hi": 0.9333333333333332
     },
     {
       "approach": "full_context",
-      "run_id": "full_context_20260512_003505_dc03cd",
+      "run_id": "full_context_T03_pooled",
       "probe_type": "distractor",
-      "n": 8,
+      "n": 24,
       "em": 0.375,
-      "em_lo": 0.125,
-      "em_hi": 0.75,
-      "f1": 0.8154761904761905,
-      "f1_lo": 0.675,
-      "f1_hi": 0.9321428571428572
+      "em_lo": 0.20833333333333334,
+      "em_hi": 0.5833333333333334,
+      "f1": 0.8154761904761906,
+      "f1_lo": 0.7412599206349206,
+      "f1_hi": 0.8936607142857144
     },
     {
       "approach": "full_context",
-      "run_id": "full_context_20260512_003505_dc03cd",
+      "run_id": "full_context_T03_pooled",
       "probe_type": "hallucination",
-      "n": 6,
+      "n": 18,
       "em": 1.0,
       "em_lo": 1.0,
       "em_hi": 1.0,
@@ -216,9 +237,9 @@
     },
     {
       "approach": "full_context",
-      "run_id": "full_context_20260512_003505_dc03cd",
+      "run_id": "full_context_T03_pooled",
       "probe_type": "sanity",
-      "n": 4,
+      "n": 12,
       "em": 1.0,
       "em_lo": 1.0,
       "em_hi": 1.0,
@@ -228,45 +249,45 @@
     },
     {
       "approach": "hybrid",
-      "run_id": "hybrid_20260512_001727_bc93e2",
+      "run_id": "hybrid_T03_pooled",
       "probe_type": "needle",
-      "n": 8,
-      "em": 0.625,
-      "em_lo": 0.25,
-      "em_hi": 0.875,
-      "f1": 0.8125,
-      "f1_lo": 0.625,
-      "f1_hi": 0.9375
+      "n": 24,
+      "em": 0.6666666666666666,
+      "em_lo": 0.5,
+      "em_hi": 0.8333333333333334,
+      "f1": 0.8263888888888888,
+      "f1_lo": 0.7291666666666666,
+      "f1_hi": 0.9166666666666666
     },
     {
       "approach": "hybrid",
-      "run_id": "hybrid_20260512_001727_bc93e2",
+      "run_id": "hybrid_T03_pooled",
       "probe_type": "multi_hop",
-      "n": 8,
+      "n": 24,
       "em": 0.375,
-      "em_lo": 0.125,
-      "em_hi": 0.75,
+      "em_lo": 0.20833333333333334,
+      "em_hi": 0.5833333333333334,
       "f1": 0.5375,
-      "f1_lo": 0.225,
-      "f1_hi": 0.8253124999999982
+      "f1_lo": 0.3707291666666667,
+      "f1_hi": 0.7208333333333332
     },
     {
       "approach": "hybrid",
-      "run_id": "hybrid_20260512_001727_bc93e2",
+      "run_id": "hybrid_T03_pooled",
       "probe_type": "distractor",
-      "n": 8,
+      "n": 24,
       "em": 0.375,
-      "em_lo": 0.125,
-      "em_hi": 0.75,
+      "em_lo": 0.20833333333333334,
+      "em_hi": 0.5833333333333334,
       "f1": 0.7738095238095238,
-      "f1_lo": 0.5916369047619048,
-      "f1_hi": 0.925
+      "f1_lo": 0.6742063492063491,
+      "f1_hi": 0.8686805555555556
     },
     {
       "approach": "hybrid",
-      "run_id": "hybrid_20260512_001727_bc93e2",
+      "run_id": "hybrid_T03_pooled",
       "probe_type": "hallucination",
-      "n": 6,
+      "n": 18,
       "em": 1.0,
       "em_lo": 1.0,
       "em_hi": 1.0,
@@ -276,9 +297,9 @@
     },
     {
       "approach": "hybrid",
-      "run_id": "hybrid_20260512_001727_bc93e2",
+      "run_id": "hybrid_T03_pooled",
       "probe_type": "sanity",
-      "n": 4,
+      "n": 12,
       "em": 1.0,
       "em_lo": 1.0,
       "em_hi": 1.0,
@@ -288,45 +309,45 @@
     },
     {
       "approach": "hyde",
-      "run_id": "hyde_20260512_001934_8b5af6",
+      "run_id": "hyde_T03_pooled",
       "probe_type": "needle",
-      "n": 8,
-      "em": 0.625,
+      "n": 24,
+      "em": 0.75,
+      "em_lo": 0.5833333333333334,
+      "em_hi": 0.9166666666666666,
+      "f1": 0.875,
+      "f1_lo": 0.7916666666666666,
+      "f1_hi": 0.9583333333333334
+    },
+    {
+      "approach": "hyde",
+      "run_id": "hyde_T03_pooled",
+      "probe_type": "multi_hop",
+      "n": 24,
+      "em": 0.4583333333333333,
       "em_lo": 0.25,
-      "em_hi": 0.875,
-      "f1": 0.8125,
-      "f1_lo": 0.625,
-      "f1_hi": 0.9375
+      "em_hi": 0.6666666666666666,
+      "f1": 0.6541666666666667,
+      "f1_lo": 0.48322916666666677,
+      "f1_hi": 0.8042708333333332
     },
     {
       "approach": "hyde",
-      "run_id": "hyde_20260512_001934_8b5af6",
-      "probe_type": "multi_hop",
-      "n": 8,
-      "em": 0.5,
-      "em_lo": 0.125,
-      "em_hi": 0.875,
-      "f1": 0.6625,
-      "f1_lo": 0.375,
-      "f1_hi": 0.925
-    },
-    {
-      "approach": "hyde",
-      "run_id": "hyde_20260512_001934_8b5af6",
+      "run_id": "hyde_T03_pooled",
       "probe_type": "distractor",
-      "n": 8,
+      "n": 24,
       "em": 0.375,
-      "em_lo": 0.125,
-      "em_hi": 0.75,
-      "f1": 0.6666666666666667,
-      "f1_lo": 0.41666666666666674,
-      "f1_hi": 0.8999999999999999
+      "em_lo": 0.20833333333333334,
+      "em_hi": 0.5833333333333334,
+      "f1": 0.7821428571428571,
+      "f1_lo": 0.6848809523809524,
+      "f1_hi": 0.8769940476190476
     },
     {
       "approach": "hyde",
-      "run_id": "hyde_20260512_001934_8b5af6",
+      "run_id": "hyde_T03_pooled",
       "probe_type": "hallucination",
-      "n": 6,
+      "n": 18,
       "em": 1.0,
       "em_lo": 1.0,
       "em_hi": 1.0,
@@ -336,9 +357,9 @@
     },
     {
       "approach": "hyde",
-      "run_id": "hyde_20260512_001934_8b5af6",
+      "run_id": "hyde_T03_pooled",
       "probe_type": "sanity",
-      "n": 4,
+      "n": 12,
       "em": 1.0,
       "em_lo": 1.0,
       "em_hi": 1.0,
@@ -348,45 +369,45 @@
     },
     {
       "approach": "naive",
-      "run_id": "naive_20260512_000900_094414",
+      "run_id": "naive_T03_pooled",
       "probe_type": "needle",
-      "n": 8,
-      "em": 0.625,
-      "em_lo": 0.25,
+      "n": 24,
+      "em": 0.7083333333333334,
+      "em_lo": 0.5416666666666666,
       "em_hi": 0.875,
-      "f1": 0.8125,
-      "f1_lo": 0.625,
+      "f1": 0.8541666666666666,
+      "f1_lo": 0.7708333333333334,
       "f1_hi": 0.9375
     },
     {
       "approach": "naive",
-      "run_id": "naive_20260512_000900_094414",
+      "run_id": "naive_T03_pooled",
       "probe_type": "multi_hop",
-      "n": 8,
+      "n": 24,
       "em": 0.5,
-      "em_lo": 0.125,
-      "em_hi": 0.875,
+      "em_lo": 0.3322916666666676,
+      "em_hi": 0.7083333333333334,
       "f1": 0.6625,
-      "f1_lo": 0.375,
-      "f1_hi": 0.9375
+      "f1_lo": 0.4873958333333334,
+      "f1_hi": 0.8166666666666668
     },
     {
       "approach": "naive",
-      "run_id": "naive_20260512_000900_094414",
+      "run_id": "naive_T03_pooled",
       "probe_type": "distractor",
-      "n": 8,
+      "n": 24,
       "em": 0.375,
-      "em_lo": 0.125,
-      "em_hi": 0.75,
-      "f1": 0.7738095238095238,
-      "f1_lo": 0.5916369047619048,
-      "f1_hi": 0.925
+      "em_lo": 0.20833333333333334,
+      "em_hi": 0.5833333333333334,
+      "f1": 0.7876984126984127,
+      "f1_lo": 0.6908630952380953,
+      "f1_hi": 0.8833333333333333
     },
     {
       "approach": "naive",
-      "run_id": "naive_20260512_000900_094414",
+      "run_id": "naive_T03_pooled",
       "probe_type": "hallucination",
-      "n": 6,
+      "n": 18,
       "em": 1.0,
       "em_lo": 1.0,
       "em_hi": 1.0,
@@ -396,9 +417,9 @@
     },
     {
       "approach": "naive",
-      "run_id": "naive_20260512_000900_094414",
+      "run_id": "naive_T03_pooled",
       "probe_type": "sanity",
-      "n": 4,
+      "n": 12,
       "em": 1.0,
       "em_lo": 1.0,
       "em_hi": 1.0,
@@ -408,9 +429,9 @@
     },
     {
       "approach": "recursive_summary",
-      "run_id": "recursive_summary_20260512_003929_c6c8c0",
+      "run_id": "recursive_summary_T03_pooled",
       "probe_type": "needle",
-      "n": 8,
+      "n": 24,
       "em": 0.0,
       "em_lo": 0.0,
       "em_hi": 0.0,
@@ -420,9 +441,9 @@
     },
     {
       "approach": "recursive_summary",
-      "run_id": "recursive_summary_20260512_003929_c6c8c0",
+      "run_id": "recursive_summary_T03_pooled",
       "probe_type": "multi_hop",
-      "n": 8,
+      "n": 24,
       "em": 0.0,
       "em_lo": 0.0,
       "em_hi": 0.0,
@@ -432,9 +453,9 @@
     },
     {
       "approach": "recursive_summary",
-      "run_id": "recursive_summary_20260512_003929_c6c8c0",
+      "run_id": "recursive_summary_T03_pooled",
       "probe_type": "distractor",
-      "n": 8,
+      "n": 24,
       "em": 0.0,
       "em_lo": 0.0,
       "em_hi": 0.0,
@@ -444,9 +465,9 @@
     },
     {
       "approach": "recursive_summary",
-      "run_id": "recursive_summary_20260512_003929_c6c8c0",
+      "run_id": "recursive_summary_T03_pooled",
       "probe_type": "hallucination",
-      "n": 6,
+      "n": 18,
       "em": 1.0,
       "em_lo": 1.0,
       "em_hi": 1.0,
@@ -456,57 +477,57 @@
     },
     {
       "approach": "recursive_summary",
-      "run_id": "recursive_summary_20260512_003929_c6c8c0",
+      "run_id": "recursive_summary_T03_pooled",
       "probe_type": "sanity",
-      "n": 4,
+      "n": 12,
       "em": 0.25,
       "em_lo": 0.0,
-      "em_hi": 0.75,
-      "f1": 0.375,
+      "em_hi": 0.5,
+      "f1": 0.25,
       "f1_lo": 0.0,
-      "f1_hi": 0.75
+      "f1_hi": 0.5
     },
     {
       "approach": "rerank",
-      "run_id": "rerank_20260512_002410_3c14e1",
+      "run_id": "rerank_T03_pooled",
       "probe_type": "needle",
-      "n": 8,
-      "em": 0.625,
-      "em_lo": 0.25,
+      "n": 24,
+      "em": 0.7083333333333334,
+      "em_lo": 0.5416666666666666,
       "em_hi": 0.875,
-      "f1": 0.8125,
-      "f1_lo": 0.625,
+      "f1": 0.8541666666666666,
+      "f1_lo": 0.7708333333333334,
       "f1_hi": 0.9375
     },
     {
       "approach": "rerank",
-      "run_id": "rerank_20260512_002410_3c14e1",
+      "run_id": "rerank_T03_pooled",
       "probe_type": "multi_hop",
-      "n": 8,
+      "n": 24,
       "em": 0.5,
-      "em_lo": 0.125,
-      "em_hi": 0.875,
-      "f1": 0.7180555555555556,
-      "f1_lo": 0.46788194444444475,
-      "f1_hi": 0.9375
+      "em_lo": 0.2916666666666667,
+      "em_hi": 0.7083333333333334,
+      "f1": 0.6625,
+      "f1_lo": 0.4916666666666667,
+      "f1_hi": 0.8376041666666666
     },
     {
       "approach": "rerank",
-      "run_id": "rerank_20260512_002410_3c14e1",
+      "run_id": "rerank_T03_pooled",
       "probe_type": "distractor",
-      "n": 8,
+      "n": 24,
       "em": 0.375,
-      "em_lo": 0.125,
-      "em_hi": 0.75,
+      "em_lo": 0.20833333333333334,
+      "em_hi": 0.5833333333333334,
       "f1": 0.7738095238095238,
-      "f1_lo": 0.5916369047619048,
-      "f1_hi": 0.925
+      "f1_lo": 0.6742063492063491,
+      "f1_hi": 0.8686805555555556
     },
     {
       "approach": "rerank",
-      "run_id": "rerank_20260512_002410_3c14e1",
+      "run_id": "rerank_T03_pooled",
       "probe_type": "hallucination",
-      "n": 6,
+      "n": 18,
       "em": 1.0,
       "em_lo": 1.0,
       "em_hi": 1.0,
@@ -516,9 +537,9 @@
     },
     {
       "approach": "rerank",
-      "run_id": "rerank_20260512_002410_3c14e1",
+      "run_id": "rerank_T03_pooled",
       "probe_type": "sanity",
-      "n": 4,
+      "n": 12,
       "em": 1.0,
       "em_lo": 1.0,
       "em_hi": 1.0,
@@ -528,43 +549,43 @@
     },
     {
       "approach": "sliding_window",
-      "run_id": "sliding_window_20260512_004119_9480ef",
+      "run_id": "sliding_window_T03_pooled",
       "probe_type": "needle",
       "n": 8,
-      "em": 0.75,
-      "em_lo": 0.4968750000000055,
+      "em": 0.875,
+      "em_lo": 0.625,
       "em_hi": 1.0,
-      "f1": 0.875,
-      "f1_lo": 0.7484375000000028,
+      "f1": 0.9375,
+      "f1_lo": 0.8125,
       "f1_hi": 1.0
     },
     {
       "approach": "sliding_window",
-      "run_id": "sliding_window_20260512_004119_9480ef",
+      "run_id": "sliding_window_T03_pooled",
       "probe_type": "multi_hop",
       "n": 8,
       "em": 0.5,
       "em_lo": 0.125,
       "em_hi": 0.875,
-      "f1": 0.8458333333333333,
-      "f1_lo": 0.7208333333333333,
-      "f1_hi": 0.9502083333333321
+      "f1": 0.7625,
+      "f1_lo": 0.5125,
+      "f1_hi": 0.95
     },
     {
       "approach": "sliding_window",
-      "run_id": "sliding_window_20260512_004119_9480ef",
+      "run_id": "sliding_window_T03_pooled",
       "probe_type": "distractor",
       "n": 8,
       "em": 0.5,
       "em_lo": 0.125,
       "em_hi": 0.875,
       "f1": 0.8571428571428572,
-      "f1_lo": 0.7212500000000003,
-      "f1_hi": 0.975
+      "f1_lo": 0.7071428571428572,
+      "f1_hi": 0.9642857142857143
     },
     {
       "approach": "sliding_window",
-      "run_id": "sliding_window_20260512_004119_9480ef",
+      "run_id": "sliding_window_T03_pooled",
       "probe_type": "hallucination",
       "n": 6,
       "em": 1.0,
@@ -576,7 +597,7 @@
     },
     {
       "approach": "sliding_window",
-      "run_id": "sliding_window_20260512_004119_9480ef",
+      "run_id": "sliding_window_T03_pooled",
       "probe_type": "sanity",
       "n": 4,
       "em": 1.0,
@@ -587,446 +608,6 @@
       "f1_hi": 1.0
     }
   ],
-  "pairwise_em": {
-    "full_context": {
-      "full_context": 1.0,
-      "hybrid": 1.0,
-      "hyde": 1.0,
-      "naive": 1.0,
-      "recursive_summary": 0.0012668496733247946,
-      "rerank": 1.0,
-      "sliding_window": 1.0
-    },
-    "hybrid": {
-      "full_context": 1.0,
-      "hybrid": 1.0,
-      "hyde": 1.0,
-      "naive": 1.0,
-      "recursive_summary": 0.0029249701277093572,
-      "rerank": 1.0,
-      "sliding_window": 1.0
-    },
-    "hyde": {
-      "full_context": 1.0,
-      "hybrid": 1.0,
-      "hyde": 1.0,
-      "naive": 1.0,
-      "recursive_summary": 0.0020427123578605102,
-      "rerank": 1.0,
-      "sliding_window": 1.0
-    },
-    "naive": {
-      "full_context": 1.0,
-      "hybrid": 1.0,
-      "hyde": 1.0,
-      "naive": 1.0,
-      "recursive_summary": 0.0020427123578605102,
-      "rerank": 1.0,
-      "sliding_window": 1.0
-    },
-    "recursive_summary": {
-      "full_context": 0.0012668496733247946,
-      "hybrid": 0.0029249701277093572,
-      "hyde": 0.0020427123578605102,
-      "naive": 0.0020427123578605102,
-      "recursive_summary": 1.0,
-      "rerank": 0.0020427123578605102,
-      "sliding_window": 0.0007849761864357324
-    },
-    "rerank": {
-      "full_context": 1.0,
-      "hybrid": 1.0,
-      "hyde": 1.0,
-      "naive": 1.0,
-      "recursive_summary": 0.0020427123578605102,
-      "rerank": 1.0,
-      "sliding_window": 1.0
-    },
-    "sliding_window": {
-      "full_context": 1.0,
-      "hybrid": 1.0,
-      "hyde": 1.0,
-      "naive": 1.0,
-      "recursive_summary": 0.0007849761864357324,
-      "rerank": 1.0,
-      "sliding_window": 1.0
-    }
-  },
-  "pairwise_f1": {
-    "full_context": {
-      "full_context": 1.0,
-      "hybrid": 0.7871963057648624,
-      "hyde": 0.7871963057648624,
-      "naive": 1.0,
-      "recursive_summary": 6.948986111307345e-05,
-      "rerank": 1.0,
-      "sliding_window": 1.0
-    },
-    "hybrid": {
-      "full_context": 0.7871963057648624,
-      "hybrid": 1.0,
-      "hyde": 1.0,
-      "naive": 1.0,
-      "recursive_summary": 0.0001959381134915569,
-      "rerank": 1.0,
-      "sliding_window": 0.40921757216427
-    },
-    "hyde": {
-      "full_context": 0.7871963057648624,
-      "hybrid": 1.0,
-      "hyde": 1.0,
-      "naive": 1.0,
-      "recursive_summary": 0.00018878690880451082,
-      "rerank": 1.0,
-      "sliding_window": 0.6694291708128765
-    },
-    "naive": {
-      "full_context": 1.0,
-      "hybrid": 1.0,
-      "hyde": 1.0,
-      "naive": 1.0,
-      "recursive_summary": 0.00014057320423433532,
-      "rerank": 1.0,
-      "sliding_window": 0.5903547593601833
-    },
-    "recursive_summary": {
-      "full_context": 6.948986111307345e-05,
-      "hybrid": 0.0001959381134915569,
-      "hyde": 0.00018878690880451082,
-      "naive": 0.00014057320423433532,
-      "recursive_summary": 1.0,
-      "rerank": 0.00010388302838756028,
-      "sliding_window": 6.642842636290681e-05
-    },
-    "rerank": {
-      "full_context": 1.0,
-      "hybrid": 1.0,
-      "hyde": 1.0,
-      "naive": 1.0,
-      "recursive_summary": 0.00010388302838756028,
-      "rerank": 1.0,
-      "sliding_window": 1.0
-    },
-    "sliding_window": {
-      "full_context": 1.0,
-      "hybrid": 0.40921757216427,
-      "hyde": 0.6694291708128765,
-      "naive": 0.5903547593601833,
-      "recursive_summary": 6.642842636290681e-05,
-      "rerank": 1.0,
-      "sliding_window": 1.0
-    }
-  },
-  "win_matrix": {
-    "full_context": {
-      "full_context": {
-        "wins": 0,
-        "losses": 0,
-        "ties": 0,
-        "n": 0
-      },
-      "hybrid": {
-        "wins": 2,
-        "losses": 0,
-        "ties": 32,
-        "n": 34
-      },
-      "hyde": {
-        "wins": 1,
-        "losses": 0,
-        "ties": 33,
-        "n": 34
-      },
-      "naive": {
-        "wins": 1,
-        "losses": 0,
-        "ties": 33,
-        "n": 34
-      },
-      "recursive_summary": {
-        "wins": 16,
-        "losses": 0,
-        "ties": 18,
-        "n": 34
-      },
-      "rerank": {
-        "wins": 1,
-        "losses": 0,
-        "ties": 33,
-        "n": 34
-      },
-      "sliding_window": {
-        "wins": 1,
-        "losses": 2,
-        "ties": 31,
-        "n": 34
-      }
-    },
-    "hybrid": {
-      "full_context": {
-        "wins": 0,
-        "losses": 2,
-        "ties": 32,
-        "n": 34
-      },
-      "hybrid": {
-        "wins": 0,
-        "losses": 0,
-        "ties": 0,
-        "n": 0
-      },
-      "hyde": {
-        "wins": 1,
-        "losses": 2,
-        "ties": 31,
-        "n": 34
-      },
-      "naive": {
-        "wins": 0,
-        "losses": 1,
-        "ties": 33,
-        "n": 34
-      },
-      "recursive_summary": {
-        "wins": 14,
-        "losses": 0,
-        "ties": 20,
-        "n": 34
-      },
-      "rerank": {
-        "wins": 0,
-        "losses": 1,
-        "ties": 33,
-        "n": 34
-      },
-      "sliding_window": {
-        "wins": 0,
-        "losses": 3,
-        "ties": 31,
-        "n": 34
-      }
-    },
-    "hyde": {
-      "full_context": {
-        "wins": 0,
-        "losses": 1,
-        "ties": 33,
-        "n": 34
-      },
-      "hybrid": {
-        "wins": 2,
-        "losses": 1,
-        "ties": 31,
-        "n": 34
-      },
-      "hyde": {
-        "wins": 0,
-        "losses": 0,
-        "ties": 0,
-        "n": 0
-      },
-      "naive": {
-        "wins": 1,
-        "losses": 1,
-        "ties": 32,
-        "n": 34
-      },
-      "recursive_summary": {
-        "wins": 15,
-        "losses": 0,
-        "ties": 19,
-        "n": 34
-      },
-      "rerank": {
-        "wins": 1,
-        "losses": 1,
-        "ties": 32,
-        "n": 34
-      },
-      "sliding_window": {
-        "wins": 1,
-        "losses": 3,
-        "ties": 30,
-        "n": 34
-      }
-    },
-    "naive": {
-      "full_context": {
-        "wins": 0,
-        "losses": 1,
-        "ties": 33,
-        "n": 34
-      },
-      "hybrid": {
-        "wins": 1,
-        "losses": 0,
-        "ties": 33,
-        "n": 34
-      },
-      "hyde": {
-        "wins": 1,
-        "losses": 1,
-        "ties": 32,
-        "n": 34
-      },
-      "naive": {
-        "wins": 0,
-        "losses": 0,
-        "ties": 0,
-        "n": 0
-      },
-      "recursive_summary": {
-        "wins": 15,
-        "losses": 0,
-        "ties": 19,
-        "n": 34
-      },
-      "rerank": {
-        "wins": 1,
-        "losses": 1,
-        "ties": 32,
-        "n": 34
-      },
-      "sliding_window": {
-        "wins": 0,
-        "losses": 2,
-        "ties": 32,
-        "n": 34
-      }
-    },
-    "recursive_summary": {
-      "full_context": {
-        "wins": 0,
-        "losses": 16,
-        "ties": 18,
-        "n": 34
-      },
-      "hybrid": {
-        "wins": 0,
-        "losses": 14,
-        "ties": 20,
-        "n": 34
-      },
-      "hyde": {
-        "wins": 0,
-        "losses": 15,
-        "ties": 19,
-        "n": 34
-      },
-      "naive": {
-        "wins": 0,
-        "losses": 15,
-        "ties": 19,
-        "n": 34
-      },
-      "recursive_summary": {
-        "wins": 0,
-        "losses": 0,
-        "ties": 0,
-        "n": 0
-      },
-      "rerank": {
-        "wins": 0,
-        "losses": 15,
-        "ties": 19,
-        "n": 34
-      },
-      "sliding_window": {
-        "wins": 0,
-        "losses": 17,
-        "ties": 17,
-        "n": 34
-      }
-    },
-    "rerank": {
-      "full_context": {
-        "wins": 0,
-        "losses": 1,
-        "ties": 33,
-        "n": 34
-      },
-      "hybrid": {
-        "wins": 1,
-        "losses": 0,
-        "ties": 33,
-        "n": 34
-      },
-      "hyde": {
-        "wins": 1,
-        "losses": 1,
-        "ties": 32,
-        "n": 34
-      },
-      "naive": {
-        "wins": 1,
-        "losses": 1,
-        "ties": 32,
-        "n": 34
-      },
-      "recursive_summary": {
-        "wins": 15,
-        "losses": 0,
-        "ties": 19,
-        "n": 34
-      },
-      "rerank": {
-        "wins": 0,
-        "losses": 0,
-        "ties": 0,
-        "n": 0
-      },
-      "sliding_window": {
-        "wins": 1,
-        "losses": 3,
-        "ties": 30,
-        "n": 34
-      }
-    },
-    "sliding_window": {
-      "full_context": {
-        "wins": 2,
-        "losses": 1,
-        "ties": 31,
-        "n": 34
-      },
-      "hybrid": {
-        "wins": 3,
-        "losses": 0,
-        "ties": 31,
-        "n": 34
-      },
-      "hyde": {
-        "wins": 3,
-        "losses": 1,
-        "ties": 30,
-        "n": 34
-      },
-      "naive": {
-        "wins": 2,
-        "losses": 0,
-        "ties": 32,
-        "n": 34
-      },
-      "recursive_summary": {
-        "wins": 17,
-        "losses": 0,
-        "ties": 17,
-        "n": 34
-      },
-      "rerank": {
-        "wins": 3,
-        "losses": 1,
-        "ties": 30,
-        "n": 34
-      },
-      "sliding_window": {
-        "wins": 0,
-        "losses": 0,
-        "ties": 0,
-        "n": 0
-      }
-    }
-  },
   "questions": [
     {
       "qid": "dist-01",
@@ -1037,43 +618,57 @@
           "pred": "2019",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "hybrid": {
           "pred": "2019",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "hyde": {
           "pred": "2019",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "naive": {
           "pred": "2019",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "recursive_summary": {
           "pred": "NOT_IN_CONTEXT",
           "em": 0,
           "f1": 0.0,
-          "correct": 0
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "rerank": {
           "pred": "2019",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "sliding_window": {
           "pred": "2019",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 1
         }
       }
     },
@@ -1086,43 +681,57 @@
           "pred": "Dr. Mei-Ling Forrester",
           "em": 0,
           "f1": 0.8571428571428571,
-          "correct": 0
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "hybrid": {
           "pred": "Dr. Mei-Ling Forrester",
           "em": 0,
           "f1": 0.8571428571428571,
-          "correct": 0
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "hyde": {
-          "pred": "NOT_IN_CONTEXT",
+          "pred": "Dr. Mei-Ling Forrester",
           "em": 0,
-          "f1": 0.0,
-          "correct": 0
+          "f1": 0.8571428571428571,
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "naive": {
           "pred": "Dr. Mei-Ling Forrester",
           "em": 0,
           "f1": 0.8571428571428571,
-          "correct": 0
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "recursive_summary": {
           "pred": "NOT_IN_CONTEXT",
           "em": 0,
           "f1": 0.0,
-          "correct": 0
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "rerank": {
           "pred": "Dr. Mei-Ling Forrester",
           "em": 0,
           "f1": 0.8571428571428571,
-          "correct": 0
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "sliding_window": {
           "pred": "Dr. Mei-Ling Forrester",
           "em": 0,
           "f1": 0.8571428571428571,
-          "correct": 0
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 1
         }
       }
     },
@@ -1134,44 +743,58 @@
         "full_context": {
           "pred": "Twenty-five years",
           "em": 0,
-          "f1": 0.4,
-          "correct": 0
+          "f1": 0.4000000000000001,
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "hybrid": {
-          "pred": "Twenty-five years",
+          "pred": "Twenty-five years.",
           "em": 0,
-          "f1": 0.4,
-          "correct": 0
+          "f1": 0.4000000000000001,
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "hyde": {
           "pred": "Twenty-five years",
           "em": 0,
-          "f1": 0.4,
-          "correct": 0
+          "f1": 0.4000000000000001,
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "naive": {
           "pred": "Twenty-five years",
           "em": 0,
-          "f1": 0.4,
-          "correct": 0
+          "f1": 0.4000000000000001,
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "recursive_summary": {
           "pred": "NOT_IN_CONTEXT",
           "em": 0,
           "f1": 0.0,
-          "correct": 0
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "rerank": {
           "pred": "Twenty-five years",
           "em": 0,
-          "f1": 0.4,
-          "correct": 0
+          "f1": 0.4000000000000001,
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "sliding_window": {
           "pred": "twenty-five years",
           "em": 0,
           "f1": 0.4,
-          "correct": 0
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 1
         }
       }
     },
@@ -1184,43 +807,57 @@
           "pred": "2,847,000 residents",
           "em": 0,
           "f1": 0.6666666666666666,
-          "correct": 0
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "hybrid": {
           "pred": "2,847,000 residents within the city limits.",
           "em": 0,
-          "f1": 0.33333333333333337,
-          "correct": 0
+          "f1": 0.3333333333333333,
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "hyde": {
-          "pred": "2,847,000 residents within the city limits.",
+          "pred": "2,847,000 residents",
           "em": 0,
-          "f1": 0.33333333333333337,
-          "correct": 0
+          "f1": 0.6666666666666666,
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "naive": {
-          "pred": "2,847,000 residents within the city limits.",
+          "pred": "2,847,000 residents",
           "em": 0,
-          "f1": 0.33333333333333337,
-          "correct": 0
+          "f1": 0.4444444444444445,
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "recursive_summary": {
           "pred": "NOT_IN_CONTEXT",
           "em": 0,
           "f1": 0.0,
-          "correct": 0
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "rerank": {
-          "pred": "2,847,000 residents within the city limits",
+          "pred": "2,847,000 residents within the city limits.",
           "em": 0,
-          "f1": 0.33333333333333337,
-          "correct": 0
+          "f1": 0.3333333333333333,
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "sliding_window": {
           "pred": "2,847,000",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 1
         }
       }
     },
@@ -1233,43 +870,57 @@
           "pred": "4.2 kilowatts",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "hybrid": {
           "pred": "4.2 kilowatts",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "hyde": {
           "pred": "4.2 kilowatts",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "naive": {
           "pred": "4.2 kilowatts",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "recursive_summary": {
           "pred": "NOT_IN_CONTEXT",
           "em": 0,
           "f1": 0.0,
-          "correct": 0
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "rerank": {
           "pred": "4.2 kilowatts",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "sliding_window": {
           "pred": "4.2 kilowatts",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 1
         }
       }
     },
@@ -1282,43 +933,57 @@
           "pred": "1932",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "hybrid": {
           "pred": "1932",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "hyde": {
           "pred": "1932",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "naive": {
           "pred": "1932",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "recursive_summary": {
           "pred": "NOT_IN_CONTEXT",
           "em": 0,
           "f1": 0.0,
-          "correct": 0
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "rerank": {
           "pred": "1932",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "sliding_window": {
           "pred": "1932",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 1
         }
       }
     },
@@ -1330,44 +995,58 @@
         "full_context": {
           "pred": "$47.3 million USD",
           "em": 0,
-          "f1": 0.8,
-          "correct": 0
+          "f1": 0.8000000000000002,
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "hybrid": {
           "pred": "$47.3 million USD",
           "em": 0,
-          "f1": 0.8,
-          "correct": 0
+          "f1": 0.8000000000000002,
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "hyde": {
-          "pred": "$47.3 million USD",
+          "pred": "NOT_IN_CONTEXT",
           "em": 0,
-          "f1": 0.8,
-          "correct": 0
+          "f1": 0.5333333333333333,
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "naive": {
           "pred": "$47.3 million USD",
           "em": 0,
-          "f1": 0.8,
-          "correct": 0
+          "f1": 0.8000000000000002,
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "recursive_summary": {
           "pred": "NOT_IN_CONTEXT",
           "em": 0,
           "f1": 0.0,
-          "correct": 0
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "rerank": {
           "pred": "$47.3 million USD",
           "em": 0,
-          "f1": 0.8,
-          "correct": 0
+          "f1": 0.8000000000000002,
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "sliding_window": {
           "pred": "$47.3 million USD",
           "em": 0,
           "f1": 0.8,
-          "correct": 0
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 1
         }
       }
     },
@@ -1379,44 +1058,58 @@
         "full_context": {
           "pred": "Dr. Henrik Voss",
           "em": 0,
-          "f1": 0.8,
-          "correct": 0
+          "f1": 0.8000000000000002,
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "hybrid": {
           "pred": "Dr. Henrik Voss",
           "em": 0,
-          "f1": 0.8,
-          "correct": 0
+          "f1": 0.8000000000000002,
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "hyde": {
           "pred": "Dr. Henrik Voss",
           "em": 0,
-          "f1": 0.8,
-          "correct": 0
+          "f1": 0.8000000000000002,
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "naive": {
           "pred": "Dr. Henrik Voss",
           "em": 0,
-          "f1": 0.8,
-          "correct": 0
+          "f1": 0.8000000000000002,
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "recursive_summary": {
           "pred": "NOT_IN_CONTEXT",
           "em": 0,
           "f1": 0.0,
-          "correct": 0
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "rerank": {
           "pred": "Dr. Henrik Voss",
           "em": 0,
-          "f1": 0.8,
-          "correct": 0
+          "f1": 0.8000000000000002,
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "sliding_window": {
           "pred": "Dr. Henrik Voss",
           "em": 0,
           "f1": 0.8,
-          "correct": 0
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 1
         }
       }
     },
@@ -1429,43 +1122,57 @@
           "pred": "NOT_IN_CONTEXT",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "hybrid": {
           "pred": "NOT_IN_CONTEXT",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "hyde": {
           "pred": "NOT_IN_CONTEXT",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "naive": {
           "pred": "NOT_IN_CONTEXT",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "recursive_summary": {
           "pred": "NOT_IN_CONTEXT",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "rerank": {
           "pred": "NOT_IN_CONTEXT",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "sliding_window": {
           "pred": "NOT_IN_CONTEXT",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 1
         }
       }
     },
@@ -1478,43 +1185,57 @@
           "pred": "NOT_IN_CONTEXT",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "hybrid": {
           "pred": "NOT_IN_CONTEXT",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "hyde": {
           "pred": "NOT_IN_CONTEXT",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "naive": {
           "pred": "NOT_IN_CONTEXT",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "recursive_summary": {
           "pred": "NOT_IN_CONTEXT",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "rerank": {
           "pred": "NOT_IN_CONTEXT",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "sliding_window": {
           "pred": "NOT_IN_CONTEXT",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 1
         }
       }
     },
@@ -1527,43 +1248,57 @@
           "pred": "NOT_IN_CONTEXT",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "hybrid": {
           "pred": "NOT_IN_CONTEXT",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "hyde": {
           "pred": "NOT_IN_CONTEXT",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "naive": {
           "pred": "NOT_IN_CONTEXT",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "recursive_summary": {
           "pred": "NOT_IN_CONTEXT",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "rerank": {
           "pred": "NOT_IN_CONTEXT",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "sliding_window": {
           "pred": "NOT_IN_CONTEXT",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 1
         }
       }
     },
@@ -1576,43 +1311,57 @@
           "pred": "NOT_IN_CONTEXT",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "hybrid": {
           "pred": "NOT_IN_CONTEXT",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "hyde": {
           "pred": "NOT_IN_CONTEXT",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "naive": {
           "pred": "NOT_IN_CONTEXT",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "recursive_summary": {
           "pred": "NOT_IN_CONTEXT",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "rerank": {
           "pred": "NOT_IN_CONTEXT",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "sliding_window": {
           "pred": "NOT_IN_CONTEXT",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 1
         }
       }
     },
@@ -1625,43 +1374,57 @@
           "pred": "NOT_IN_CONTEXT",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "hybrid": {
           "pred": "NOT_IN_CONTEXT",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "hyde": {
           "pred": "NOT_IN_CONTEXT",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "naive": {
           "pred": "NOT_IN_CONTEXT",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "recursive_summary": {
           "pred": "NOT_IN_CONTEXT",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "rerank": {
           "pred": "NOT_IN_CONTEXT",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "sliding_window": {
           "pred": "NOT_IN_CONTEXT",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 1
         }
       }
     },
@@ -1674,43 +1437,57 @@
           "pred": "NOT_IN_CONTEXT",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "hybrid": {
           "pred": "NOT_IN_CONTEXT",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "hyde": {
           "pred": "NOT_IN_CONTEXT",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "naive": {
           "pred": "NOT_IN_CONTEXT",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "recursive_summary": {
           "pred": "NOT_IN_CONTEXT",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "rerank": {
           "pred": "NOT_IN_CONTEXT",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "sliding_window": {
           "pred": "NOT_IN_CONTEXT",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 1
         }
       }
     },
@@ -1723,43 +1500,57 @@
           "pred": "Veridian",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "hybrid": {
           "pred": "NOT_IN_CONTEXT",
           "em": 0,
           "f1": 0.0,
-          "correct": 0
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "hyde": {
-          "pred": "Veridian",
-          "em": 1,
-          "f1": 1.0,
-          "correct": 1
+          "pred": "NOT_IN_CONTEXT",
+          "em": 0,
+          "f1": 0.0,
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "naive": {
           "pred": "Veridian",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "recursive_summary": {
           "pred": "NOT_IN_CONTEXT",
           "em": 0,
           "f1": 0.0,
-          "correct": 0
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "rerank": {
           "pred": "NOT_IN_CONTEXT",
           "em": 0,
           "f1": 0.0,
-          "correct": 0
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "sliding_window": {
-          "pred": "Veridian",
-          "em": 1,
-          "f1": 1.0,
-          "correct": 1
+          "pred": "NOT_IN_CONTEXT",
+          "em": 0,
+          "f1": 0.0,
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 1
         }
       }
     },
@@ -1772,43 +1563,57 @@
           "pred": "Quentin Aldermann",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "hybrid": {
           "pred": "Quentin Aldermann",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "hyde": {
           "pred": "Quentin Aldermann",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "naive": {
           "pred": "Quentin Aldermann",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "recursive_summary": {
           "pred": "NOT_IN_CONTEXT",
           "em": 0,
           "f1": 0.0,
-          "correct": 0
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "rerank": {
           "pred": "Quentin Aldermann",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "sliding_window": {
           "pred": "Quentin Aldermann",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 1
         }
       }
     },
@@ -1818,46 +1623,60 @@
       "gold": "Halden Institute for Computational Mycology",
       "predictions": {
         "full_context": {
-          "pred": "Halden Institute for Computational Mycology",
+          "pred": "The Halden Institute for Computational Mycology",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "hybrid": {
           "pred": "Halden Institute for Computational Mycology",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "hyde": {
-          "pred": "NOT_IN_CONTEXT",
-          "em": 0,
-          "f1": 0.0,
-          "correct": 0
+          "pred": "Halden Institute for Computational Mycology",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "naive": {
           "pred": "Halden Institute for Computational Mycology",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "recursive_summary": {
           "pred": "NOT_IN_CONTEXT",
           "em": 0,
           "f1": 0.0,
-          "correct": 0
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "rerank": {
           "pred": "Halden Institute for Computational Mycology",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "sliding_window": {
           "pred": "Halden Institute for Computational Mycology",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 1
         }
       }
     },
@@ -1867,46 +1686,60 @@
       "gold": "Auralite Accord",
       "predictions": {
         "full_context": {
-          "pred": "The Auralite Accord",
+          "pred": "The Auralite Accord. (Wait, the prompt asks for \"as few words",
           "em": 1,
-          "f1": 1.0,
-          "correct": 1
+          "f1": 0.7878787878787877,
+          "correct": 1,
+          "correct_rate": 0.6666666666666666,
+          "n_seeds": 3
         },
         "hybrid": {
           "pred": "NOT_IN_CONTEXT",
           "em": 0,
           "f1": 0.0,
-          "correct": 0
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "hyde": {
-          "pred": "Auralite Accord",
-          "em": 1,
-          "f1": 1.0,
-          "correct": 1
+          "pred": "NOT_IN_CONTEXT",
+          "em": 0,
+          "f1": 0.3333333333333333,
+          "correct": 0,
+          "correct_rate": 0.3333333333333333,
+          "n_seeds": 3
         },
         "naive": {
           "pred": "NOT_IN_CONTEXT",
           "em": 0,
           "f1": 0.0,
-          "correct": 0
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "recursive_summary": {
           "pred": "NOT_IN_CONTEXT",
           "em": 0,
           "f1": 0.0,
-          "correct": 0
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "rerank": {
           "pred": "Auralite Accord",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "sliding_window": {
-          "pred": "Article 7-bis of the Auralite Accord",
-          "em": 0,
-          "f1": 0.5,
-          "correct": 0
+          "pred": "Auralite Accord",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 1
         }
       }
     },
@@ -1917,45 +1750,59 @@
       "predictions": {
         "full_context": {
           "pred": "1991, Veridian Heights.",
-          "em": 1,
-          "f1": 1.0,
-          "correct": 1
+          "em": 0,
+          "f1": 0.9047619047619048,
+          "correct": 0,
+          "correct_rate": 0.3333333333333333,
+          "n_seeds": 3
         },
         "hybrid": {
           "pred": "1991, Veridian Heights",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "hyde": {
-          "pred": "1991, Veridian Heights",
+          "pred": "1991, Veridian Heights.",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "naive": {
           "pred": "1991, Veridian Heights",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "recursive_summary": {
           "pred": "NOT_IN_CONTEXT",
           "em": 0,
           "f1": 0.0,
-          "correct": 0
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "rerank": {
-          "pred": "1991, Veridian Heights.",
+          "pred": "1991, Veridian Heights",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "sliding_window": {
           "pred": "1991, Veridian Heights",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 1
         }
       }
     },
@@ -1967,44 +1814,58 @@
         "full_context": {
           "pred": "Ambassador Iola Penmarrick",
           "em": 0,
-          "f1": 0.8,
-          "correct": 0
+          "f1": 0.8000000000000002,
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "hybrid": {
           "pred": "Ambassador Iola Penmarrick",
           "em": 0,
-          "f1": 0.8,
-          "correct": 0
+          "f1": 0.8000000000000002,
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "hyde": {
           "pred": "Ambassador Iola Penmarrick",
           "em": 0,
-          "f1": 0.8,
-          "correct": 0
+          "f1": 0.8000000000000002,
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "naive": {
           "pred": "Ambassador Iola Penmarrick",
           "em": 0,
-          "f1": 0.8,
-          "correct": 0
+          "f1": 0.8000000000000002,
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "recursive_summary": {
           "pred": "NOT_IN_CONTEXT",
           "em": 0,
           "f1": 0.0,
-          "correct": 0
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "rerank": {
           "pred": "Ambassador Iola Penmarrick",
           "em": 0,
-          "f1": 0.8,
-          "correct": 0
+          "f1": 0.8000000000000002,
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "sliding_window": {
           "pred": "Ambassador Iola Penmarrick",
           "em": 0,
           "f1": 0.8,
-          "correct": 0
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 1
         }
       }
     },
@@ -2015,45 +1876,59 @@
       "predictions": {
         "full_context": {
           "pred": "32 years old",
-          "em": 0,
-          "f1": 0.8,
-          "correct": 0
+          "em": 1,
+          "f1": 0.9333333333333332,
+          "correct": 1,
+          "correct_rate": 0.6666666666666666,
+          "n_seeds": 3
         },
         "hybrid": {
           "pred": "NOT_IN_CONTEXT",
           "em": 0,
           "f1": 0.0,
-          "correct": 0
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "hyde": {
-          "pred": "NOT_IN_CONTEXT",
+          "pred": "32 years",
           "em": 0,
-          "f1": 0.0,
-          "correct": 0
+          "f1": 0.6,
+          "correct": 0,
+          "correct_rate": 0.3333333333333333,
+          "n_seeds": 3
         },
         "naive": {
           "pred": "NOT_IN_CONTEXT",
           "em": 0,
           "f1": 0.0,
-          "correct": 0
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "recursive_summary": {
           "pred": "NOT_IN_CONTEXT",
           "em": 0,
           "f1": 0.0,
-          "correct": 0
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "rerank": {
-          "pred": "32 years (records date back to 1991)",
+          "pred": "NOT_IN_CONTEXT",
           "em": 0,
-          "f1": 0.4444444444444445,
-          "correct": 0
+          "f1": 0.0,
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "sliding_window": {
           "pred": "32 years old",
           "em": 0,
           "f1": 0.8,
-          "correct": 0
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 1
         }
       }
     },
@@ -2066,43 +1941,57 @@
           "pred": "542 kilometers",
           "em": 0,
           "f1": 0.5,
-          "correct": 0
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "hybrid": {
           "pred": "542 kilometers",
           "em": 0,
           "f1": 0.5,
-          "correct": 0
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "hyde": {
           "pred": "542 kilometers",
           "em": 0,
           "f1": 0.5,
-          "correct": 0
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "naive": {
           "pred": "542 kilometers",
           "em": 0,
           "f1": 0.5,
-          "correct": 0
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "recursive_summary": {
           "pred": "NOT_IN_CONTEXT",
           "em": 0,
           "f1": 0.0,
-          "correct": 0
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "rerank": {
           "pred": "542 kilometers",
           "em": 0,
           "f1": 0.5,
-          "correct": 0
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "sliding_window": {
-          "pred": "542",
+          "pred": "542 kilometers",
           "em": 0,
-          "f1": 0.6666666666666666,
-          "correct": 0
+          "f1": 0.5,
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 1
         }
       }
     },
@@ -2115,43 +2004,57 @@
           "pred": "MULBERRY-7Q",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "hybrid": {
           "pred": "MULBERRY-7Q",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "hyde": {
           "pred": "MULBERRY-7Q",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "naive": {
           "pred": "MULBERRY-7Q",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "recursive_summary": {
           "pred": "NOT_IN_CONTEXT",
           "em": 0,
           "f1": 0.0,
-          "correct": 0
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "rerank": {
           "pred": "MULBERRY-7Q",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "sliding_window": {
           "pred": "MULBERRY-7Q",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 1
         }
       }
     },
@@ -2164,43 +2067,57 @@
           "pred": "0.46 ppm",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "hybrid": {
           "pred": "0.46 ppm",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "hyde": {
           "pred": "0.46 ppm",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "naive": {
           "pred": "0.46 ppm",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "recursive_summary": {
           "pred": "NOT_IN_CONTEXT",
           "em": 0,
           "f1": 0.0,
-          "correct": 0
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "rerank": {
           "pred": "0.46 ppm",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "sliding_window": {
           "pred": "0.46 ppm",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 1
         }
       }
     },
@@ -2213,43 +2130,57 @@
           "pred": "M7-RX-204-A",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "hybrid": {
           "pred": "M7-RX-204-A",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "hyde": {
           "pred": "M7-RX-204-A",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "naive": {
           "pred": "M7-RX-204-A",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "recursive_summary": {
           "pred": "NOT_IN_CONTEXT",
           "em": 0,
           "f1": 0.0,
-          "correct": 0
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "rerank": {
           "pred": "M7-RX-204-A",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "sliding_window": {
           "pred": "M7-RX-204-A",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 1
         }
       }
     },
@@ -2262,43 +2193,57 @@
           "pred": "4.832 GHz",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "hybrid": {
           "pred": "4.832 GHz",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "hyde": {
           "pred": "4.832 GHz",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "naive": {
           "pred": "4.832 GHz",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "recursive_summary": {
           "pred": "NOT_IN_CONTEXT",
           "em": 0,
           "f1": 0.0,
-          "correct": 0
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "rerank": {
           "pred": "4.832 GHz",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "sliding_window": {
           "pred": "4.832 GHz",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 1
         }
       }
     },
@@ -2311,43 +2256,57 @@
           "pred": "12%",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "hybrid": {
           "pred": "12%",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "hyde": {
           "pred": "12%",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "naive": {
           "pred": "12%",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "recursive_summary": {
           "pred": "NOT_IN_CONTEXT",
           "em": 0,
           "f1": 0.0,
-          "correct": 0
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "rerank": {
           "pred": "12%",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "sliding_window": {
           "pred": "12%",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 1
         }
       }
     },
@@ -2357,46 +2316,60 @@
       "gold": "178",
       "predictions": {
         "full_context": {
-          "pred": "178 staff members",
+          "pred": "178 staff members.",
           "em": 0,
           "f1": 0.5,
-          "correct": 0
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "hybrid": {
-          "pred": "178 staff members",
+          "pred": "178",
           "em": 0,
-          "f1": 0.5,
-          "correct": 0
+          "f1": 0.6666666666666666,
+          "correct": 0,
+          "correct_rate": 0.3333333333333333,
+          "n_seeds": 3
         },
         "hyde": {
-          "pred": "178 staff members",
-          "em": 0,
-          "f1": 0.5,
-          "correct": 0
+          "pred": "178",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "naive": {
-          "pred": "178 staff members",
-          "em": 0,
-          "f1": 0.5,
-          "correct": 0
+          "pred": "178",
+          "em": 1,
+          "f1": 0.8333333333333334,
+          "correct": 1,
+          "correct_rate": 0.6666666666666666,
+          "n_seeds": 3
         },
         "recursive_summary": {
           "pred": "NOT_IN_CONTEXT",
           "em": 0,
           "f1": 0.0,
-          "correct": 0
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "rerank": {
-          "pred": "178 staff members",
-          "em": 0,
-          "f1": 0.5,
-          "correct": 0
+          "pred": "178",
+          "em": 1,
+          "f1": 0.8333333333333334,
+          "correct": 1,
+          "correct_rate": 0.6666666666666666,
+          "n_seeds": 3
         },
         "sliding_window": {
           "pred": "178",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 1
         }
       }
     },
@@ -2406,46 +2379,60 @@
       "gold": "7 years",
       "predictions": {
         "full_context": {
-          "pred": "Seven years",
+          "pred": "Seven years.",
           "em": 0,
           "f1": 0.5,
-          "correct": 0
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "hybrid": {
           "pred": "Seven years",
           "em": 0,
-          "f1": 0.5,
-          "correct": 0
+          "f1": 0.4444444444444444,
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "hyde": {
           "pred": "Seven years",
           "em": 0,
           "f1": 0.5,
-          "correct": 0
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "naive": {
           "pred": "Seven years",
           "em": 0,
           "f1": 0.5,
-          "correct": 0
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "recursive_summary": {
           "pred": "NOT_IN_CONTEXT",
           "em": 0,
           "f1": 0.0,
-          "correct": 0
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "rerank": {
           "pred": "Seven years",
           "em": 0,
           "f1": 0.5,
-          "correct": 0
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "sliding_window": {
           "pred": "seven years",
           "em": 0,
           "f1": 0.5,
-          "correct": 0
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 1
         }
       }
     },
@@ -2458,43 +2445,57 @@
           "pred": "14.5 degrees Celsius",
           "em": 0,
           "f1": 0.5,
-          "correct": 0
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "hybrid": {
           "pred": "14.5 degrees Celsius",
           "em": 0,
           "f1": 0.5,
-          "correct": 0
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "hyde": {
           "pred": "14.5 degrees Celsius",
           "em": 0,
           "f1": 0.5,
-          "correct": 0
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "naive": {
           "pred": "14.5 degrees Celsius",
           "em": 0,
           "f1": 0.5,
-          "correct": 0
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "recursive_summary": {
           "pred": "NOT_IN_CONTEXT",
           "em": 0,
           "f1": 0.0,
-          "correct": 0
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "rerank": {
           "pred": "14.5 degrees Celsius",
           "em": 0,
           "f1": 0.5,
-          "correct": 0
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "sliding_window": {
-          "pred": "14.5 degrees Celsius",
-          "em": 0,
-          "f1": 0.5,
-          "correct": 0
+          "pred": "14.5",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 1
         }
       }
     },
@@ -2507,43 +2508,57 @@
           "pred": "1991",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "hybrid": {
           "pred": "1991",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "hyde": {
           "pred": "1991",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "naive": {
           "pred": "1991",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "recursive_summary": {
           "pred": "1991",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "rerank": {
           "pred": "1991",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "sliding_window": {
           "pred": "1991",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 1
         }
       }
     },
@@ -2556,43 +2571,57 @@
           "pred": "Quentin Aldermann",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "hybrid": {
           "pred": "Quentin Aldermann",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "hyde": {
           "pred": "Quentin Aldermann",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "naive": {
           "pred": "Quentin Aldermann",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "recursive_summary": {
           "pred": "NOT_IN_CONTEXT",
           "em": 0,
           "f1": 0.0,
-          "correct": 0
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "rerank": {
           "pred": "Quentin Aldermann",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "sliding_window": {
           "pred": "Quentin Aldermann",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 1
         }
       }
     },
@@ -2605,43 +2634,57 @@
           "pred": "9 April 2019",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "hybrid": {
           "pred": "9 April 2019",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "hyde": {
           "pred": "9 April 2019",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "naive": {
           "pred": "9 April 2019",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "recursive_summary": {
           "pred": "NOT_IN_CONTEXT",
           "em": 0,
           "f1": 0.0,
-          "correct": 0
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "rerank": {
           "pred": "9 April 2019",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "sliding_window": {
           "pred": "9 April 2019",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 1
         }
       }
     },
@@ -2654,45 +2697,373 @@
           "pred": "14 November 1987",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "hybrid": {
           "pred": "14 November 1987",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "hyde": {
           "pred": "14 November 1987",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "naive": {
           "pred": "14 November 1987",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "recursive_summary": {
-          "pred": "1987",
+          "pred": "NOT_IN_CONTEXT",
           "em": 0,
-          "f1": 0.5,
-          "correct": 0
+          "f1": 0.0,
+          "correct": 0,
+          "correct_rate": 0.0,
+          "n_seeds": 3
         },
         "rerank": {
           "pred": "14 November 1987",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 3
         },
         "sliding_window": {
           "pred": "14 November 1987",
           "em": 1,
           "f1": 1.0,
-          "correct": 1
+          "correct": 1,
+          "correct_rate": 1.0,
+          "n_seeds": 1
         }
       }
     }
-  ]
+  ],
+  "win_matrix": {
+    "full_context": {
+      "full_context": {
+        "wins": 0,
+        "losses": 0,
+        "ties": 0,
+        "n": 0
+      },
+      "hybrid": {
+        "wins": 3,
+        "losses": 2,
+        "ties": 29,
+        "n": 34
+      },
+      "hyde": {
+        "wins": 3,
+        "losses": 2,
+        "ties": 29,
+        "n": 34
+      },
+      "naive": {
+        "wins": 2,
+        "losses": 2,
+        "ties": 30,
+        "n": 34
+      },
+      "recursive_summary": {
+        "wins": 17,
+        "losses": 0,
+        "ties": 17,
+        "n": 34
+      },
+      "rerank": {
+        "wins": 2,
+        "losses": 3,
+        "ties": 29,
+        "n": 34
+      },
+      "sliding_window": {
+        "wins": 2,
+        "losses": 5,
+        "ties": 27,
+        "n": 34
+      }
+    },
+    "hybrid": {
+      "full_context": {
+        "wins": 2,
+        "losses": 3,
+        "ties": 29,
+        "n": 34
+      },
+      "hybrid": {
+        "wins": 0,
+        "losses": 0,
+        "ties": 0,
+        "n": 0
+      },
+      "hyde": {
+        "wins": 0,
+        "losses": 3,
+        "ties": 31,
+        "n": 34
+      },
+      "naive": {
+        "wins": 0,
+        "losses": 2,
+        "ties": 32,
+        "n": 34
+      },
+      "recursive_summary": {
+        "wins": 15,
+        "losses": 0,
+        "ties": 19,
+        "n": 34
+      },
+      "rerank": {
+        "wins": 0,
+        "losses": 2,
+        "ties": 32,
+        "n": 34
+      },
+      "sliding_window": {
+        "wins": 0,
+        "losses": 4,
+        "ties": 30,
+        "n": 34
+      }
+    },
+    "hyde": {
+      "full_context": {
+        "wins": 2,
+        "losses": 3,
+        "ties": 29,
+        "n": 34
+      },
+      "hybrid": {
+        "wins": 3,
+        "losses": 0,
+        "ties": 31,
+        "n": 34
+      },
+      "hyde": {
+        "wins": 0,
+        "losses": 0,
+        "ties": 0,
+        "n": 0
+      },
+      "naive": {
+        "wins": 3,
+        "losses": 1,
+        "ties": 30,
+        "n": 34
+      },
+      "recursive_summary": {
+        "wins": 17,
+        "losses": 0,
+        "ties": 17,
+        "n": 34
+      },
+      "rerank": {
+        "wins": 2,
+        "losses": 1,
+        "ties": 31,
+        "n": 34
+      },
+      "sliding_window": {
+        "wins": 1,
+        "losses": 3,
+        "ties": 30,
+        "n": 34
+      }
+    },
+    "naive": {
+      "full_context": {
+        "wins": 2,
+        "losses": 2,
+        "ties": 30,
+        "n": 34
+      },
+      "hybrid": {
+        "wins": 2,
+        "losses": 0,
+        "ties": 32,
+        "n": 34
+      },
+      "hyde": {
+        "wins": 1,
+        "losses": 3,
+        "ties": 30,
+        "n": 34
+      },
+      "naive": {
+        "wins": 0,
+        "losses": 0,
+        "ties": 0,
+        "n": 0
+      },
+      "recursive_summary": {
+        "wins": 16,
+        "losses": 0,
+        "ties": 18,
+        "n": 34
+      },
+      "rerank": {
+        "wins": 1,
+        "losses": 1,
+        "ties": 32,
+        "n": 34
+      },
+      "sliding_window": {
+        "wins": 1,
+        "losses": 4,
+        "ties": 29,
+        "n": 34
+      }
+    },
+    "recursive_summary": {
+      "full_context": {
+        "wins": 0,
+        "losses": 17,
+        "ties": 17,
+        "n": 34
+      },
+      "hybrid": {
+        "wins": 0,
+        "losses": 15,
+        "ties": 19,
+        "n": 34
+      },
+      "hyde": {
+        "wins": 0,
+        "losses": 17,
+        "ties": 17,
+        "n": 34
+      },
+      "naive": {
+        "wins": 0,
+        "losses": 16,
+        "ties": 18,
+        "n": 34
+      },
+      "recursive_summary": {
+        "wins": 0,
+        "losses": 0,
+        "ties": 0,
+        "n": 0
+      },
+      "rerank": {
+        "wins": 0,
+        "losses": 16,
+        "ties": 18,
+        "n": 34
+      },
+      "sliding_window": {
+        "wins": 0,
+        "losses": 18,
+        "ties": 16,
+        "n": 34
+      }
+    },
+    "rerank": {
+      "full_context": {
+        "wins": 3,
+        "losses": 2,
+        "ties": 29,
+        "n": 34
+      },
+      "hybrid": {
+        "wins": 2,
+        "losses": 0,
+        "ties": 32,
+        "n": 34
+      },
+      "hyde": {
+        "wins": 1,
+        "losses": 2,
+        "ties": 31,
+        "n": 34
+      },
+      "naive": {
+        "wins": 1,
+        "losses": 1,
+        "ties": 32,
+        "n": 34
+      },
+      "recursive_summary": {
+        "wins": 16,
+        "losses": 0,
+        "ties": 18,
+        "n": 34
+      },
+      "rerank": {
+        "wins": 0,
+        "losses": 0,
+        "ties": 0,
+        "n": 0
+      },
+      "sliding_window": {
+        "wins": 0,
+        "losses": 3,
+        "ties": 31,
+        "n": 34
+      }
+    },
+    "sliding_window": {
+      "full_context": {
+        "wins": 5,
+        "losses": 2,
+        "ties": 27,
+        "n": 34
+      },
+      "hybrid": {
+        "wins": 4,
+        "losses": 0,
+        "ties": 30,
+        "n": 34
+      },
+      "hyde": {
+        "wins": 3,
+        "losses": 1,
+        "ties": 30,
+        "n": 34
+      },
+      "naive": {
+        "wins": 4,
+        "losses": 1,
+        "ties": 29,
+        "n": 34
+      },
+      "recursive_summary": {
+        "wins": 18,
+        "losses": 0,
+        "ties": 16,
+        "n": 34
+      },
+      "rerank": {
+        "wins": 3,
+        "losses": 0,
+        "ties": 31,
+        "n": 34
+      },
+      "sliding_window": {
+        "wins": 0,
+        "losses": 0,
+        "ties": 0,
+        "n": 0
+      }
+    }
+  },
+  "pairwise_em": {},
+  "pairwise_f1": {},
+  "is_sweep": true,
+  "temperature": 0.3
 }

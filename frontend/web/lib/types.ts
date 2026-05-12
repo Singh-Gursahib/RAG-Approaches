@@ -32,6 +32,10 @@ export interface HeadlineRow {
   p50_ms: number;
   p95_ms: number;
   wall_s: number;
+  // Optional, present when data was built from a multi-seed sweep
+  n_seeds?: number;
+  em_seed_std?: number;
+  f1_seed_std?: number;
 }
 
 export interface PerProbeRow {
@@ -52,6 +56,9 @@ export interface QuestionPrediction {
   em: number;
   f1: number;
   correct: number;
+  // Optional, present when data was built from a multi-seed sweep
+  correct_rate?: number;
+  n_seeds?: number;
 }
 
 export interface Question {
@@ -93,4 +100,6 @@ export interface DashboardData {
   pairwise_f1: Record<string, Record<string, number>>;
   win_matrix: Record<string, Record<string, WinCell>>;
   questions: Question[];
+  is_sweep?: boolean;
+  temperature?: number;
 }

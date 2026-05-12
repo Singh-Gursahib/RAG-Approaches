@@ -1,0 +1,48 @@
+{
+  "run_id": "full_context_T03_seed2",
+  "approach": "full_context",
+  "n_questions": 34,
+  "em": 0.6764705882352942,
+  "f1": 0.8876750700280113,
+  "accuracy": 0.6764705882352942,
+  "per_type": {
+    "distractor": {
+      "n": 8,
+      "em": 0.375,
+      "f1": 0.8154761904761905,
+      "accuracy": 0.375
+    },
+    "hallucination": {
+      "n": 6,
+      "em": 1.0,
+      "f1": 1.0,
+      "accuracy": 1.0
+    },
+    "multi_hop": {
+      "n": 8,
+      "em": 0.625,
+      "f1": 0.8946428571428571,
+      "accuracy": 0.625
+    },
+    "needle": {
+      "n": 8,
+      "em": 0.625,
+      "f1": 0.8125,
+      "accuracy": 0.625
+    },
+    "sanity": {
+      "n": 4,
+      "em": 1.0,
+      "f1": 1.0,
+      "accuracy": 1.0
+    }
+  },
+  "cost_usd": 0.0911393,
+  "tokens_in": 302281,
+  "tokens_out": 182,
+  "latency_p50_ms": 19465.700207976624,
+  "latency_p95_ms": 45952.268624911085,
+  "wall_clock_s": 741.6168089588173,
+  "cumulative_spend_usd": 0.7405658000000013,
+  "budget_cap_usd": 5.0
+}

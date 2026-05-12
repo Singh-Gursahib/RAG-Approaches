@@ -104,10 +104,13 @@ def run(
     config_path: str | Path,
     run_id: str | None = None,
     out_root: str | Path = "runs",
+    config_overrides: dict[str, Any] | None = None,
 ) -> Path:
     _eager_register()
 
     cfg = load_resolved_config(config_path)
+    if config_overrides:
+        cfg = _merge(cfg, config_overrides)
     approach_name = cfg.get("approach")
     if not approach_name:
         raise ValueError(f"Config {config_path} is missing required key 'approach'.")

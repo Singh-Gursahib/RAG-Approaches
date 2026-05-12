@@ -1,0 +1,53 @@
+{
+  "run_id": "full_context_T03_seed1",
+  "approach": "full_context",
+  "package_version": "0.1.0",
+  "started_at": "2026-05-12T18:00:54.610570+00:00",
+  "config_path": "configs/approaches/full_context.yaml",
+  "config_hash": "a66a1b40ee38d532",
+  "config_resolved": {
+    "llm": {
+      "model": "gemini-3-flash-preview",
+      "temperature": 0.3,
+      "max_output_tokens": 512
+    },
+    "embedding": {
+      "model": "sentence-transformers/all-MiniLM-L6-v2"
+    },
+    "reranker": {
+      "model": "BAAI/bge-reranker-base"
+    },
+    "chunking": {
+      "strategy": "sentence_window",
+      "target_tokens": 150,
+      "overlap_tokens": 30
+    },
+    "retrieval": {
+      "top_k": 5,
+      "top_n_for_rerank": 20
+    },
+    "budget": {
+      "cap_usd": 5.0,
+      "warn_pct": 0.5,
+      "abort_pct": 0.95
+    },
+    "paths": {
+      "eval_corpus": "data/eval_corpus",
+      "eval_set": "tests/eval_set.jsonl",
+      "runs": "runs"
+    },
+    "approach": "full_context",
+    "seed": 1
+  },
+  "corpus_dir": "data/eval_corpus",
+  "corpus_hash": "1ae9d59747a42d96",
+  "eval_set_path": "tests/eval_set.jsonl",
+  "eval_set_hash": "1000a8960de1982f",
+  "n_questions": 34,
+  "n_chunks": 65,
+  "env": {
+    "python": "3.11.8",
+    "platform": "macOS-26.3-arm64-arm-64bit",
+    "model": "gemini-3-flash-preview"
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "run_id": "hyde_T03_seed1",
+  "approach": "hyde",
+  "n_questions": 34,
+  "em": 0.6764705882352942,
+  "f1": 0.8477591036414567,
+  "accuracy": 0.6764705882352942,
+  "per_type": {
+    "distractor": {
+      "n": 8,
+      "em": 0.375,
+      "f1": 0.8154761904761905,
+      "accuracy": 0.375
+    },
+    "hallucination": {
+      "n": 6,
+      "em": 1.0,
+      "f1": 1.0,
+      "accuracy": 1.0
+    },
+    "multi_hop": {
+      "n": 8,
+      "em": 0.5,
+      "f1": 0.6625,
+      "accuracy": 0.5
+    },
+    "needle": {
+      "n": 8,
+      "em": 0.75,
+      "f1": 0.875,
+      "accuracy": 0.75
+    },
+    "sanity": {
+      "n": 4,
+      "em": 1.0,
+      "f1": 1.0,
+      "accuracy": 1.0
+    }
+  },
+  "cost_usd": 0.018516899999999996,
+  "tokens_in": 43298,
+  "tokens_out": 2211,
+  "latency_p50_ms": 5049.355793045834,
+  "latency_p95_ms": 8572.363624116406,
+  "wall_clock_s": 189.9048251248896,
+  "cumulative_spend_usd": 0.4118093000000006,
+  "budget_cap_usd": 5.0
+}
