@@ -36,3 +36,10 @@ Thumbs.db
 
 # Notebook outputs
 .ipynb_checkpoints/
+
+# Next.js dashboard
+frontend/web/node_modules/
+frontend/web/.next/
+frontend/web/out/
+frontend/web/next-env.d.ts
+frontend/web/.turbo/

@@ -19,8 +19,12 @@ run:  ## Run one approach. Usage: make run config=configs/approaches/naive.yaml
 	@if [ -z "$(config)" ]; then echo "Usage: make run config=configs/approaches/<name>.yaml"; exit 2; fi
 	.venv/bin/python -m ragureap.runner --config $(config)
 
-ui:  ## (Phase 8) Launch the Streamlit dashboard.
-	@echo "Phase 8 — implement in frontend/app.py"
+dashboard-data:  ## Regenerate frontend/web/lib/data.json from runs/.
+	.venv/bin/python scripts/build_dashboard_data.py
+
+ui:  ## Launch the Next.js dashboard (regenerates data first).
+	@$(MAKE) dashboard-data
+	cd frontend/web && npm install --silent && npm run dev
 
 clean:  ## Remove build artifacts and caches (NOT runs/ or data/).
 	rm -rf build dist *.egg-info .pytest_cache .ruff_cache

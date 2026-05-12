@@ -1,0 +1,2698 @@
+{
+  "generated_at": "2026-05-12T16:06:47.502545+00:00",
+  "project": {
+    "name": "RAG_Ureap",
+    "budget_cap_usd": 5.0,
+    "cumulative_spend_usd": 0.2594,
+    "spend_pct": 5.19,
+    "total_llm_calls": 402,
+    "model": "gemini-3-flash-preview"
+  },
+  "corpus": {
+    "n_docs": 4,
+    "total_words": 5983,
+    "documents": [
+      {
+        "doc_id": "01_halden_institute",
+        "words": 1645,
+        "chars": 11388
+      },
+      {
+        "doc_id": "02_city_of_veridian",
+        "words": 1512,
+        "chars": 9819
+      },
+      {
+        "doc_id": "03_meridian7_satellite",
+        "words": 1341,
+        "chars": 9451
+      },
+      {
+        "doc_id": "04_auralite_accord",
+        "words": 1485,
+        "chars": 10342
+      }
+    ]
+  },
+  "eval_set": {
+    "n_questions": 34,
+    "by_probe_type": {
+      "needle": 8,
+      "multi_hop": 8,
+      "distractor": 8,
+      "hallucination": 6,
+      "sanity": 4
+    }
+  },
+  "headline": [
+    {
+      "approach": "sliding_window",
+      "run_id": "sliding_window_20260512_004119_9480ef",
+      "n": 34,
+      "em": 0.7058823529411765,
+      "em_lo": 0.5588235294117647,
+      "em_hi": 0.8529411764705882,
+      "f1": 0.900700280112045,
+      "f1_lo": 0.8399159663865546,
+      "f1_hi": 0.9546218487394957,
+      "cost_usd": 0.09721689999999997,
+      "tokens_in": 318223,
+      "tokens_out": 700,
+      "p50_ms": 7996.8707910738885,
+      "p95_ms": 10452.82966690138,
+      "wall_s": 288.369977416005
+    },
+    {
+      "approach": "full_context",
+      "run_id": "full_context_20260512_003505_dc03cd",
+      "n": 34,
+      "em": 0.6764705882352942,
+      "em_lo": 0.5294117647058824,
+      "em_hi": 0.8235294117647058,
+      "f1": 0.8859943977591036,
+      "f1_lo": 0.823515406162465,
+      "f1_hi": 0.9457983193277312,
+      "cost_usd": 0.09113930000000002,
+      "tokens_in": 302281,
+      "tokens_out": 182,
+      "p50_ms": 2536.991709144786,
+      "p95_ms": 4701.360250124708,
+      "wall_s": 233.40503166709095
+    },
+    {
+      "approach": "rerank",
+      "run_id": "rerank_20260512_002410_3c14e1",
+      "n": 34,
+      "em": 0.6470588235294118,
+      "em_lo": 0.47058823529411764,
+      "em_hi": 0.7941176470588235,
+      "f1": 0.8363211951447246,
+      "f1_lo": 0.7411437908496733,
+      "f1_hi": 0.9186274509803921,
+      "cost_usd": 0.012323399999999998,
+      "tokens_in": 39428,
+      "tokens_out": 198,
+      "p50_ms": 2910.50887433812,
+      "p95_ms": 3794.2612080369145,
+      "wall_s": 106.3232583750505
+    },
+    {
+      "approach": "naive",
+      "run_id": "naive_20260512_000900_094414",
+      "n": 34,
+      "em": 0.6470588235294118,
+      "em_lo": 0.47058823529411764,
+      "em_hi": 0.7941176470588235,
+      "f1": 0.8232492997198879,
+      "f1_lo": 0.712874649859944,
+      "f1_hi": 0.9121988795518207,
+      "cost_usd": 0.0122186,
+      "tokens_in": 39162,
+      "tokens_out": 188,
+      "p50_ms": 2149.197624763474,
+      "p95_ms": 3070.1257919427007,
+      "wall_s": 77.04163387487642
+    },
+    {
+      "approach": "hyde",
+      "run_id": "hyde_20260512_001934_8b5af6",
+      "n": 34,
+      "em": 0.6470588235294118,
+      "em_lo": 0.47058823529411764,
+      "em_hi": 0.7941176470588235,
+      "f1": 0.7980392156862745,
+      "f1_lo": 0.6833088235294118,
+      "f1_hi": 0.9029411764705882,
+      "cost_usd": 0.019293599999999998,
+      "tokens_in": 43387,
+      "tokens_out": 2511,
+      "p50_ms": 5206.74033369869,
+      "p95_ms": 6850.726958131418,
+      "wall_s": 183.72223008284345
+    },
+    {
+      "approach": "hybrid",
+      "run_id": "hybrid_20260512_001727_bc93e2",
+      "n": 34,
+      "em": 0.6176470588235294,
+      "em_lo": 0.4411764705882353,
+      "em_hi": 0.7647058823529411,
+      "f1": 0.7938375350140056,
+      "f1_lo": 0.677156862745098,
+      "f1_hi": 0.8928571428571429,
+      "cost_usd": 0.012160199999999998,
+      "tokens_in": 38959,
+      "tokens_out": 189,
+      "p50_ms": 2084.6024160273373,
+      "p95_ms": 2705.1247088238597,
+      "wall_s": 73.09833679185249
+    },
+    {
+      "approach": "recursive_summary",
+      "run_id": "recursive_summary_20260512_003929_c6c8c0",
+      "n": 34,
+      "em": 0.20588235294117646,
+      "em_lo": 0.08823529411764706,
+      "em_hi": 0.35294117647058826,
+      "f1": 0.22058823529411764,
+      "f1_lo": 0.08823529411764706,
+      "f1_hi": 0.36764705882352944,
+      "cost_usd": 0.006774999999999999,
+      "tokens_in": 19925,
+      "tokens_out": 319,
+      "p50_ms": 1945.118750212714,
+      "p95_ms": 2884.263915941119,
+      "wall_s": 91.89801020896994
+    }
+  ],
+  "per_probe": [
+    {
+      "approach": "full_context",
+      "run_id": "full_context_20260512_003505_dc03cd",
+      "probe_type": "needle",
+      "n": 8,
+      "em": 0.625,
+      "em_lo": 0.25,
+      "em_hi": 0.875,
+      "f1": 0.8125,
+      "f1_lo": 0.625,
+      "f1_hi": 0.9375
+    },
+    {
+      "approach": "full_context",
+      "run_id": "full_context_20260512_003505_dc03cd",
+      "probe_type": "multi_hop",
+      "n": 8,
+      "em": 0.625,
+      "em_lo": 0.25,
+      "em_hi": 0.875,
+      "f1": 0.8875,
+      "f1_lo": 0.7625,
+      "f1_hi": 0.975
+    },
+    {
+      "approach": "full_context",
+      "run_id": "full_context_20260512_003505_dc03cd",
+      "probe_type": "distractor",
+      "n": 8,
+      "em": 0.375,
+      "em_lo": 0.125,
+      "em_hi": 0.75,
+      "f1": 0.8154761904761905,
+      "f1_lo": 0.675,
+      "f1_hi": 0.9321428571428572
+    },
+    {
+      "approach": "full_context",
+      "run_id": "full_context_20260512_003505_dc03cd",
+      "probe_type": "hallucination",
+      "n": 6,
+      "em": 1.0,
+      "em_lo": 1.0,
+      "em_hi": 1.0,
+      "f1": 1.0,
+      "f1_lo": 1.0,
+      "f1_hi": 1.0
+    },
+    {
+      "approach": "full_context",
+      "run_id": "full_context_20260512_003505_dc03cd",
+      "probe_type": "sanity",
+      "n": 4,
+      "em": 1.0,
+      "em_lo": 1.0,
+      "em_hi": 1.0,
+      "f1": 1.0,
+      "f1_lo": 1.0,
+      "f1_hi": 1.0
+    },
+    {
+      "approach": "hybrid",
+      "run_id": "hybrid_20260512_001727_bc93e2",
+      "probe_type": "needle",
+      "n": 8,
+      "em": 0.625,
+      "em_lo": 0.25,
+      "em_hi": 0.875,
+      "f1": 0.8125,
+      "f1_lo": 0.625,
+      "f1_hi": 0.9375
+    },
+    {
+      "approach": "hybrid",
+      "run_id": "hybrid_20260512_001727_bc93e2",
+      "probe_type": "multi_hop",
+      "n": 8,
+      "em": 0.375,
+      "em_lo": 0.125,
+      "em_hi": 0.75,
+      "f1": 0.5375,
+      "f1_lo": 0.225,
+      "f1_hi": 0.8253124999999982
+    },
+    {
+      "approach": "hybrid",
+      "run_id": "hybrid_20260512_001727_bc93e2",
+      "probe_type": "distractor",
+      "n": 8,
+      "em": 0.375,
+      "em_lo": 0.125,
+      "em_hi": 0.75,
+      "f1": 0.7738095238095238,
+      "f1_lo": 0.5916369047619048,
+      "f1_hi": 0.925
+    },
+    {
+      "approach": "hybrid",
+      "run_id": "hybrid_20260512_001727_bc93e2",
+      "probe_type": "hallucination",
+      "n": 6,
+      "em": 1.0,
+      "em_lo": 1.0,
+      "em_hi": 1.0,
+      "f1": 1.0,
+      "f1_lo": 1.0,
+      "f1_hi": 1.0
+    },
+    {
+      "approach": "hybrid",
+      "run_id": "hybrid_20260512_001727_bc93e2",
+      "probe_type": "sanity",
+      "n": 4,
+      "em": 1.0,
+      "em_lo": 1.0,
+      "em_hi": 1.0,
+      "f1": 1.0,
+      "f1_lo": 1.0,
+      "f1_hi": 1.0
+    },
+    {
+      "approach": "hyde",
+      "run_id": "hyde_20260512_001934_8b5af6",
+      "probe_type": "needle",
+      "n": 8,
+      "em": 0.625,
+      "em_lo": 0.25,
+      "em_hi": 0.875,
+      "f1": 0.8125,
+      "f1_lo": 0.625,
+      "f1_hi": 0.9375
+    },
+    {
+      "approach": "hyde",
+      "run_id": "hyde_20260512_001934_8b5af6",
+      "probe_type": "multi_hop",
+      "n": 8,
+      "em": 0.5,
+      "em_lo": 0.125,
+      "em_hi": 0.875,
+      "f1": 0.6625,
+      "f1_lo": 0.375,
+      "f1_hi": 0.925
+    },
+    {
+      "approach": "hyde",
+      "run_id": "hyde_20260512_001934_8b5af6",
+      "probe_type": "distractor",
+      "n": 8,
+      "em": 0.375,
+      "em_lo": 0.125,
+      "em_hi": 0.75,
+      "f1": 0.6666666666666667,
+      "f1_lo": 0.41666666666666674,
+      "f1_hi": 0.8999999999999999
+    },
+    {
+      "approach": "hyde",
+      "run_id": "hyde_20260512_001934_8b5af6",
+      "probe_type": "hallucination",
+      "n": 6,
+      "em": 1.0,
+      "em_lo": 1.0,
+      "em_hi": 1.0,
+      "f1": 1.0,
+      "f1_lo": 1.0,
+      "f1_hi": 1.0
+    },
+    {
+      "approach": "hyde",
+      "run_id": "hyde_20260512_001934_8b5af6",
+      "probe_type": "sanity",
+      "n": 4,
+      "em": 1.0,
+      "em_lo": 1.0,
+      "em_hi": 1.0,
+      "f1": 1.0,
+      "f1_lo": 1.0,
+      "f1_hi": 1.0
+    },
+    {
+      "approach": "naive",
+      "run_id": "naive_20260512_000900_094414",
+      "probe_type": "needle",
+      "n": 8,
+      "em": 0.625,
+      "em_lo": 0.25,
+      "em_hi": 0.875,
+      "f1": 0.8125,
+      "f1_lo": 0.625,
+      "f1_hi": 0.9375
+    },
+    {
+      "approach": "naive",
+      "run_id": "naive_20260512_000900_094414",
+      "probe_type": "multi_hop",
+      "n": 8,
+      "em": 0.5,
+      "em_lo": 0.125,
+      "em_hi": 0.875,
+      "f1": 0.6625,
+      "f1_lo": 0.375,
+      "f1_hi": 0.9375
+    },
+    {
+      "approach": "naive",
+      "run_id": "naive_20260512_000900_094414",
+      "probe_type": "distractor",
+      "n": 8,
+      "em": 0.375,
+      "em_lo": 0.125,
+      "em_hi": 0.75,
+      "f1": 0.7738095238095238,
+      "f1_lo": 0.5916369047619048,
+      "f1_hi": 0.925
+    },
+    {
+      "approach": "naive",
+      "run_id": "naive_20260512_000900_094414",
+      "probe_type": "hallucination",
+      "n": 6,
+      "em": 1.0,
+      "em_lo": 1.0,
+      "em_hi": 1.0,
+      "f1": 1.0,
+      "f1_lo": 1.0,
+      "f1_hi": 1.0
+    },
+    {
+      "approach": "naive",
+      "run_id": "naive_20260512_000900_094414",
+      "probe_type": "sanity",
+      "n": 4,
+      "em": 1.0,
+      "em_lo": 1.0,
+      "em_hi": 1.0,
+      "f1": 1.0,
+      "f1_lo": 1.0,
+      "f1_hi": 1.0
+    },
+    {
+      "approach": "recursive_summary",
+      "run_id": "recursive_summary_20260512_003929_c6c8c0",
+      "probe_type": "needle",
+      "n": 8,
+      "em": 0.0,
+      "em_lo": 0.0,
+      "em_hi": 0.0,
+      "f1": 0.0,
+      "f1_lo": 0.0,
+      "f1_hi": 0.0
+    },
+    {
+      "approach": "recursive_summary",
+      "run_id": "recursive_summary_20260512_003929_c6c8c0",
+      "probe_type": "multi_hop",
+      "n": 8,
+      "em": 0.0,
+      "em_lo": 0.0,
+      "em_hi": 0.0,
+      "f1": 0.0,
+      "f1_lo": 0.0,
+      "f1_hi": 0.0
+    },
+    {
+      "approach": "recursive_summary",
+      "run_id": "recursive_summary_20260512_003929_c6c8c0",
+      "probe_type": "distractor",
+      "n": 8,
+      "em": 0.0,
+      "em_lo": 0.0,
+      "em_hi": 0.0,
+      "f1": 0.0,
+      "f1_lo": 0.0,
+      "f1_hi": 0.0
+    },
+    {
+      "approach": "recursive_summary",
+      "run_id": "recursive_summary_20260512_003929_c6c8c0",
+      "probe_type": "hallucination",
+      "n": 6,
+      "em": 1.0,
+      "em_lo": 1.0,
+      "em_hi": 1.0,
+      "f1": 1.0,
+      "f1_lo": 1.0,
+      "f1_hi": 1.0
+    },
+    {
+      "approach": "recursive_summary",
+      "run_id": "recursive_summary_20260512_003929_c6c8c0",
+      "probe_type": "sanity",
+      "n": 4,
+      "em": 0.25,
+      "em_lo": 0.0,
+      "em_hi": 0.75,
+      "f1": 0.375,
+      "f1_lo": 0.0,
+      "f1_hi": 0.75
+    },
+    {
+      "approach": "rerank",
+      "run_id": "rerank_20260512_002410_3c14e1",
+      "probe_type": "needle",
+      "n": 8,
+      "em": 0.625,
+      "em_lo": 0.25,
+      "em_hi": 0.875,
+      "f1": 0.8125,
+      "f1_lo": 0.625,
+      "f1_hi": 0.9375
+    },
+    {
+      "approach": "rerank",
+      "run_id": "rerank_20260512_002410_3c14e1",
+      "probe_type": "multi_hop",
+      "n": 8,
+      "em": 0.5,
+      "em_lo": 0.125,
+      "em_hi": 0.875,
+      "f1": 0.7180555555555556,
+      "f1_lo": 0.46788194444444475,
+      "f1_hi": 0.9375
+    },
+    {
+      "approach": "rerank",
+      "run_id": "rerank_20260512_002410_3c14e1",
+      "probe_type": "distractor",
+      "n": 8,
+      "em": 0.375,
+      "em_lo": 0.125,
+      "em_hi": 0.75,
+      "f1": 0.7738095238095238,
+      "f1_lo": 0.5916369047619048,
+      "f1_hi": 0.925
+    },
+    {
+      "approach": "rerank",
+      "run_id": "rerank_20260512_002410_3c14e1",
+      "probe_type": "hallucination",
+      "n": 6,
+      "em": 1.0,
+      "em_lo": 1.0,
+      "em_hi": 1.0,
+      "f1": 1.0,
+      "f1_lo": 1.0,
+      "f1_hi": 1.0
+    },
+    {
+      "approach": "rerank",
+      "run_id": "rerank_20260512_002410_3c14e1",
+      "probe_type": "sanity",
+      "n": 4,
+      "em": 1.0,
+      "em_lo": 1.0,
+      "em_hi": 1.0,
+      "f1": 1.0,
+      "f1_lo": 1.0,
+      "f1_hi": 1.0
+    },
+    {
+      "approach": "sliding_window",
+      "run_id": "sliding_window_20260512_004119_9480ef",
+      "probe_type": "needle",
+      "n": 8,
+      "em": 0.75,
+      "em_lo": 0.4968750000000055,
+      "em_hi": 1.0,
+      "f1": 0.875,
+      "f1_lo": 0.7484375000000028,
+      "f1_hi": 1.0
+    },
+    {
+      "approach": "sliding_window",
+      "run_id": "sliding_window_20260512_004119_9480ef",
+      "probe_type": "multi_hop",
+      "n": 8,
+      "em": 0.5,
+      "em_lo": 0.125,
+      "em_hi": 0.875,
+      "f1": 0.8458333333333333,
+      "f1_lo": 0.7208333333333333,
+      "f1_hi": 0.9502083333333321
+    },
+    {
+      "approach": "sliding_window",
+      "run_id": "sliding_window_20260512_004119_9480ef",
+      "probe_type": "distractor",
+      "n": 8,
+      "em": 0.5,
+      "em_lo": 0.125,
+      "em_hi": 0.875,
+      "f1": 0.8571428571428572,
+      "f1_lo": 0.7212500000000003,
+      "f1_hi": 0.975
+    },
+    {
+      "approach": "sliding_window",
+      "run_id": "sliding_window_20260512_004119_9480ef",
+      "probe_type": "hallucination",
+      "n": 6,
+      "em": 1.0,
+      "em_lo": 1.0,
+      "em_hi": 1.0,
+      "f1": 1.0,
+      "f1_lo": 1.0,
+      "f1_hi": 1.0
+    },
+    {
+      "approach": "sliding_window",
+      "run_id": "sliding_window_20260512_004119_9480ef",
+      "probe_type": "sanity",
+      "n": 4,
+      "em": 1.0,
+      "em_lo": 1.0,
+      "em_hi": 1.0,
+      "f1": 1.0,
+      "f1_lo": 1.0,
+      "f1_hi": 1.0
+    }
+  ],
+  "pairwise_em": {
+    "full_context": {
+      "full_context": 1.0,
+      "hybrid": 1.0,
+      "hyde": 1.0,
+      "naive": 1.0,
+      "recursive_summary": 0.0012668496733247946,
+      "rerank": 1.0,
+      "sliding_window": 1.0
+    },
+    "hybrid": {
+      "full_context": 1.0,
+      "hybrid": 1.0,
+      "hyde": 1.0,
+      "naive": 1.0,
+      "recursive_summary": 0.0029249701277093572,
+      "rerank": 1.0,
+      "sliding_window": 1.0
+    },
+    "hyde": {
+      "full_context": 1.0,
+      "hybrid": 1.0,
+      "hyde": 1.0,
+      "naive": 1.0,
+      "recursive_summary": 0.0020427123578605102,
+      "rerank": 1.0,
+      "sliding_window": 1.0
+    },
+    "naive": {
+      "full_context": 1.0,
+      "hybrid": 1.0,
+      "hyde": 1.0,
+      "naive": 1.0,
+      "recursive_summary": 0.0020427123578605102,
+      "rerank": 1.0,
+      "sliding_window": 1.0
+    },
+    "recursive_summary": {
+      "full_context": 0.0012668496733247946,
+      "hybrid": 0.0029249701277093572,
+      "hyde": 0.0020427123578605102,
+      "naive": 0.0020427123578605102,
+      "recursive_summary": 1.0,
+      "rerank": 0.0020427123578605102,
+      "sliding_window": 0.0007849761864357324
+    },
+    "rerank": {
+      "full_context": 1.0,
+      "hybrid": 1.0,
+      "hyde": 1.0,
+      "naive": 1.0,
+      "recursive_summary": 0.0020427123578605102,
+      "rerank": 1.0,
+      "sliding_window": 1.0
+    },
+    "sliding_window": {
+      "full_context": 1.0,
+      "hybrid": 1.0,
+      "hyde": 1.0,
+      "naive": 1.0,
+      "recursive_summary": 0.0007849761864357324,
+      "rerank": 1.0,
+      "sliding_window": 1.0
+    }
+  },
+  "pairwise_f1": {
+    "full_context": {
+      "full_context": 1.0,
+      "hybrid": 0.7871963057648624,
+      "hyde": 0.7871963057648624,
+      "naive": 1.0,
+      "recursive_summary": 6.948986111307345e-05,
+      "rerank": 1.0,
+      "sliding_window": 1.0
+    },
+    "hybrid": {
+      "full_context": 0.7871963057648624,
+      "hybrid": 1.0,
+      "hyde": 1.0,
+      "naive": 1.0,
+      "recursive_summary": 0.0001959381134915569,
+      "rerank": 1.0,
+      "sliding_window": 0.40921757216427
+    },
+    "hyde": {
+      "full_context": 0.7871963057648624,
+      "hybrid": 1.0,
+      "hyde": 1.0,
+      "naive": 1.0,
+      "recursive_summary": 0.00018878690880451082,
+      "rerank": 1.0,
+      "sliding_window": 0.6694291708128765
+    },
+    "naive": {
+      "full_context": 1.0,
+      "hybrid": 1.0,
+      "hyde": 1.0,
+      "naive": 1.0,
+      "recursive_summary": 0.00014057320423433532,
+      "rerank": 1.0,
+      "sliding_window": 0.5903547593601833
+    },
+    "recursive_summary": {
+      "full_context": 6.948986111307345e-05,
+      "hybrid": 0.0001959381134915569,
+      "hyde": 0.00018878690880451082,
+      "naive": 0.00014057320423433532,
+      "recursive_summary": 1.0,
+      "rerank": 0.00010388302838756028,
+      "sliding_window": 6.642842636290681e-05
+    },
+    "rerank": {
+      "full_context": 1.0,
+      "hybrid": 1.0,
+      "hyde": 1.0,
+      "naive": 1.0,
+      "recursive_summary": 0.00010388302838756028,
+      "rerank": 1.0,
+      "sliding_window": 1.0
+    },
+    "sliding_window": {
+      "full_context": 1.0,
+      "hybrid": 0.40921757216427,
+      "hyde": 0.6694291708128765,
+      "naive": 0.5903547593601833,
+      "recursive_summary": 6.642842636290681e-05,
+      "rerank": 1.0,
+      "sliding_window": 1.0
+    }
+  },
+  "win_matrix": {
+    "full_context": {
+      "full_context": {
+        "wins": 0,
+        "losses": 0,
+        "ties": 0,
+        "n": 0
+      },
+      "hybrid": {
+        "wins": 2,
+        "losses": 0,
+        "ties": 32,
+        "n": 34
+      },
+      "hyde": {
+        "wins": 1,
+        "losses": 0,
+        "ties": 33,
+        "n": 34
+      },
+      "naive": {
+        "wins": 1,
+        "losses": 0,
+        "ties": 33,
+        "n": 34
+      },
+      "recursive_summary": {
+        "wins": 16,
+        "losses": 0,
+        "ties": 18,
+        "n": 34
+      },
+      "rerank": {
+        "wins": 1,
+        "losses": 0,
+        "ties": 33,
+        "n": 34
+      },
+      "sliding_window": {
+        "wins": 1,
+        "losses": 2,
+        "ties": 31,
+        "n": 34
+      }
+    },
+    "hybrid": {
+      "full_context": {
+        "wins": 0,
+        "losses": 2,
+        "ties": 32,
+        "n": 34
+      },
+      "hybrid": {
+        "wins": 0,
+        "losses": 0,
+        "ties": 0,
+        "n": 0
+      },
+      "hyde": {
+        "wins": 1,
+        "losses": 2,
+        "ties": 31,
+        "n": 34
+      },
+      "naive": {
+        "wins": 0,
+        "losses": 1,
+        "ties": 33,
+        "n": 34
+      },
+      "recursive_summary": {
+        "wins": 14,
+        "losses": 0,
+        "ties": 20,
+        "n": 34
+      },
+      "rerank": {
+        "wins": 0,
+        "losses": 1,
+        "ties": 33,
+        "n": 34
+      },
+      "sliding_window": {
+        "wins": 0,
+        "losses": 3,
+        "ties": 31,
+        "n": 34
+      }
+    },
+    "hyde": {
+      "full_context": {
+        "wins": 0,
+        "losses": 1,
+        "ties": 33,
+        "n": 34
+      },
+      "hybrid": {
+        "wins": 2,
+        "losses": 1,
+        "ties": 31,
+        "n": 34
+      },
+      "hyde": {
+        "wins": 0,
+        "losses": 0,
+        "ties": 0,
+        "n": 0
+      },
+      "naive": {
+        "wins": 1,
+        "losses": 1,
+        "ties": 32,
+        "n": 34
+      },
+      "recursive_summary": {
+        "wins": 15,
+        "losses": 0,
+        "ties": 19,
+        "n": 34
+      },
+      "rerank": {
+        "wins": 1,
+        "losses": 1,
+        "ties": 32,
+        "n": 34
+      },
+      "sliding_window": {
+        "wins": 1,
+        "losses": 3,
+        "ties": 30,
+        "n": 34
+      }
+    },
+    "naive": {
+      "full_context": {
+        "wins": 0,
+        "losses": 1,
+        "ties": 33,
+        "n": 34
+      },
+      "hybrid": {
+        "wins": 1,
+        "losses": 0,
+        "ties": 33,
+        "n": 34
+      },
+      "hyde": {
+        "wins": 1,
+        "losses": 1,
+        "ties": 32,
+        "n": 34
+      },
+      "naive": {
+        "wins": 0,
+        "losses": 0,
+        "ties": 0,
+        "n": 0
+      },
+      "recursive_summary": {
+        "wins": 15,
+        "losses": 0,
+        "ties": 19,
+        "n": 34
+      },
+      "rerank": {
+        "wins": 1,
+        "losses": 1,
+        "ties": 32,
+        "n": 34
+      },
+      "sliding_window": {
+        "wins": 0,
+        "losses": 2,
+        "ties": 32,
+        "n": 34
+      }
+    },
+    "recursive_summary": {
+      "full_context": {
+        "wins": 0,
+        "losses": 16,
+        "ties": 18,
+        "n": 34
+      },
+      "hybrid": {
+        "wins": 0,
+        "losses": 14,
+        "ties": 20,
+        "n": 34
+      },
+      "hyde": {
+        "wins": 0,
+        "losses": 15,
+        "ties": 19,
+        "n": 34
+      },
+      "naive": {
+        "wins": 0,
+        "losses": 15,
+        "ties": 19,
+        "n": 34
+      },
+      "recursive_summary": {
+        "wins": 0,
+        "losses": 0,
+        "ties": 0,
+        "n": 0
+      },
+      "rerank": {
+        "wins": 0,
+        "losses": 15,
+        "ties": 19,
+        "n": 34
+      },
+      "sliding_window": {
+        "wins": 0,
+        "losses": 17,
+        "ties": 17,
+        "n": 34
+      }
+    },
+    "rerank": {
+      "full_context": {
+        "wins": 0,
+        "losses": 1,
+        "ties": 33,
+        "n": 34
+      },
+      "hybrid": {
+        "wins": 1,
+        "losses": 0,
+        "ties": 33,
+        "n": 34
+      },
+      "hyde": {
+        "wins": 1,
+        "losses": 1,
+        "ties": 32,
+        "n": 34
+      },
+      "naive": {
+        "wins": 1,
+        "losses": 1,
+        "ties": 32,
+        "n": 34
+      },
+      "recursive_summary": {
+        "wins": 15,
+        "losses": 0,
+        "ties": 19,
+        "n": 34
+      },
+      "rerank": {
+        "wins": 0,
+        "losses": 0,
+        "ties": 0,
+        "n": 0
+      },
+      "sliding_window": {
+        "wins": 1,
+        "losses": 3,
+        "ties": 30,
+        "n": 34
+      }
+    },
+    "sliding_window": {
+      "full_context": {
+        "wins": 2,
+        "losses": 1,
+        "ties": 31,
+        "n": 34
+      },
+      "hybrid": {
+        "wins": 3,
+        "losses": 0,
+        "ties": 31,
+        "n": 34
+      },
+      "hyde": {
+        "wins": 3,
+        "losses": 1,
+        "ties": 30,
+        "n": 34
+      },
+      "naive": {
+        "wins": 2,
+        "losses": 0,
+        "ties": 32,
+        "n": 34
+      },
+      "recursive_summary": {
+        "wins": 17,
+        "losses": 0,
+        "ties": 17,
+        "n": 34
+      },
+      "rerank": {
+        "wins": 3,
+        "losses": 1,
+        "ties": 30,
+        "n": 34
+      },
+      "sliding_window": {
+        "wins": 0,
+        "losses": 0,
+        "ties": 0,
+        "n": 0
+      }
+    }
+  },
+  "questions": [
+    {
+      "qid": "dist-01",
+      "type": "distractor",
+      "gold": "2019",
+      "predictions": {
+        "full_context": {
+          "pred": "2019",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "hybrid": {
+          "pred": "2019",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "hyde": {
+          "pred": "2019",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "naive": {
+          "pred": "2019",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "recursive_summary": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 0,
+          "f1": 0.0,
+          "correct": 0
+        },
+        "rerank": {
+          "pred": "2019",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "sliding_window": {
+          "pred": "2019",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        }
+      }
+    },
+    {
+      "qid": "dist-02",
+      "type": "distractor",
+      "gold": "Mei-Ling Forrester",
+      "predictions": {
+        "full_context": {
+          "pred": "Dr. Mei-Ling Forrester",
+          "em": 0,
+          "f1": 0.8571428571428571,
+          "correct": 0
+        },
+        "hybrid": {
+          "pred": "Dr. Mei-Ling Forrester",
+          "em": 0,
+          "f1": 0.8571428571428571,
+          "correct": 0
+        },
+        "hyde": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 0,
+          "f1": 0.0,
+          "correct": 0
+        },
+        "naive": {
+          "pred": "Dr. Mei-Ling Forrester",
+          "em": 0,
+          "f1": 0.8571428571428571,
+          "correct": 0
+        },
+        "recursive_summary": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 0,
+          "f1": 0.0,
+          "correct": 0
+        },
+        "rerank": {
+          "pred": "Dr. Mei-Ling Forrester",
+          "em": 0,
+          "f1": 0.8571428571428571,
+          "correct": 0
+        },
+        "sliding_window": {
+          "pred": "Dr. Mei-Ling Forrester",
+          "em": 0,
+          "f1": 0.8571428571428571,
+          "correct": 0
+        }
+      }
+    },
+    {
+      "qid": "dist-03",
+      "type": "distractor",
+      "gold": "25 years",
+      "predictions": {
+        "full_context": {
+          "pred": "Twenty-five years",
+          "em": 0,
+          "f1": 0.4,
+          "correct": 0
+        },
+        "hybrid": {
+          "pred": "Twenty-five years",
+          "em": 0,
+          "f1": 0.4,
+          "correct": 0
+        },
+        "hyde": {
+          "pred": "Twenty-five years",
+          "em": 0,
+          "f1": 0.4,
+          "correct": 0
+        },
+        "naive": {
+          "pred": "Twenty-five years",
+          "em": 0,
+          "f1": 0.4,
+          "correct": 0
+        },
+        "recursive_summary": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 0,
+          "f1": 0.0,
+          "correct": 0
+        },
+        "rerank": {
+          "pred": "Twenty-five years",
+          "em": 0,
+          "f1": 0.4,
+          "correct": 0
+        },
+        "sliding_window": {
+          "pred": "twenty-five years",
+          "em": 0,
+          "f1": 0.4,
+          "correct": 0
+        }
+      }
+    },
+    {
+      "qid": "dist-04",
+      "type": "distractor",
+      "gold": "2,847,000",
+      "predictions": {
+        "full_context": {
+          "pred": "2,847,000 residents",
+          "em": 0,
+          "f1": 0.6666666666666666,
+          "correct": 0
+        },
+        "hybrid": {
+          "pred": "2,847,000 residents within the city limits.",
+          "em": 0,
+          "f1": 0.33333333333333337,
+          "correct": 0
+        },
+        "hyde": {
+          "pred": "2,847,000 residents within the city limits.",
+          "em": 0,
+          "f1": 0.33333333333333337,
+          "correct": 0
+        },
+        "naive": {
+          "pred": "2,847,000 residents within the city limits.",
+          "em": 0,
+          "f1": 0.33333333333333337,
+          "correct": 0
+        },
+        "recursive_summary": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 0,
+          "f1": 0.0,
+          "correct": 0
+        },
+        "rerank": {
+          "pred": "2,847,000 residents within the city limits",
+          "em": 0,
+          "f1": 0.33333333333333337,
+          "correct": 0
+        },
+        "sliding_window": {
+          "pred": "2,847,000",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        }
+      }
+    },
+    {
+      "qid": "dist-05",
+      "type": "distractor",
+      "gold": "4.2 kilowatts",
+      "predictions": {
+        "full_context": {
+          "pred": "4.2 kilowatts",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "hybrid": {
+          "pred": "4.2 kilowatts",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "hyde": {
+          "pred": "4.2 kilowatts",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "naive": {
+          "pred": "4.2 kilowatts",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "recursive_summary": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 0,
+          "f1": 0.0,
+          "correct": 0
+        },
+        "rerank": {
+          "pred": "4.2 kilowatts",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "sliding_window": {
+          "pred": "4.2 kilowatts",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        }
+      }
+    },
+    {
+      "qid": "dist-06",
+      "type": "distractor",
+      "gold": "1932",
+      "predictions": {
+        "full_context": {
+          "pred": "1932",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "hybrid": {
+          "pred": "1932",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "hyde": {
+          "pred": "1932",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "naive": {
+          "pred": "1932",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "recursive_summary": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 0,
+          "f1": 0.0,
+          "correct": 0
+        },
+        "rerank": {
+          "pred": "1932",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "sliding_window": {
+          "pred": "1932",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        }
+      }
+    },
+    {
+      "qid": "dist-07",
+      "type": "distractor",
+      "gold": "$47.3 million",
+      "predictions": {
+        "full_context": {
+          "pred": "$47.3 million USD",
+          "em": 0,
+          "f1": 0.8,
+          "correct": 0
+        },
+        "hybrid": {
+          "pred": "$47.3 million USD",
+          "em": 0,
+          "f1": 0.8,
+          "correct": 0
+        },
+        "hyde": {
+          "pred": "$47.3 million USD",
+          "em": 0,
+          "f1": 0.8,
+          "correct": 0
+        },
+        "naive": {
+          "pred": "$47.3 million USD",
+          "em": 0,
+          "f1": 0.8,
+          "correct": 0
+        },
+        "recursive_summary": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 0,
+          "f1": 0.0,
+          "correct": 0
+        },
+        "rerank": {
+          "pred": "$47.3 million USD",
+          "em": 0,
+          "f1": 0.8,
+          "correct": 0
+        },
+        "sliding_window": {
+          "pred": "$47.3 million USD",
+          "em": 0,
+          "f1": 0.8,
+          "correct": 0
+        }
+      }
+    },
+    {
+      "qid": "dist-08",
+      "type": "distractor",
+      "gold": "Henrik Voss",
+      "predictions": {
+        "full_context": {
+          "pred": "Dr. Henrik Voss",
+          "em": 0,
+          "f1": 0.8,
+          "correct": 0
+        },
+        "hybrid": {
+          "pred": "Dr. Henrik Voss",
+          "em": 0,
+          "f1": 0.8,
+          "correct": 0
+        },
+        "hyde": {
+          "pred": "Dr. Henrik Voss",
+          "em": 0,
+          "f1": 0.8,
+          "correct": 0
+        },
+        "naive": {
+          "pred": "Dr. Henrik Voss",
+          "em": 0,
+          "f1": 0.8,
+          "correct": 0
+        },
+        "recursive_summary": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 0,
+          "f1": 0.0,
+          "correct": 0
+        },
+        "rerank": {
+          "pred": "Dr. Henrik Voss",
+          "em": 0,
+          "f1": 0.8,
+          "correct": 0
+        },
+        "sliding_window": {
+          "pred": "Dr. Henrik Voss",
+          "em": 0,
+          "f1": 0.8,
+          "correct": 0
+        }
+      }
+    },
+    {
+      "qid": "halluc-01",
+      "type": "hallucination",
+      "gold": "NOT_IN_CORPUS",
+      "predictions": {
+        "full_context": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "hybrid": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "hyde": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "naive": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "recursive_summary": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "rerank": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "sliding_window": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        }
+      }
+    },
+    {
+      "qid": "halluc-02",
+      "type": "hallucination",
+      "gold": "NOT_IN_CORPUS",
+      "predictions": {
+        "full_context": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "hybrid": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "hyde": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "naive": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "recursive_summary": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "rerank": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "sliding_window": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        }
+      }
+    },
+    {
+      "qid": "halluc-03",
+      "type": "hallucination",
+      "gold": "NOT_IN_CORPUS",
+      "predictions": {
+        "full_context": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "hybrid": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "hyde": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "naive": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "recursive_summary": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "rerank": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "sliding_window": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        }
+      }
+    },
+    {
+      "qid": "halluc-04",
+      "type": "hallucination",
+      "gold": "NOT_IN_CORPUS",
+      "predictions": {
+        "full_context": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "hybrid": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "hyde": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "naive": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "recursive_summary": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "rerank": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "sliding_window": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        }
+      }
+    },
+    {
+      "qid": "halluc-05",
+      "type": "hallucination",
+      "gold": "NOT_IN_CORPUS",
+      "predictions": {
+        "full_context": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "hybrid": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "hyde": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "naive": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "recursive_summary": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "rerank": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "sliding_window": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        }
+      }
+    },
+    {
+      "qid": "halluc-06",
+      "type": "hallucination",
+      "gold": "NOT_IN_CORPUS",
+      "predictions": {
+        "full_context": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "hybrid": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "hyde": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "naive": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "recursive_summary": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "rerank": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "sliding_window": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        }
+      }
+    },
+    {
+      "qid": "hop-01",
+      "type": "multi_hop",
+      "gold": "Veridian",
+      "predictions": {
+        "full_context": {
+          "pred": "Veridian",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "hybrid": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 0,
+          "f1": 0.0,
+          "correct": 0
+        },
+        "hyde": {
+          "pred": "Veridian",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "naive": {
+          "pred": "Veridian",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "recursive_summary": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 0,
+          "f1": 0.0,
+          "correct": 0
+        },
+        "rerank": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 0,
+          "f1": 0.0,
+          "correct": 0
+        },
+        "sliding_window": {
+          "pred": "Veridian",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        }
+      }
+    },
+    {
+      "qid": "hop-02",
+      "type": "multi_hop",
+      "gold": "Quentin Aldermann",
+      "predictions": {
+        "full_context": {
+          "pred": "Quentin Aldermann",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "hybrid": {
+          "pred": "Quentin Aldermann",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "hyde": {
+          "pred": "Quentin Aldermann",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "naive": {
+          "pred": "Quentin Aldermann",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "recursive_summary": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 0,
+          "f1": 0.0,
+          "correct": 0
+        },
+        "rerank": {
+          "pred": "Quentin Aldermann",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "sliding_window": {
+          "pred": "Quentin Aldermann",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        }
+      }
+    },
+    {
+      "qid": "hop-03",
+      "type": "multi_hop",
+      "gold": "Halden Institute for Computational Mycology",
+      "predictions": {
+        "full_context": {
+          "pred": "Halden Institute for Computational Mycology",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "hybrid": {
+          "pred": "Halden Institute for Computational Mycology",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "hyde": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 0,
+          "f1": 0.0,
+          "correct": 0
+        },
+        "naive": {
+          "pred": "Halden Institute for Computational Mycology",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "recursive_summary": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 0,
+          "f1": 0.0,
+          "correct": 0
+        },
+        "rerank": {
+          "pred": "Halden Institute for Computational Mycology",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "sliding_window": {
+          "pred": "Halden Institute for Computational Mycology",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        }
+      }
+    },
+    {
+      "qid": "hop-04",
+      "type": "multi_hop",
+      "gold": "Auralite Accord",
+      "predictions": {
+        "full_context": {
+          "pred": "The Auralite Accord",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "hybrid": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 0,
+          "f1": 0.0,
+          "correct": 0
+        },
+        "hyde": {
+          "pred": "Auralite Accord",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "naive": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 0,
+          "f1": 0.0,
+          "correct": 0
+        },
+        "recursive_summary": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 0,
+          "f1": 0.0,
+          "correct": 0
+        },
+        "rerank": {
+          "pred": "Auralite Accord",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "sliding_window": {
+          "pred": "Article 7-bis of the Auralite Accord",
+          "em": 0,
+          "f1": 0.5,
+          "correct": 0
+        }
+      }
+    },
+    {
+      "qid": "hop-05",
+      "type": "multi_hop",
+      "gold": "1991, Veridian Heights",
+      "predictions": {
+        "full_context": {
+          "pred": "1991, Veridian Heights.",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "hybrid": {
+          "pred": "1991, Veridian Heights",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "hyde": {
+          "pred": "1991, Veridian Heights",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "naive": {
+          "pred": "1991, Veridian Heights",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "recursive_summary": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 0,
+          "f1": 0.0,
+          "correct": 0
+        },
+        "rerank": {
+          "pred": "1991, Veridian Heights.",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "sliding_window": {
+          "pred": "1991, Veridian Heights",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        }
+      }
+    },
+    {
+      "qid": "hop-06",
+      "type": "multi_hop",
+      "gold": "Iola Penmarrick",
+      "predictions": {
+        "full_context": {
+          "pred": "Ambassador Iola Penmarrick",
+          "em": 0,
+          "f1": 0.8,
+          "correct": 0
+        },
+        "hybrid": {
+          "pred": "Ambassador Iola Penmarrick",
+          "em": 0,
+          "f1": 0.8,
+          "correct": 0
+        },
+        "hyde": {
+          "pred": "Ambassador Iola Penmarrick",
+          "em": 0,
+          "f1": 0.8,
+          "correct": 0
+        },
+        "naive": {
+          "pred": "Ambassador Iola Penmarrick",
+          "em": 0,
+          "f1": 0.8,
+          "correct": 0
+        },
+        "recursive_summary": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 0,
+          "f1": 0.0,
+          "correct": 0
+        },
+        "rerank": {
+          "pred": "Ambassador Iola Penmarrick",
+          "em": 0,
+          "f1": 0.8,
+          "correct": 0
+        },
+        "sliding_window": {
+          "pred": "Ambassador Iola Penmarrick",
+          "em": 0,
+          "f1": 0.8,
+          "correct": 0
+        }
+      }
+    },
+    {
+      "qid": "hop-07",
+      "type": "multi_hop",
+      "gold": "32 years",
+      "predictions": {
+        "full_context": {
+          "pred": "32 years old",
+          "em": 0,
+          "f1": 0.8,
+          "correct": 0
+        },
+        "hybrid": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 0,
+          "f1": 0.0,
+          "correct": 0
+        },
+        "hyde": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 0,
+          "f1": 0.0,
+          "correct": 0
+        },
+        "naive": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 0,
+          "f1": 0.0,
+          "correct": 0
+        },
+        "recursive_summary": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 0,
+          "f1": 0.0,
+          "correct": 0
+        },
+        "rerank": {
+          "pred": "32 years (records date back to 1991)",
+          "em": 0,
+          "f1": 0.4444444444444445,
+          "correct": 0
+        },
+        "sliding_window": {
+          "pred": "32 years old",
+          "em": 0,
+          "f1": 0.8,
+          "correct": 0
+        }
+      }
+    },
+    {
+      "qid": "hop-08",
+      "type": "multi_hop",
+      "gold": "542 km",
+      "predictions": {
+        "full_context": {
+          "pred": "542 kilometers",
+          "em": 0,
+          "f1": 0.5,
+          "correct": 0
+        },
+        "hybrid": {
+          "pred": "542 kilometers",
+          "em": 0,
+          "f1": 0.5,
+          "correct": 0
+        },
+        "hyde": {
+          "pred": "542 kilometers",
+          "em": 0,
+          "f1": 0.5,
+          "correct": 0
+        },
+        "naive": {
+          "pred": "542 kilometers",
+          "em": 0,
+          "f1": 0.5,
+          "correct": 0
+        },
+        "recursive_summary": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 0,
+          "f1": 0.0,
+          "correct": 0
+        },
+        "rerank": {
+          "pred": "542 kilometers",
+          "em": 0,
+          "f1": 0.5,
+          "correct": 0
+        },
+        "sliding_window": {
+          "pred": "542",
+          "em": 0,
+          "f1": 0.6666666666666666,
+          "correct": 0
+        }
+      }
+    },
+    {
+      "qid": "needle-01",
+      "type": "needle",
+      "gold": "MULBERRY-7Q",
+      "predictions": {
+        "full_context": {
+          "pred": "MULBERRY-7Q",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "hybrid": {
+          "pred": "MULBERRY-7Q",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "hyde": {
+          "pred": "MULBERRY-7Q",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "naive": {
+          "pred": "MULBERRY-7Q",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "recursive_summary": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 0,
+          "f1": 0.0,
+          "correct": 0
+        },
+        "rerank": {
+          "pred": "MULBERRY-7Q",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "sliding_window": {
+          "pred": "MULBERRY-7Q",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        }
+      }
+    },
+    {
+      "qid": "needle-02",
+      "type": "needle",
+      "gold": "0.46 ppm",
+      "predictions": {
+        "full_context": {
+          "pred": "0.46 ppm",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "hybrid": {
+          "pred": "0.46 ppm",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "hyde": {
+          "pred": "0.46 ppm",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "naive": {
+          "pred": "0.46 ppm",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "recursive_summary": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 0,
+          "f1": 0.0,
+          "correct": 0
+        },
+        "rerank": {
+          "pred": "0.46 ppm",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "sliding_window": {
+          "pred": "0.46 ppm",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        }
+      }
+    },
+    {
+      "qid": "needle-03",
+      "type": "needle",
+      "gold": "M7-RX-204-A",
+      "predictions": {
+        "full_context": {
+          "pred": "M7-RX-204-A",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "hybrid": {
+          "pred": "M7-RX-204-A",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "hyde": {
+          "pred": "M7-RX-204-A",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "naive": {
+          "pred": "M7-RX-204-A",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "recursive_summary": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 0,
+          "f1": 0.0,
+          "correct": 0
+        },
+        "rerank": {
+          "pred": "M7-RX-204-A",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "sliding_window": {
+          "pred": "M7-RX-204-A",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        }
+      }
+    },
+    {
+      "qid": "needle-04",
+      "type": "needle",
+      "gold": "4.832 GHz",
+      "predictions": {
+        "full_context": {
+          "pred": "4.832 GHz",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "hybrid": {
+          "pred": "4.832 GHz",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "hyde": {
+          "pred": "4.832 GHz",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "naive": {
+          "pred": "4.832 GHz",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "recursive_summary": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 0,
+          "f1": 0.0,
+          "correct": 0
+        },
+        "rerank": {
+          "pred": "4.832 GHz",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "sliding_window": {
+          "pred": "4.832 GHz",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        }
+      }
+    },
+    {
+      "qid": "needle-05",
+      "type": "needle",
+      "gold": "12%",
+      "predictions": {
+        "full_context": {
+          "pred": "12%",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "hybrid": {
+          "pred": "12%",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "hyde": {
+          "pred": "12%",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "naive": {
+          "pred": "12%",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "recursive_summary": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 0,
+          "f1": 0.0,
+          "correct": 0
+        },
+        "rerank": {
+          "pred": "12%",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "sliding_window": {
+          "pred": "12%",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        }
+      }
+    },
+    {
+      "qid": "needle-06",
+      "type": "needle",
+      "gold": "178",
+      "predictions": {
+        "full_context": {
+          "pred": "178 staff members",
+          "em": 0,
+          "f1": 0.5,
+          "correct": 0
+        },
+        "hybrid": {
+          "pred": "178 staff members",
+          "em": 0,
+          "f1": 0.5,
+          "correct": 0
+        },
+        "hyde": {
+          "pred": "178 staff members",
+          "em": 0,
+          "f1": 0.5,
+          "correct": 0
+        },
+        "naive": {
+          "pred": "178 staff members",
+          "em": 0,
+          "f1": 0.5,
+          "correct": 0
+        },
+        "recursive_summary": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 0,
+          "f1": 0.0,
+          "correct": 0
+        },
+        "rerank": {
+          "pred": "178 staff members",
+          "em": 0,
+          "f1": 0.5,
+          "correct": 0
+        },
+        "sliding_window": {
+          "pred": "178",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        }
+      }
+    },
+    {
+      "qid": "needle-07",
+      "type": "needle",
+      "gold": "7 years",
+      "predictions": {
+        "full_context": {
+          "pred": "Seven years",
+          "em": 0,
+          "f1": 0.5,
+          "correct": 0
+        },
+        "hybrid": {
+          "pred": "Seven years",
+          "em": 0,
+          "f1": 0.5,
+          "correct": 0
+        },
+        "hyde": {
+          "pred": "Seven years",
+          "em": 0,
+          "f1": 0.5,
+          "correct": 0
+        },
+        "naive": {
+          "pred": "Seven years",
+          "em": 0,
+          "f1": 0.5,
+          "correct": 0
+        },
+        "recursive_summary": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 0,
+          "f1": 0.0,
+          "correct": 0
+        },
+        "rerank": {
+          "pred": "Seven years",
+          "em": 0,
+          "f1": 0.5,
+          "correct": 0
+        },
+        "sliding_window": {
+          "pred": "seven years",
+          "em": 0,
+          "f1": 0.5,
+          "correct": 0
+        }
+      }
+    },
+    {
+      "qid": "needle-08",
+      "type": "needle",
+      "gold": "14.5",
+      "predictions": {
+        "full_context": {
+          "pred": "14.5 degrees Celsius",
+          "em": 0,
+          "f1": 0.5,
+          "correct": 0
+        },
+        "hybrid": {
+          "pred": "14.5 degrees Celsius",
+          "em": 0,
+          "f1": 0.5,
+          "correct": 0
+        },
+        "hyde": {
+          "pred": "14.5 degrees Celsius",
+          "em": 0,
+          "f1": 0.5,
+          "correct": 0
+        },
+        "naive": {
+          "pred": "14.5 degrees Celsius",
+          "em": 0,
+          "f1": 0.5,
+          "correct": 0
+        },
+        "recursive_summary": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 0,
+          "f1": 0.0,
+          "correct": 0
+        },
+        "rerank": {
+          "pred": "14.5 degrees Celsius",
+          "em": 0,
+          "f1": 0.5,
+          "correct": 0
+        },
+        "sliding_window": {
+          "pred": "14.5 degrees Celsius",
+          "em": 0,
+          "f1": 0.5,
+          "correct": 0
+        }
+      }
+    },
+    {
+      "qid": "sanity-01",
+      "type": "sanity",
+      "gold": "1991",
+      "predictions": {
+        "full_context": {
+          "pred": "1991",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "hybrid": {
+          "pred": "1991",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "hyde": {
+          "pred": "1991",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "naive": {
+          "pred": "1991",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "recursive_summary": {
+          "pred": "1991",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "rerank": {
+          "pred": "1991",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "sliding_window": {
+          "pred": "1991",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        }
+      }
+    },
+    {
+      "qid": "sanity-02",
+      "type": "sanity",
+      "gold": "Quentin Aldermann",
+      "predictions": {
+        "full_context": {
+          "pred": "Quentin Aldermann",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "hybrid": {
+          "pred": "Quentin Aldermann",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "hyde": {
+          "pred": "Quentin Aldermann",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "naive": {
+          "pred": "Quentin Aldermann",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "recursive_summary": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 0,
+          "f1": 0.0,
+          "correct": 0
+        },
+        "rerank": {
+          "pred": "Quentin Aldermann",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "sliding_window": {
+          "pred": "Quentin Aldermann",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        }
+      }
+    },
+    {
+      "qid": "sanity-03",
+      "type": "sanity",
+      "gold": "9 April 2019",
+      "predictions": {
+        "full_context": {
+          "pred": "9 April 2019",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "hybrid": {
+          "pred": "9 April 2019",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "hyde": {
+          "pred": "9 April 2019",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "naive": {
+          "pred": "9 April 2019",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "recursive_summary": {
+          "pred": "NOT_IN_CONTEXT",
+          "em": 0,
+          "f1": 0.0,
+          "correct": 0
+        },
+        "rerank": {
+          "pred": "9 April 2019",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "sliding_window": {
+          "pred": "9 April 2019",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        }
+      }
+    },
+    {
+      "qid": "sanity-04",
+      "type": "sanity",
+      "gold": "14 November 1987",
+      "predictions": {
+        "full_context": {
+          "pred": "14 November 1987",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "hybrid": {
+          "pred": "14 November 1987",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "hyde": {
+          "pred": "14 November 1987",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "naive": {
+          "pred": "14 November 1987",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "recursive_summary": {
+          "pred": "1987",
+          "em": 0,
+          "f1": 0.5,
+          "correct": 0
+        },
+        "rerank": {
+          "pred": "14 November 1987",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        },
+        "sliding_window": {
+          "pred": "14 November 1987",
+          "em": 1,
+          "f1": 1.0,
+          "correct": 1
+        }
+      }
+    }
+  ]
+}

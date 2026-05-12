@@ -1,0 +1,69 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    @apply bg-canvas text-ink font-sans;
+    font-feature-settings: "ss01", "ss03", "cv11";
+  }
+
+  /* Subtle paper grain — only visible on close inspection */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background-image:
+      radial-gradient(circle at 20% 20%, rgba(207, 69, 32, 0.025) 0%, transparent 50%),
+      radial-gradient(circle at 80% 70%, rgba(45, 106, 79, 0.02) 0%, transparent 50%);
+  }
+
+  h1, h2, h3 {
+    @apply font-display tracking-tightest text-ink;
+  }
+
+  /* Tabular numerals everywhere — essential for data displays */
+  .num, table, .recharts-text {
+    font-variant-numeric: tabular-nums;
+  }
+
+  ::selection {
+    background-color: rgba(207, 69, 32, 0.15);
+    color: #1d1d1f;
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-surface border border-border rounded-2xl;
+  }
+
+  .card-hover {
+    @apply transition-colors duration-200 hover:border-ink/20;
+  }
+
+  /* Hairline divider — Apple-style */
+  .hairline {
+    background: linear-gradient(to right, transparent, #d2d2d7, transparent);
+    height: 1px;
+  }
+
+  /* Headline numeral — for hero metrics */
+  .numeral {
+    @apply font-display tabular-nums tracking-tightest text-ink;
+    font-feature-settings: "lnum" 1;
+  }
+
+  /* Underline label — small caps marker */
+  .eyebrow {
+    @apply text-[11px] uppercase tracking-[0.14em] text-ink-muted font-mono;
+  }
+}
