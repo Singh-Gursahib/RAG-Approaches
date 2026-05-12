@@ -2,7 +2,7 @@
   "run_id": "sliding_window_T03_seed1",
   "approach": "sliding_window",
   "package_version": "0.1.0",
-  "started_at": "2026-05-12T18:25:13.511679+00:00",
+  "started_at": "2026-05-12T20:35:59.314294+00:00",
   "config_path": "configs/approaches/sliding_window.yaml",
   "config_hash": "547831fb0b82c665",
   "config_resolved": {

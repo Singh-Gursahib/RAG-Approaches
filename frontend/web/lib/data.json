@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-05-12T19:22:13.507655+00:00",
+  "generated_at": "2026-05-12T20:44:07.049218+00:00",
   "project": {
     "name": "RAG_Ureap",
     "budget_cap_usd": 5.0,
-    "cumulative_spend_usd": 0.8929,
-    "spend_pct": 17.86,
-    "total_llm_calls": 1349,
+    "cumulative_spend_usd": 1.0875,
+    "spend_pct": 21.75,
+    "total_llm_calls": 1622,
     "model": "gemini-3-flash-preview"
   },
   "corpus": {
@@ -169,21 +169,21 @@
       "approach": "sliding_window",
       "run_id": "sliding_window_T03_pooled",
       "n": 34,
-      "n_seeds": 1,
-      "em": 0.7352941176470589,
-      "em_lo": 0.5882352941176471,
-      "em_hi": 0.8823529411764706,
-      "em_seed_std": 0.0,
-      "f1": 0.8957983193277312,
-      "f1_lo": 0.8104621848739496,
-      "f1_hi": 0.9621848739495796,
-      "f1_seed_std": 0.0,
-      "cost_usd": 0.09719130000000001,
-      "tokens_in": 318221,
-      "tokens_out": 690,
-      "p50_ms": 8528.140790062025,
-      "p95_ms": 10681.573291076347,
-      "wall_s": 292.14593979204074
+      "n_seeds": 3,
+      "em": 0.6960784313725491,
+      "em_lo": 0.6078431372549019,
+      "em_hi": 0.7843137254901961,
+      "em_seed_std": 0.0449272126956455,
+      "f1": 0.8747050335285631,
+      "f1_lo": 0.8264809863339276,
+      "f1_hi": 0.9197037602919955,
+      "f1_seed_std": 0.024908973383022472,
+      "cost_usd": 0.09723043333333331,
+      "tokens_in": 318223,
+      "tokens_out": 705,
+      "p50_ms": 8316.54756842181,
+      "p95_ms": 10643.025471906489,
+      "wall_s": 435.1751193890038
     }
   ],
   "per_probe": [
@@ -551,43 +551,43 @@
       "approach": "sliding_window",
       "run_id": "sliding_window_T03_pooled",
       "probe_type": "needle",
-      "n": 8,
-      "em": 0.875,
-      "em_lo": 0.625,
-      "em_hi": 1.0,
-      "f1": 0.9375,
-      "f1_lo": 0.8125,
-      "f1_hi": 1.0
+      "n": 24,
+      "em": 0.8333333333333334,
+      "em_lo": 0.7072916666666677,
+      "em_hi": 0.9583333333333334,
+      "f1": 0.9166666666666666,
+      "f1_lo": 0.8536458333333338,
+      "f1_hi": 0.9791666666666666
     },
     {
       "approach": "sliding_window",
       "run_id": "sliding_window_T03_pooled",
       "probe_type": "multi_hop",
-      "n": 8,
-      "em": 0.5,
-      "em_lo": 0.125,
-      "em_hi": 0.875,
-      "f1": 0.7625,
-      "f1_lo": 0.5125,
-      "f1_hi": 0.95
+      "n": 24,
+      "em": 0.4166666666666667,
+      "em_lo": 0.20833333333333334,
+      "em_hi": 0.625,
+      "f1": 0.7075757575757576,
+      "f1_lo": 0.5586837121212122,
+      "f1_hi": 0.8417329545454545
     },
     {
       "approach": "sliding_window",
       "run_id": "sliding_window_T03_pooled",
       "probe_type": "distractor",
-      "n": 8,
-      "em": 0.5,
-      "em_lo": 0.125,
-      "em_hi": 0.875,
-      "f1": 0.8571428571428572,
-      "f1_lo": 0.7071428571428572,
-      "f1_hi": 0.9642857142857143
+      "n": 24,
+      "em": 0.4583333333333333,
+      "em_lo": 0.29062500000000097,
+      "em_hi": 0.6666666666666666,
+      "f1": 0.8432539682539684,
+      "f1_lo": 0.7658730158730159,
+      "f1_hi": 0.9178571428571428
     },
     {
       "approach": "sliding_window",
       "run_id": "sliding_window_T03_pooled",
       "probe_type": "hallucination",
-      "n": 6,
+      "n": 18,
       "em": 1.0,
       "em_lo": 1.0,
       "em_hi": 1.0,
@@ -599,7 +599,7 @@
       "approach": "sliding_window",
       "run_id": "sliding_window_T03_pooled",
       "probe_type": "sanity",
-      "n": 4,
+      "n": 12,
       "em": 1.0,
       "em_lo": 1.0,
       "em_hi": 1.0,
@@ -668,7 +668,7 @@
           "f1": 1.0,
           "correct": 1,
           "correct_rate": 1.0,
-          "n_seeds": 1
+          "n_seeds": 3
         }
       }
     },
@@ -731,7 +731,7 @@
           "f1": 0.8571428571428571,
           "correct": 0,
           "correct_rate": 0.0,
-          "n_seeds": 1
+          "n_seeds": 3
         }
       }
     },
@@ -791,10 +791,10 @@
         "sliding_window": {
           "pred": "twenty-five years",
           "em": 0,
-          "f1": 0.4,
+          "f1": 0.4000000000000001,
           "correct": 0,
           "correct_rate": 0.0,
-          "n_seeds": 1
+          "n_seeds": 3
         }
       }
     },
@@ -854,10 +854,10 @@
         "sliding_window": {
           "pred": "2,847,000",
           "em": 1,
-          "f1": 1.0,
+          "f1": 0.8888888888888888,
           "correct": 1,
-          "correct_rate": 1.0,
-          "n_seeds": 1
+          "correct_rate": 0.6666666666666666,
+          "n_seeds": 3
         }
       }
     },
@@ -920,7 +920,7 @@
           "f1": 1.0,
           "correct": 1,
           "correct_rate": 1.0,
-          "n_seeds": 1
+          "n_seeds": 3
         }
       }
     },
@@ -983,7 +983,7 @@
           "f1": 1.0,
           "correct": 1,
           "correct_rate": 1.0,
-          "n_seeds": 1
+          "n_seeds": 3
         }
       }
     },
@@ -1043,10 +1043,10 @@
         "sliding_window": {
           "pred": "$47.3 million USD",
           "em": 0,
-          "f1": 0.8,
+          "f1": 0.8000000000000002,
           "correct": 0,
           "correct_rate": 0.0,
-          "n_seeds": 1
+          "n_seeds": 3
         }
       }
     },
@@ -1106,10 +1106,10 @@
         "sliding_window": {
           "pred": "Dr. Henrik Voss",
           "em": 0,
-          "f1": 0.8,
+          "f1": 0.8000000000000002,
           "correct": 0,
           "correct_rate": 0.0,
-          "n_seeds": 1
+          "n_seeds": 3
         }
       }
     },
@@ -1172,7 +1172,7 @@
           "f1": 1.0,
           "correct": 1,
           "correct_rate": 1.0,
-          "n_seeds": 1
+          "n_seeds": 3
         }
       }
     },
@@ -1235,7 +1235,7 @@
           "f1": 1.0,
           "correct": 1,
           "correct_rate": 1.0,
-          "n_seeds": 1
+          "n_seeds": 3
         }
       }
     },
@@ -1298,7 +1298,7 @@
           "f1": 1.0,
           "correct": 1,
           "correct_rate": 1.0,
-          "n_seeds": 1
+          "n_seeds": 3
         }
       }
     },
@@ -1361,7 +1361,7 @@
           "f1": 1.0,
           "correct": 1,
           "correct_rate": 1.0,
-          "n_seeds": 1
+          "n_seeds": 3
         }
       }
     },
@@ -1424,7 +1424,7 @@
           "f1": 1.0,
           "correct": 1,
           "correct_rate": 1.0,
-          "n_seeds": 1
+          "n_seeds": 3
         }
       }
     },
@@ -1487,7 +1487,7 @@
           "f1": 1.0,
           "correct": 1,
           "correct_rate": 1.0,
-          "n_seeds": 1
+          "n_seeds": 3
         }
       }
     },
@@ -1550,7 +1550,7 @@
           "f1": 0.0,
           "correct": 0,
           "correct_rate": 0.0,
-          "n_seeds": 1
+          "n_seeds": 3
         }
       }
     },
@@ -1613,7 +1613,7 @@
           "f1": 1.0,
           "correct": 1,
           "correct_rate": 1.0,
-          "n_seeds": 1
+          "n_seeds": 3
         }
       }
     },
@@ -1676,7 +1676,7 @@
           "f1": 1.0,
           "correct": 1,
           "correct_rate": 1.0,
-          "n_seeds": 1
+          "n_seeds": 3
         }
       }
     },
@@ -1735,11 +1735,11 @@
         },
         "sliding_window": {
           "pred": "Auralite Accord",
-          "em": 1,
-          "f1": 1.0,
-          "correct": 1,
-          "correct_rate": 1.0,
-          "n_seeds": 1
+          "em": 0,
+          "f1": 0.6666666666666666,
+          "correct": 0,
+          "correct_rate": 0.3333333333333333,
+          "n_seeds": 3
         }
       }
     },
@@ -1802,7 +1802,7 @@
           "f1": 1.0,
           "correct": 1,
           "correct_rate": 1.0,
-          "n_seeds": 1
+          "n_seeds": 3
         }
       }
     },
@@ -1862,10 +1862,10 @@
         "sliding_window": {
           "pred": "Ambassador Iola Penmarrick",
           "em": 0,
-          "f1": 0.8,
+          "f1": 0.8000000000000002,
           "correct": 0,
           "correct_rate": 0.0,
-          "n_seeds": 1
+          "n_seeds": 3
         }
       }
     },
@@ -1925,10 +1925,10 @@
         "sliding_window": {
           "pred": "32 years old",
           "em": 0,
-          "f1": 0.8,
+          "f1": 0.8000000000000002,
           "correct": 0,
           "correct_rate": 0.0,
-          "n_seeds": 1
+          "n_seeds": 3
         }
       }
     },
@@ -1988,10 +1988,10 @@
         "sliding_window": {
           "pred": "542 kilometers",
           "em": 0,
-          "f1": 0.5,
+          "f1": 0.393939393939394,
           "correct": 0,
           "correct_rate": 0.0,
-          "n_seeds": 1
+          "n_seeds": 3
         }
       }
     },
@@ -2054,7 +2054,7 @@
           "f1": 1.0,
           "correct": 1,
           "correct_rate": 1.0,
-          "n_seeds": 1
+          "n_seeds": 3
         }
       }
     },
@@ -2117,7 +2117,7 @@
           "f1": 1.0,
           "correct": 1,
           "correct_rate": 1.0,
-          "n_seeds": 1
+          "n_seeds": 3
         }
       }
     },
@@ -2180,7 +2180,7 @@
           "f1": 1.0,
           "correct": 1,
           "correct_rate": 1.0,
-          "n_seeds": 1
+          "n_seeds": 3
         }
       }
     },
@@ -2243,7 +2243,7 @@
           "f1": 1.0,
           "correct": 1,
           "correct_rate": 1.0,
-          "n_seeds": 1
+          "n_seeds": 3
         }
       }
     },
@@ -2306,7 +2306,7 @@
           "f1": 1.0,
           "correct": 1,
           "correct_rate": 1.0,
-          "n_seeds": 1
+          "n_seeds": 3
         }
       }
     },
@@ -2369,7 +2369,7 @@
           "f1": 1.0,
           "correct": 1,
           "correct_rate": 1.0,
-          "n_seeds": 1
+          "n_seeds": 3
         }
       }
     },
@@ -2432,7 +2432,7 @@
           "f1": 0.5,
           "correct": 0,
           "correct_rate": 0.0,
-          "n_seeds": 1
+          "n_seeds": 3
         }
       }
     },
@@ -2492,10 +2492,10 @@
         "sliding_window": {
           "pred": "14.5",
           "em": 1,
-          "f1": 1.0,
+          "f1": 0.8333333333333334,
           "correct": 1,
-          "correct_rate": 1.0,
-          "n_seeds": 1
+          "correct_rate": 0.6666666666666666,
+          "n_seeds": 3
         }
       }
     },
@@ -2558,7 +2558,7 @@
           "f1": 1.0,
           "correct": 1,
           "correct_rate": 1.0,
-          "n_seeds": 1
+          "n_seeds": 3
         }
       }
     },
@@ -2621,7 +2621,7 @@
           "f1": 1.0,
           "correct": 1,
           "correct_rate": 1.0,
-          "n_seeds": 1
+          "n_seeds": 3
         }
       }
     },
@@ -2684,7 +2684,7 @@
           "f1": 1.0,
           "correct": 1,
           "correct_rate": 1.0,
-          "n_seeds": 1
+          "n_seeds": 3
         }
       }
     },
@@ -2747,7 +2747,7 @@
           "f1": 1.0,
           "correct": 1,
           "correct_rate": 1.0,
-          "n_seeds": 1
+          "n_seeds": 3
         }
       }
     }
@@ -2791,8 +2791,8 @@
         "n": 34
       },
       "sliding_window": {
-        "wins": 2,
-        "losses": 5,
+        "wins": 3,
+        "losses": 4,
         "ties": 27,
         "n": 34
       }
@@ -2880,8 +2880,8 @@
       },
       "sliding_window": {
         "wins": 1,
-        "losses": 3,
-        "ties": 30,
+        "losses": 2,
+        "ties": 31,
         "n": 34
       }
     },
@@ -3011,16 +3011,16 @@
         "n": 0
       },
       "sliding_window": {
-        "wins": 0,
+        "wins": 1,
         "losses": 3,
-        "ties": 31,
+        "ties": 30,
         "n": 34
       }
     },
     "sliding_window": {
       "full_context": {
-        "wins": 5,
-        "losses": 2,
+        "wins": 4,
+        "losses": 3,
         "ties": 27,
         "n": 34
       },
@@ -3031,9 +3031,9 @@
         "n": 34
       },
       "hyde": {
-        "wins": 3,
+        "wins": 2,
         "losses": 1,
-        "ties": 30,
+        "ties": 31,
         "n": 34
       },
       "naive": {
@@ -3050,8 +3050,8 @@
       },
       "rerank": {
         "wins": 3,
-        "losses": 0,
-        "ties": 31,
+        "losses": 1,
+        "ties": 30,
         "n": 34
       },
       "sliding_window": {

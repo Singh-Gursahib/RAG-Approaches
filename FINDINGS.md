@@ -16,28 +16,31 @@
 
 ---
 
-## 2026-05-12 — Multi-seed sweep (Phase 9)
+## 2026-05-12 — Multi-seed sweep (Phase 9, complete after API-cap recovery)
 
-**Setup.** All 7 approaches × 3 seeds at temperature 0.3. Single generator (`gemini-3-flash-preview`). Identical eval set, identical answer prompt. 19/21 runs usable; 2 sliding_window seeds were archived after a Google account-level monthly spending cap triggered partway through that approach.
+**Setup.** All 7 approaches × 3 seeds at temperature 0.3. Single generator (`gemini-3-flash-preview`). Identical eval set, identical answer prompt. **All 21 sweep runs now clean** after re-running sliding_window seeds 1–2 once the account-level monthly cap was lifted.
 
 | Approach | n_seeds | EM mean ± std | F1 mean ± std | F1 pooled 95% CI | Cost (mean) |
 |---|---|---|---|---|---|
-| sliding_window | 1† | 0.735 ± 0.000 | **0.896 ± 0.000** | [0.811, 0.962] | $0.0972 |
 | full_context | 3 | 0.667 ± 0.017 | **0.881 ± 0.012** | [0.840, 0.918] | $0.0912 |
+| sliding_window | 3 | **0.696 ± 0.045** | 0.875 ± 0.025 | [0.795, 0.945] | $0.0972 |
 | hyde | 3 | 0.667 ± 0.017 | 0.838 ± 0.012 | [0.780, 0.893] | $0.0186 |
 | naive | 3 | 0.667 ± 0.017 | 0.836 ± 0.012 | [0.778, 0.888] | $0.0122 |
 | rerank | 3 | 0.667 ± 0.017 | 0.833 ± 0.009 | [0.774, 0.887] | $0.0123 |
 | hybrid | 3 | 0.627 ± 0.017 | 0.797 ± 0.010 | [0.728, 0.857] | $0.0122 |
 | recursive_summary | 3 | 0.206 ± 0.000 | 0.206 ± 0.000 | [0.128, 0.284] | $0.0068 |
 
-†sliding_window has 1 usable T=0.3 seed; the Phase 6 T=0 baseline ran at 0.706 / 0.901 (matches the seed-0 result closely).
+### Rank-order change vs the initial 19-run analysis
+
+With sliding_window's two missing seeds now in, **full_context overtakes sliding_window on mean F1** (0.881 vs 0.875). Sliding-window's first seed (0.896) was on the high tail; the 3-seed mean is 0.875 ± 0.025. Same story holds qualitatively (non-retrieval > retrieval > pre-summarization), but the safest claim is now "full_context and sliding_window together dominate the retrieval family" rather than "sliding_window strictly best."
 
 ### Findings now defensible at multi-seed
 
-1. **Seed variance is small to zero** for short factoid answers at T=0.3.
+1. **Seed variance is small-to-zero for single-shot approaches, but visible for multi-step approaches.**
    - Recursive Summarization: **std=0.000** across 3 seeds — the long summarization step at T=0.3 produces nearly identical outputs because the model's distribution is so concentrated on the right next token.
-   - 5 other approaches all sit at **EM std ≈ 0.017** (i.e., 1/2 of one question's worth of disagreement across seeds), with F1 std ≈ 0.01.
-   - **Implication:** for this corpus + this model + factoid QA, single-seed point estimates are very stable; multi-seed sweeps mostly validate determinism rather than add power. A genuinely useful finding for replication advice — researchers can avoid the cost of multi-seed for similar setups.
+   - 5 single-call approaches (naive, hybrid, hyde, rerank, full_context): **EM std ≈ 0.017** (i.e., 1/2 of one question's worth of disagreement across seeds), **F1 std ≈ 0.01**.
+   - **Sliding-Window stands out: EM std = 0.045, F1 std = 0.025** — roughly 3× the variance of the single-call approaches. The 4 sequential LLM calls with carry-over state mean small differences compound across windows. Multi-seed sweeps are **necessary** for sliding-window-style approaches; single-seed point estimates can mislead by ~0.05 either way.
+   - **Implication:** for single-LLM-call approaches at low temperature, single-seed point estimates are very stable. For multi-step / stateful pipelines, multi-seed is essential — and our initial single-seed sliding_window happened to land on the high tail.
 
 2. **Non-retrieval dominates retrieval at this corpus scale (confirmed across seeds).** Sliding-Window and Full-Context together hold the top two F1 spots. At an 8K-token corpus that comfortably fits in context, retrieval's chunk-selection step is unnecessary overhead.
 
@@ -55,9 +58,9 @@ The figures in `paper/figures/` tell the cost × quality story:
 - **`forest_f1.pdf`** — forest plot with pooled 95% CIs. F1 confidence intervals do *not* overlap recursive_summary; they *do* overlap among the top 6 in places, but the rank order is consistent with point estimates.
 - **`win_loss.pdf`** — head-to-head heatmap. sliding_window and full_context show net-positive cells against all single-call RAG approaches.
 
-### Quota note (transparent)
+### Quota note (resolved)
 
-Google's account-level monthly spending cap on the API key fired during sliding_window seeds 1 and 2. Those runs returned `ResourceExhausted: 429` for every LLM call after the cap was reached and have been archived under `archive/contaminated_runs/` to keep the analysis clean. Our project budget guard at 95% of $5 was never tripped — total project spend remains $0.89 (17.9% of cap).
+Google's account-level monthly spending cap on the API key fired during sliding_window seeds 1 and 2 during the initial sweep. Those runs were archived, then re-run cleanly once the cap was lifted. **All 21 sweep runs are now in the analysis.** Total project spend: **$1.09 (21.7% of the $5 cap)**. The project's own budget guard at 95% was never tripped.
 
 ---
 

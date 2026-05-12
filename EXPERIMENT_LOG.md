@@ -4,7 +4,7 @@
 
 | Date | Run ID | Approach | Split | EM | F1 | $ | Notes |
 |---|---|---|---|---|---|---|---|
-| 2026-05-12 | sweep × 21 runs at T=0.3 (19 usable) | all 7 | full (34q × 3 seeds) | see below | see below | ~$0.63 | **Phase 9 multi-seed sweep.** 6 approaches × 3 seeds + sliding_window × 1 (seeds 1–2 archived: quota-contaminated). Sweep aggregates in `paper/tables/sweep_headline.csv`. Headline (F1 mean ± std): sliding_window **0.896±0.000 (n=1)**, full_context **0.881±0.012**, hyde **0.838±0.012**, naive **0.836±0.012**, rerank **0.833±0.009**, hybrid **0.797±0.010**, recursive_summary **0.206±0.000**. |
+| 2026-05-12 | sweep × 21 runs at T=0.3 (full coverage) | all 7 | full (34q × 3 seeds) | see below | see below | ~$0.83 | **Phase 9 multi-seed sweep — complete.** Sliding_window seeds 1–2 re-run cleanly after API cap lift. Sweep aggregates in `paper/tables/sweep_headline.csv`. Headline (F1 mean ± std): full_context **0.881±0.012**, sliding_window **0.875±0.025**, hyde **0.838±0.012**, naive **0.836±0.012**, rerank **0.833±0.009**, hybrid **0.797±0.010**, recursive_summary **0.206±0.000**. |
 | 2026-05-11 | `sliding_window_20260512_004119_9480ef` | sliding_window | full (34q) | **0.706** | **0.901** | $0.0972 | **CLEAN**. New headline best. 4 LLM calls/q (one per doc, with running-state). Needle EM 0.750 (highest). Distractor F1 0.857 (highest). p50 8.0s (slowest of all approaches besides expected). |
 | 2026-05-11 | `recursive_summary_20260512_003929_c6c8c0` | recursive_summary | full (34q) | 0.206 | 0.221 | $0.0068 | **CLEAN, but catastrophic on factoid Qs**. Question-agnostic per-doc summarization stripped specific identifiers (MULBERRY-7Q, M7-RX-204-A, 12%, dates) despite explicit "preserve facts" instructions. Hallucination 1.0 holds (refusing a missing fact accidentally aligns with gold). Strong negative result for the paper. |
 | 2026-05-11 | `full_context_20260512_003505_dc03cd` | full_context | full (34q) | 0.676 | 0.886 | $0.0911 | **CLEAN**. Multi-hop EM 0.625 (highest among single-call methods). Beats every RAG variant on F1. Cost ~7.5x naive due to full corpus in every prompt. Demonstrates "if corpus fits, retrieval is unnecessary at this scale". |
@@ -16,4 +16,4 @@
 
 ---
 
-**Cumulative spend so far:** $0.8929 / $5.00 cap (17.9%). The new API key hit a Google account-level monthly spending cap during sliding_window seeds 1–2; those runs were archived (`archive/contaminated_runs/`) and the analysis proceeds with 19 clean sweep runs.
+**Cumulative spend so far:** $1.0875 / $5.00 cap (21.7%). All 21 sweep runs are clean; the earlier two contaminated sliding_window runs were re-executed once the account-level monthly cap was lifted.

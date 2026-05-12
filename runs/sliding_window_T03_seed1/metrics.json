@@ -1,0 +1,48 @@
+{
+  "run_id": "sliding_window_T03_seed1",
+  "approach": "sliding_window",
+  "n_questions": 34,
+  "em": 0.7058823529411765,
+  "f1": 0.8810924369747901,
+  "accuracy": 0.7058823529411765,
+  "per_type": {
+    "distractor": {
+      "n": 8,
+      "em": 0.5,
+      "f1": 0.8571428571428571,
+      "accuracy": 0.5
+    },
+    "hallucination": {
+      "n": 6,
+      "em": 1.0,
+      "f1": 1.0,
+      "accuracy": 1.0
+    },
+    "multi_hop": {
+      "n": 8,
+      "em": 0.375,
+      "f1": 0.7,
+      "accuracy": 0.375
+    },
+    "needle": {
+      "n": 8,
+      "em": 0.875,
+      "f1": 0.9375,
+      "accuracy": 0.875
+    },
+    "sanity": {
+      "n": 4,
+      "em": 1.0,
+      "f1": 1.0,
+      "accuracy": 1.0
+    }
+  },
+  "cost_usd": 0.09721379999999996,
+  "tokens_in": 318221,
+  "tokens_out": 699,
+  "latency_p50_ms": 8945.699833100662,
+  "latency_p95_ms": 11362.10475093685,
+  "wall_clock_s": 744.2259752079844,
+  "cumulative_spend_usd": 0.9901644000000004,
+  "budget_cap_usd": 5.0
+}
