@@ -1,0 +1,7 @@
+# HyDE RAG: LLM writes a hypothetical answer, embedding of that drives retrieval.
+# Two LLM calls per question (rewrite + answer).
+
+approach: hyde
+
+retrieval:
+  top_k: 5

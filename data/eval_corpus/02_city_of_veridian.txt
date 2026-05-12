@@ -1,0 +1,96 @@
+THE CITY OF VERIDIAN — MUNICIPAL OVERVIEW
+
+REVISED EDITION, 2023
+
+1. Geography and Setting
+
+Veridian is a riverside city in the western lowlands, situated on the great bend of the Saren River where it leaves the foothills and turns south toward the sea. The city occupies both banks of the river, with the older quarters concentrated on the western side and the more recent expansions stretching east and northeast across the flatter alluvial plain. The Saren Highlands rise visibly to the west of the city, framing the skyline on clear evenings.
+
+The city covers approximately 481 square kilometers of municipal territory. Elevations within the city limits range from 47 meters above sea level at the river quay to 312 meters at the western edge of the Veridian Heights ridge, which forms the city's distinctive western boundary.
+
+The climate is temperate-maritime, with mild wet winters and warm summers. The average annual rainfall, as recorded at the municipal weather station at Old Quay, is 142 centimeters. Snowfall is uncommon at the river level but occurs reliably each winter in the Veridian Heights district above 200 meters.
+
+2. Founding and Early History
+
+Veridian was founded in 1873 as a trading settlement at the head of navigable water on the Saren. Its founding charter was granted by the Provincial Council of Saren-Vell in the autumn of that year and the first formal mayor, a timber merchant named Joachim Telder, was appointed the following spring.
+
+The city grew rapidly during the 1880s and 1890s as the inland forestry trade routed its product downriver to the coast. By 1900 the population had passed eighty thousand. The first railway connection — to the coastal city of Aurelius — opened in 1894, and the first bridge to the eastern bank, a wooden trestle long since replaced, opened in 1898.
+
+The Crescent Bridge, the city's most recognizable landmark, was built in 1932 to replace an earlier iron bridge that had been damaged in the great floods of 1929. Designed by the engineer Hadrian Voss-Marcello (no known relation to the satellite investigator of similar surname), the Crescent Bridge spans 412 meters in a single shallow arc and is widely considered one of the more elegant pieces of civil engineering in the western provinces. It carries pedestrian, bicycle, and light vehicle traffic, but not heavy freight.
+
+A second river crossing, the Saren Bridge, was completed in 1958 and carries the city's primary east-west motor traffic. The Saren Bridge is utilitarian where the Crescent is graceful, and the two are often spoken of in the city as cousins of unequal looks.
+
+3. Population
+
+Veridian's population per the 2022 municipal census is 2,847,000 residents within the city limits, with an additional estimated 640,000 in the immediately surrounding metropolitan zone. The 2010 census, conducted under a slightly different boundary definition, reported a city population of 2,341,000.
+
+The population is distributed across nineteen administrative districts. The four largest by population are North Saren (412,000), Old Quay (358,000), Pinemont (301,000), and Veridian Heights (286,000). Veridian Heights, located on the high ground at the western edge of the city, is the smallest of these four by area but the highest in mean elevation; it is best known as the location of the Halden Institute for Computational Mycology and of several historic vineyards.
+
+Demographically, the city is approximately 58% native-born to Saren-Vell, with the remaining residents drawn predominantly from the Eastern Federation provinces and from the coastal trade cities. The city operates in two official languages.
+
+4. Governance
+
+Veridian is governed by a directly elected Mayor, a forty-one-member Municipal Council, and a permanent civil service. The current Mayor, Quentin Aldermann, took office in 2021 after a campaign focused on river-flood mitigation and the reform of the city's transit authority. Mayor Aldermann previously served as the Council member for Pinemont (2013-2021) and as deputy Mayor (2017-2021).
+
+The Mayor's office is located in City Hall, a sandstone building on Old Quay Square completed in 1912. City Hall has been the site of every significant municipal ceremony for over a century, and was the venue, on 14 November 1987, for the signing of the Auralite Accord.
+
+The Municipal Council meets in the smaller Council Chamber on the second floor of City Hall, in scheduled session every second Tuesday. The chamber is open to the public from the visitors' gallery.
+
+The city's civil service is organized into twenty-three departments. Of these, the Department of Public Works (which administers, among other things, water, drainage, and the maintenance of the Crescent and Saren bridges) is the largest by headcount.
+
+5. Public Works
+
+The Veridian Public Works Department employs roughly seven thousand staff across its various divisions. The Water Division is responsible for the city's drinking water supply, the management of the river-mouth reservoirs, and the discharge of treated wastewater downriver.
+
+The city's drinking water is drawn primarily from the upper Saren above the Highlands fault, treated at the North Saren Filtration Works, and distributed via approximately 4,200 kilometers of mains. As recorded in the 2022 Water Quality Annual: the municipal water system contains a chlorination ratio of 0.46 ppm at point of distribution, consistent with regional public-health guidelines and unchanged from the previous five-year average. The water supply is independently audited each spring by the Saren-Vell Public Health Inspectorate.
+
+The Public Works Department also coordinates the city's collaboration with the Halden Institute on industrial-substrate moisture monitoring, a long-running project initiated in 2018 and renewed for an additional five-year term in 2023.
+
+6. Districts of the City
+
+A brief tour of the nineteen administrative districts is well beyond the scope of this overview, but several merit mention.
+
+Old Quay, on the western bank just upstream of the Crescent Bridge, is the oldest district. It contains City Hall, the central market, the Old Quay Institute of Technology, and most of the city's historic civic buildings. The district's population has been roughly stable for thirty years.
+
+North Saren, the city's largest district by population, lies on the eastern bank north of the Saren Bridge. It is predominantly residential, with a significant light-industrial belt along the rail corridor.
+
+Pinemont, on the western bank south of the Crescent Bridge, has the highest concentration of the city's smaller engineering and aerospace firms. The Trans-Saren Aerospace Consortium maintains its principal integration facility in Pinemont. The Halden Institute leases office space in the district for its SporeSat program.
+
+Veridian Heights, atop the western ridge, is largely residential and academic. It hosts the Halden Institute for Computational Mycology, several private vineyards, and the Heights Observatory (founded 1923, now a public museum).
+
+Other notable districts include East Mire (light industrial), Saren Quay (riverside leisure and tourism), Aurelian Gate (the rail terminus and adjacent commercial zone), and the four outer residential districts collectively known as the Outer Crescent.
+
+7. Transit
+
+The city operates a mixed transit system of light rail, bus, river ferry, and bicycle infrastructure. The light rail, opened in stages between 1971 and 2008, comprises five lines and 134 stations. The bus network covers the districts the rail does not. River ferries cross the Saren at three points and connect the central districts to the easternmost residential neighborhoods.
+
+Veridian's transit policy is famously bicycle-friendly. Approximately 28% of all journeys within the city are made by bicycle, the highest figure for any city of comparable size in the western provinces. The transit authority maintains 781 kilometers of dedicated bicycle infrastructure.
+
+8. Civic Identity
+
+The city's official motto, granted by the Provincial Council in 1875 and engraved above the main entrance of City Hall, is "Per arborem et flumen" — "by the tree and the river." The motto refers to the city's twin founding industries, timber and river trade. The official municipal emblem combines a stylized pine bough and an undulating line representing the Saren.
+
+The annual Saren Festival, held over the second weekend of June, marks the historical opening of summer river navigation. The festival includes a regatta on the river, a market on Old Quay Square, and a procession from the Crescent Bridge to City Hall.
+
+9. Notable Cultural Institutions
+
+Cultural institutions of note within the city include:
+- The Veridian Museum of Western History (Old Quay).
+- The Heights Observatory and Museum (Veridian Heights).
+- The Aurelian Gate Conservatory of Music (Aurelian Gate).
+- The Saren Quay Aquarium (Saren Quay).
+- The Old Quay Institute of Technology (Old Quay), which though primarily a university also operates the Telder Library, named for the founding mayor.
+
+The city does not have a single principal art museum; smaller galleries are distributed across the districts.
+
+10. Notable Modern Events
+
+In addition to the Saren Festival and ordinary civic events, the city has hosted several significant modern occasions:
+- The 1987 signing of the Auralite Accord at City Hall, a multilateral environmental and scientific cooperation agreement of regional importance.
+- The 2004 inauguration of the Outer Crescent rail extension.
+- The 2013 reopening of the restored Crescent Bridge, following an eighteen-month structural restoration.
+- The 2021 inauguration of Mayor Quentin Aldermann.
+
+A more comprehensive municipal history is available from the Veridian Museum of Western History.
+
+End of municipal overview.

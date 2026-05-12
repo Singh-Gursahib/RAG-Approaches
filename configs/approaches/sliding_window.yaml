@@ -1,0 +1,9 @@
+# Sliding-Window Reasoning.
+# Process the corpus window-by-window, maintaining a running "best answer"
+# state. Default window_unit=document (4 LLM calls/question for our 4-doc
+# corpus). Set window_unit=chunk for a 65-call/question variant (slow + costly).
+
+approach: sliding_window
+
+sliding_window:
+  window_unit: document

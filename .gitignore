@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+
+# Env / secrets
+.env
+.env.local
+
+# Data
+data/raw/
+data/processed/
+
+# Runs are the experimental record — tracked, except the auto-generated budget ledger.
+runs/.budget_ledger.jsonl
+
+# Caches
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.cache/
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Notebook outputs
+.ipynb_checkpoints/

@@ -1,0 +1,8 @@
+# Hybrid RAG: dense + BM25 retrieval fused via RRF.
+# Inherits everything else from configs/base.yaml.
+
+approach: hybrid
+
+retrieval:
+  top_n_for_rerank: 10   # candidate pool size per retriever
+  top_k: 5               # final passages handed to the LLM

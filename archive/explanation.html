@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Context Architecture | AI Retrieval Strategies</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..500;0,9..40,600;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #07080a;
+      --surface: #0f1116;
+      --surface-hover: #161920;
+      --border: #1f222b;
+      --border-active: #2d323e;
+      --text-primary: #e8e6e1;
+      --text-secondary: #8b909c;
+      --accent-cyan: #00e5ff;
+      --accent-amber: #ffb300;
+      --accent-rose: #ff5277;
+      --font-display: 'Fraunces', serif;
+      --font-body: 'DM Sans', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text-primary);
+      font-family: var(--font-body);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Background Grid & Noise */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: 
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 60px 60px;
+      opacity: 0.25;
+      pointer-events: none;
+      z-index: -2;
+    }
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+      opacity: 0.03;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    /* Typography */
+    h1, h2, h3 { font-family: var(--font-display); font-weight: 400; line-height: 1.15; letter-spacing: -0.02em; }
+    .tag {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      padding: 0.35rem 0.6rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--text-secondary);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .tag::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+      display: block;
+    }
+
+    /* Hero */
+    .hero {
+      padding: 8rem 0 6rem;
+      position: relative;
+    }
+    .hero h1 {
+      font-size: clamp(3rem, 8vw, 6rem);
+      background: linear-gradient(135deg, var(--text-primary) 0%, var(--text-secondary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 1.5rem;
+    }
+    .hero-sub {
+      font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+      color: var(--text-secondary);
+      max-width: 720px;
+      margin-bottom: 3rem;
+      line-height: 1.5;
+    }
+    .hero-stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+    }
+    .stat-item { display: flex; flex-direction: column; gap: 0.3rem; }
+    .stat-val { font-family: var(--font-mono); font-size: 1.5rem; color: var(--accent-cyan); font-weight: 500; }
+    .stat-label { font-size: 0.85rem; color: var(--text-secondary); }
+
+    /* Path Divider */
+    .path-divider {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      margin: 4rem 0;
+      position: relative;
+    }
+    .path-divider::before {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0; left: 50%;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, var(--border-active), transparent);
+    }
+    .path-col { padding: 2rem; position: relative; }
+    .path-col::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.02), transparent);
+      pointer-events: none;
+    }
+    .path-col h3 { font-size: 1.8rem; margin-bottom: 0.5rem; }
+    .path-col.rag h3 { color: var(--accent-cyan); }
+    .path-col.non-rag h3 { color: var(--accent-amber); }
+    .path-desc { color: var(--text-secondary); font-size: 1rem; margin-bottom: 1.5rem; }
+
+    /* Filters */
+    .filter-bar {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 3rem;
+      flex-wrap: wrap;
+    }
+    .filter-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      padding: 0.6rem 1.2rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.25s var(--ease-out);
+    }
+    .filter-btn:hover { border-color: var(--border-active); color: var(--text-primary); }
+    .filter-btn.active {
+      background: var(--surface-hover);
+      border-color: var(--text-secondary);
+      color: var(--text-primary);
+      box-shadow: 0 0 12px rgba(255,255,255,0.05);
+    }
+
+    /* Cards Grid */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 6rem;
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.5rem;
+      cursor: pointer;
+      transition: all 0.3s var(--ease-out);
+      position: relative;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    .card.visible { opacity: 1; transform: translateY(0); }
+    .card.hidden { display: none; }
+    .card:hover { border-color: var(--border-active); background: var(--surface-hover); transform: translateY(-4px); }
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; width: 4px; height: 100%;
+      background: var(--accent-cyan);
+      opacity: 0;
+      transition: opacity 0.25s var(--ease-out);
+    }
+    .card[data-type="non-rag"]::before { background: var(--accent-amber); }
+    .card:hover::before { opacity: 1; }
+    
+    .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; }
+    .card-title { font-family: var(--font-display); font-size: 1.4rem; color: var(--text-primary); margin-bottom: 0.2rem; }
+    .card-type { font-family: var(--font-mono); font-size: 0.65rem; padding: 0.2rem 0.5rem; border-radius: 3px; background: rgba(255,255,255,0.05); color: var(--text-secondary); text-transform: uppercase; }
+    .card-metaphor { width: 100%; height: 40px; margin: 1rem 0; position: relative; }
+    .card-metaphor svg { width: 100%; height: 100%; }
+    .card-summary { color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 1rem; line-height: 1.5; }
+    .card-details {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s var(--ease-spring);
+    }
+    .card.expanded .card-details { max-height: 400px; }
+    .details-inner { padding-top: 1rem; border-top: 1px solid var(--border); margin-top: 0.5rem; }
+    .details-inner p { color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.8rem; }
+    .domain-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.5rem; }
+    .domain-tag { font-family: var(--font-mono); font-size: 0.7rem; padding: 0.25rem 0.5rem; border-radius: 3px; background: rgba(0,229,255,0.08); color: var(--accent-cyan); border: 1px solid rgba(0,229,255,0.15); }
+    .card[data-type="non-rag"] .domain-tag { background: rgba(255,179,0,0.08); color: var(--accent-amber); border-color: rgba(255,179,0,0.15); }
+    .expand-icon { transition: transform 0.3s var(--ease-out); margin-left: auto; display: inline-block; }
+    .card.expanded .expand-icon { transform: rotate(180deg); }
+
+    /* Decision Matrix */
+    .matrix-section { padding: 6rem 0; border-top: 1px solid var(--border); }
+    .matrix-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    .matrix-item {
+      padding: 1.5rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface);
+      transition: all 0.3s var(--ease-out);
+    }
+    .matrix-item:hover { border-color: var(--border-active); background: var(--surface-hover); }
+    .matrix-domain { font-family: var(--font-display); font-size: 1.2rem; margin-bottom: 0.5rem; color: var(--text-primary); }
+    .matrix-rec { font-family: var(--font-mono); font-size: 0.85rem; color: var(--accent-cyan); margin-bottom: 0.3rem; }
+    .matrix-rec span { color: var(--text-secondary); }
+    .matrix-why { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4; }
+
+    /* Footer */
+    footer { padding: 4rem 0 3rem; text-align: center; color: var(--text-secondary); font-size: 0.85rem; border-top: 1px solid var(--border); }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .path-divider { grid-template-columns: 1fr; gap: 2rem; }
+      .path-divider::before { display: none; }
+      .cards-grid { grid-template-columns: 1fr; }
+      .hero { padding: 6rem 0 4rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .card.visible { animation: none; transition: none; }
+      .card:hover { transform: none; }
+      * { transition: none !important; animation: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header class="hero">
+      <div class="tag">AI CONTEXT STRATEGY</div>
+      <h1>Context Architecture</h1>
+      <p class="hero-sub">Modern AI can process millions of words, but the real challenge isn't capacity—it's precision. How do you deliver the <em>right</em> information at the <em>right</em> time?</p>
+      <div class="hero-stats">
+        <div class="stat-item"><span class="stat-val">21+</span><span class="stat-label">Strategies Tested</span></div>
+        <div class="stat-item"><span class="stat-val">7</span><span class="stat-label">Real-World Domains</span></div>
+        <div class="stat-item"><span class="stat-val">1:1</span><span class="stat-label">Fair Evaluation</span></div>
+        <div class="stat-item"><span class="stat-val">→</span><span class="stat-label">Decision Guide</span></div>
+      </div>
+    </header>
+
+    <section class="path-divider">
+      <div class="path-col rag">
+        <div class="tag" style="color:var(--accent-cyan); border-color:var(--accent-cyan);">Search-First</div>
+        <h3>RAG Approaches</h3>
+        <p class="path-desc">Query first, retrieve second. Find relevant fragments from your documents, then feed them to the AI. 13 variations tested.</p>
+      </div>
+      <div class="path-col non-rag">
+        <div class="tag" style="color:var(--accent-amber); border-color:var(--accent-amber);">Compress / Memory</div>
+        <h3>Non-RAG Approaches</h3>
+        <p class="path-desc">No upfront search. Instead: compress, cache, chunk, or leverage persistent memory banks. 8 variations tested.</p>
+      </div>
+    </section>
+
+    <nav class="filter-bar">
+      <button class="filter-btn active" data-filter="all">All Strategies</button>
+      <button class="filter-btn" data-filter="rag">RAG (13)</button>
+      <button class="filter-btn" data-filter="non-rag">Non-RAG (8)</button>
+    </nav>
+
+    <main class="cards-grid" id="cardsGrid">
+      <!-- Cards injected via JS for cleaner DOM structure -->
+    </main>
+
+    <section class="matrix-section">
+      <div class="tag">DECISION GUIDE</div>
+      <h2 style="margin: 0.5rem 0 1rem; font-size: 2.2rem;">Where to Apply What</h2>
+      <p style="color: var(--text-secondary); margin-bottom: 2rem; max-width: 650px;">Based on cross-domain testing, here's the strategic mapping for maximum accuracy, speed, and cost efficiency.</p>
+      
+      <div class="matrix-grid">
+        <div class="matrix-item">
+          <div class="matrix-domain">⚖️ Legal</div>
+          <div class="matrix-rec">Hybrid RAG <span>+</span> Parent-Child</div>
+          <p class="matrix-why">Precise keyword matching + hierarchical clause structure prevents missing critical legal references.</p>
+        </div>
+        <div class="matrix-item">
+          <div class="matrix-domain">🏥 Medicine</div>
+          <div class="matrix-rec">GraphRAG <span>+</span> Contextual Compression</div>
+          <p class="matrix-why">Symptom-drug-disease relationships require graph topology. Compression removes redundant clinical notes.</p>
+        </div>
+        <div class="matrix-item">
+          <div class="matrix-domain">📚 Education</div>
+          <div class="matrix-rec">Hierarchical RAG <span>+</span> Sliding Window</div>
+          <p class="matrix-why">Chapters → sections → paragraphs flow naturally top-down. Chunking preserves pedagogical sequence.</p>
+        </div>
+        <div class="matrix-item">
+          <div class="matrix-domain">💰 Finance</div>
+          <div class="matrix-rec">Adaptive RAG <span>+</span> Context Caching</div>
+          <p class="matrix-why">Market questions vary wildly in complexity. Adaptive routing + cached earnings data = low latency, high precision.</p>
+        </div>
+        <div class="matrix-item">
+          <div class="matrix-domain">🔬 Research</div>
+          <div class="matrix-rec">Multi-Query RAG <span>+</span> RAPTOR</div>
+          <p class="matrix-why">Academic queries benefit from rephrased searches + clustered citation trees for comprehensive literature coverage.</p>
+        </div>
+        <div class="matrix-item">
+          <div class="matrix-domain">💻 Coding</div>
+          <div class="matrix-rec">Agentic RAG <span>+</span> Full-Context</div>
+          <p class="matrix-why">Agents plan multi-step codebase navigation. Native long-context handles entire repos without fragmentation.</p>
+        </div>
+        <div class="matrix-item">
+          <div class="matrix-domain">❓ General Q&A</div>
+          <div class="matrix-rec">Self-RAG <span>+</span> Long-Context Native</div>
+          <p class="matrix-why">AI knows when to retrieve vs. rely on training. Modern context windows handle everyday breadth effortlessly.</p>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <p>Built for clarity. Tested for performance. Optimized for real-world AI deployment.</p>
+      <p style="margin-top:0.5rem; opacity:0.5;">Context Architecture Visualization • 2024</p>
+    </footer>
+  </div>
+
+<script>
+const techniques = [
+  { id: 'naive-vector', type: 'rag', title: 'Naive Vector RAG', summary: 'Simple vector matching for quick baseline retrieval.', details: 'Convert documents into mathematical embeddings, compute cosine similarity against the query, and return the top-k matches. Fast, but struggles with nuanced keyword matches or structural context.', domains: ['General', 'Coding'] },
+  { id: 'hybrid-rag', type: 'rag', title: 'Hybrid RAG', summary: 'Combines keyword + vector search with smart re-ranking.', details: 'BM25 keyword matching catches exact terms, vectors catch semantic meaning, and a cross-encoder re-ranks results. Balances precision and recall better than either alone.', domains: ['Legal', 'Finance', 'Research'] },
+  { id: 'parent-child', type: 'rag', title: 'Parent-Child Retrieval', summary: 'Retrieves child chunks alongside their parent document.', details: 'Documents are split into small chunks (children) and linked to larger source sections (parents). Search finds precise child matches, but feeds the broader parent context to the AI for coherence.', domains: ['Legal', 'Education'] },
+  { id: 'multi-query', type: 'rag', title: 'Multi-Query RAG', summary: 'Generates multiple query variations to cast a wider net.', details: 'The AI rephrases the original question into 5 distinct angles. Each runs through retrieval, results are merged, deduplicated, and passed to the final generation step.', domains: ['Research', 'Medicine'] },
+  { id: 'hyde', type: 'rag', title: 'HyDE', summary: 'Hallucinates a hypothetical answer to guide search.', details: 'Instead of searching with the question, the model first writes a fake answer. That text is embedded and searched against documents. Excellent when query vocabulary mismatches document vocabulary.', domains: ['General', 'Finance'] },
+  { id: 'hierarchical', type: 'rag', title: 'Hierarchical RAG', summary: 'Top-down pyramid search through document layers.', details: 'Documents are indexed at multiple abstraction levels. Queries first match high-level summaries, then drill down to paragraphs. Prevents losing context in dense technical manuals.', domains: ['Education', 'Research'] },
+  { id: 'raptor', type: 'rag', title: 'RAPTOR', summary: 'Recursive clustering & summarization into a retrieval tree.', details: 'Embeds chunks, clusters semantically similar ones, summarizes each cluster, and repeats. Creates a multi-layer tree. Query traverses from root to relevant leaf clusters.', domains: ['Research', 'General'] },
+  { id: 'graphrag', type: 'rag', title: 'GraphRAG', summary: 'Knowledge graph traversal instead of flat similarity search.', details: 'Entities and relationships are extracted into nodes and edges. Queries walk the graph to find connected facts. Superior for multi-hop reasoning and complex domain relationships.', domains: ['Medicine', 'Finance'] },
+  { id: 'memorag', type: 'rag', title: 'MemoRAG', summary: 'Persistent fact storage with dynamic recall.', details: 'Important entities, dates, and rules are extracted and stored in a structured memory index. Future queries check memory first before falling back to vector search. Reduces redundant computation.', domains: ['Legal', 'Coding'] },
+  { id: 'self-rag', type: 'rag', title: 'Self-RAG', summary: 'AI decides when to retrieve, reflect, or generate.', details: 'The model uses special tokens to trigger retrieval only when confidence is low. It self-evaluates output quality and can re-search if hallucinations are detected.', domains: ['General', 'Education'] },
+  { id: 'agentic-rag', type: 'rag', title: 'Agentic RAG', summary: 'Autonomous agent plans multi-step search strategies.', details: 'An AI agent breaks complex questions into sub-queries, decides which tool/database to use, synthesizes intermediate results, and iterates until satisfied. Highly flexible but slower.', domains: ['Coding', 'Research'] },
+  { id: 'adaptive-rag', type: 'rag', title: 'Adaptive RAG', summary: 'Auto-selects the optimal retrieval pipeline per query.', details: 'A lightweight router analyzes query complexity, length, and domain, then dynamically chooses between naive, hybrid, graph, or memory retrieval. Maximizes speed vs. accuracy tradeoff.', domains: ['Finance', 'General'] },
+  { id: 'context-compression', type: 'rag', title: 'Contextual Compression RAG', summary: 'Strips fluff from retrieved chunks before feeding to AI.', details: 'Retrieved documents pass through a compressor LLM that removes irrelevant sentences while preserving key facts and citations. Reduces token cost and noise interference.', domains: ['Medicine', 'Legal'] },
+  { id: 'full-context', type: 'non-rag', title: 'Full-Context Injection', summary: 'Dump everything into the model at once.', details: 'With modern 1M+ context windows, entire documents or datasets are fed directly. Zero retrieval latency, perfect for small-to-medium corpora where token cost isn\'t prohibitive.', domains: ['Coding', 'General'] },
+  { id: 'recursive-summary', type: 'non-rag', title: 'Recursive Summarization', summary: 'Summarize, then summarize the summaries.', details: 'Documents are chunked, summarized, then summaries are merged and summarized again until the entire corpus fits in a single coherent prompt. Preserves high-level meaning, loses granular detail.', domains: ['Education', 'Finance'] },
+  { id: 'sliding-window', type: 'non-rag', title: 'Sliding-Window Reasoning', summary: 'Process chunks sequentially with overlapping memory.', details: 'The model reads chunk 1, generates thoughts, reads chunk 2 (with overlap), and carries forward condensed reasoning. Mimics human reading comprehension for massive texts.', domains: ['Legal', 'Research'] },
+  { id: 'prompt-compression', type: 'non-rag', title: 'Prompt Compression', summary: 'AI-powered distillation of raw text into dense prompts.', details: 'Uses techniques like LLMLingua or selective attention masking to retain only high-information tokens. Reduces input length by 30-60% while preserving accuracy.', domains: ['Finance', 'General'] },
+  { id: 'context-caching', type: 'non-rag', title: 'Context Caching', summary: 'Cache processed embeddings/key-value states for reuse.', details: 'Instead of re-encoding documents every request, KV caches or precomputed states are stored. Drastically reduces latency and compute for repeated queries over static data.', domains: ['Coding', 'Finance'] },
+  { id: 'memory-augmented', type: 'non-rag', title: 'Memory-Augmented', summary: 'Persistent read/write memory bank for long-term context.', details: 'The system maintains an external vector/SQL memory. AI writes new insights after each session and reads them later. Enables stateful conversations across days or weeks.', domains: ['General', 'Education'] },
+  { id: 'multi-agent-memory', type: 'non-rag', title: 'Multi-Agent Memory', summary: 'Specialized agents maintain shared memory pools.', details: 'Research agent, coding agent, and domain expert each manage their own memory. They synchronize via a central knowledge graph. Ideal for enterprise-scale collaborative workflows.', domains: ['Coding', 'Research'] },
+  { id: 'long-context-native', type: 'non-rag', title: 'Long-Context Native', summary: 'Models architected for massive windows from the ground up.', details: 'Uses optimized attention mechanisms (e.g., RoPE scaling, sliding attention) to process 100k-10M tokens natively. No retrieval pipeline needed. Best for single-document deep analysis.', domains: ['Legal', 'Medicine'] }
+];
+
+const grid = document.getElementById('cardsGrid');
+
+function createCard(t) {
+  const domainsHtml = t.domains.map(d => `<span class="domain-tag">${d}</span>`).join('');
+  const svgMetaphor = getMetaphorSVG(t.type);
+  return `
+    <article class="card" data-type="${t.type}" data-id="${t.id}">
+      <div class="card-header">
+        <div>
+          <div class="card-title">${t.title}</div>
+          <div class="card-type">${t.type === 'rag' ? 'Search-First' : 'Compress/Memory'}</div>
+        </div>
+        <span class="expand-icon">▼</span>
+      </div>
+      <div class="card-metaphor">${svgMetaphor}</div>
+      <p class="card-summary">${t.summary}</p>
+      <div class="card-details">
+        <div class="details-inner">
+          <p>${t.details}</p>
+          <div class="domain-tags">${domainsHtml}</div>
+        </div>
+      </div>
+    </article>
+  `;
+}
+
+function getMetaphorSVG(type) {
+  const color = type === 'rag' ? 'var(--accent-cyan)' : 'var(--accent-amber)';
+  const paths = type === 'rag' 
+    ? `<path d="M5 15 Q15 5 25 15 T45 15" fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round"/>`
+    : `<path d="M10 15 L15 8 L20 15 M30 15 L35 8 L40 15" fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>`;
+  return `<svg viewBox="0 0 50 30" preserveAspectRatio="xMidYMid meet">${paths}</svg>`;
+}
+
+grid.innerHTML = techniques.map(createCard).join('');
+
+// Intersection Observer for staggered reveals
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => entry.target.classList.add('visible'), i * 40);
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+document.querySelectorAll('.card').forEach(card => observer.observe(card));
+
+// Filter Logic
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const filter = btn.dataset.filter;
+    document.querySelectorAll('.card').forEach(card => {
+      if (filter === 'all' || card.dataset.type === filter) {
+        card.classList.remove('hidden');
+      } else {
+        card.classList.add('hidden');
+      }
+    });
+  });
+});
+
+// Expand/Collapse Logic
+grid.addEventListener('click', (e) => {
+  const card = e.target.closest('.card');
+  if (!card) return;
+  card.classList.toggle('expanded');
+});
+
+// Reduced motion fallback
+if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  document.querySelectorAll('.card').forEach(c => c.classList.add('visible'));
+}
+</script>
+</body>
+</html>

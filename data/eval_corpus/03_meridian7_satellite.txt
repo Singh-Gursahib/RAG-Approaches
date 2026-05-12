@@ -1,0 +1,81 @@
+MERIDIAN-7 SATELLITE SYSTEM — TECHNICAL OVERVIEW
+
+PUBLIC TECHNICAL SUMMARY, ISSUE 3, 2023
+
+1. Mission
+
+MERIDIAN-7 is a low Earth orbit science satellite operated by the Trans-Saren Aerospace Consortium. Its primary mission is the continuous monitoring of atmospheric biosignatures — trace organic compounds and microbial signatures suspended in the upper troposphere and stratosphere — over a contiguous swath that spans the Saren-Vell territories and the western edge of the Eastern Federation. The satellite is the seventh in the MERIDIAN series, following the partial-success MERIDIAN-6 mission of 2014, and incorporates a substantially redesigned instrument bay and a generationally larger power system.
+
+The mission is funded through a combination of national contributions from Saren-Vell and the Eastern Federation, contract revenue from the Consortium's commercial subsidiaries, and a research provision drawn from the Auralite Accord joint fund. Under the standing terms of the Accord, a portion of the joint fund is reserved for cooperative atmospheric science; the MERIDIAN-7 program is one of three current beneficiaries of that allocation.
+
+2. Operations and Orbit
+
+MERIDIAN-7 was launched on 9 April 2019 from the eastern coastal launch facility at Aurelius Heliport, on a refurbished medium-lift booster contracted from the Federation Launch Authority. The satellite achieved its operational orbit two days after launch and completed in-orbit commissioning by 1 May 2019.
+
+The operational orbit is a near-circular sun-synchronous orbit at a nominal altitude of 542 kilometers, with an inclination of 97.6 degrees. The orbit was selected to provide stable lighting conditions over the primary swath and to permit twice-daily revisit times for most monitored regions. Ground-track repeat occurs every nine days.
+
+The satellite is operated from the Consortium's mission operations center in Pinemont, Veridian, with backup operations capability available from the Federation Launch Authority's facility at Aurelius. The principal investigator for the mission is Dr. Henrik Voss, of the Consortium's atmospheric sciences group; the deputy principal investigator is Dr. Yvenne Marchant.
+
+MERIDIAN-7's nominal mission duration was planned at seven years from launch, with consumables and structural margins sized to permit a possible two-year extension subject to performance review. The mission is currently in its fifth year and continues to meet its primary science objectives.
+
+3. Spacecraft Bus
+
+The spacecraft bus is the Consortium's TSV-200 platform, a midsize bus widely used for Earth-observation missions in the 700-1,200 kilogram class. The MERIDIAN-7 implementation of the TSV-200 has a launch mass of 1,034 kilograms and a deployed wingspan of 9.4 meters across the solar arrays.
+
+The power subsystem comprises twin deployable solar arrays of triple-junction gallium arsenide cells, delivering 4.2 kilowatts of end-of-life power at the equivalent of beginning-of-life Sun angle. The earlier MERIDIAN-6 mission, by comparison, carried a smaller single-array configuration delivering only 3.1 kilowatts. Energy storage is provided by a 64 Ah lithium-ion battery sized for eclipse operations plus margin.
+
+Attitude determination and control is by a three-axis stabilized system using reaction wheels, with magnetic torquers for momentum management and a cold-gas reaction control system for orbit maintenance. Star trackers provide arcsecond-class pointing knowledge; the achieved pointing performance in operation has consistently exceeded the specification of 30 arcseconds (1-sigma).
+
+Thermal control is passive, with heat pipes coupling the instrument bay to a forward radiator. The bus interior is maintained between -10 and +30 degrees Celsius across the orbit.
+
+4. Instrument Payload
+
+MERIDIAN-7 carries three primary instruments:
+
+4.1 The Atmospheric Spectral Imager (ASI-2), a five-band hyperspectral imager covering wavelengths from 380 to 2,400 nanometers, with a ground sample distance of 18 meters from the nominal orbit. ASI-2 is the principal instrument for compositional analysis of upper-atmosphere aerosols and is the heaviest item on the payload manifest.
+
+4.2 The Limb Sounder Array (LSA), a passive microwave instrument that measures atmospheric temperature and water vapor profiles along the orbital limb. LSA shares the forward instrument deck with ASI-2.
+
+4.3 The FILAMENT-3 biosensor. FILAMENT-3 is a compact biological-monitoring instrument designed and built by the Halden Institute for Computational Mycology. It cultivates and continuously reads the electrical signatures of fungal samples under simulated atmospheric exposure conditions, providing a unique direct-measurement capability for airborne fungal spore populations in the upper troposphere. FILAMENT-3 is the third-generation device in the Halden Institute's FILAMENT series and is, as of this writing, the only such biosensor operational in orbit. The instrument was delivered to the Consortium in 2018 and integrated into MERIDIAN-7 during the 2018-19 spacecraft integration campaign.
+
+5. Communications and Data
+
+MERIDIAN-7 communicates with its ground stations on standard S-band uplink and a high-rate X-band downlink for science data. A backup S-band downlink is available for telemetry and safe-mode operations.
+
+For internal identification within the Consortium's mission-tracking system, the satellite is assigned the designator M7-RX-204-A. The primary telemetry channel operates at 4.832 GHz. These identifiers appear in routine ground-station logs and in the Consortium's vehicle catalog.
+
+Data is downlinked to the Consortium's primary ground station at Aurelius Heliport, with backup reception available at the Pinemont mission operations center and at a Federation Launch Authority site in the Eastern Federation. Daily volumes average 240 gigabytes; weekly volumes peak at approximately 1.9 terabytes during high-cadence science campaigns.
+
+6. Ground Segment
+
+The Pinemont mission operations center maintains the satellite's flight schedule, performs daily health checks, and uplinks science command sequences. The center operates twenty-four hours a day with a staff of approximately forty across three shifts.
+
+The science data processing pipeline runs at the Aurelius data center. Level-0 (raw) and Level-1 (calibrated) products are produced within twelve hours of downlink; Level-2 and higher-order products are produced on rolling schedules ranging from twenty-four hours to one week depending on the product.
+
+7. Mission History to Date
+
+Since commissioning in May 2019, MERIDIAN-7 has completed over twenty-five thousand orbits and downlinked approximately 380 terabytes of cumulative science data. Notable mission events include:
+- 1 May 2019: completion of in-orbit commissioning.
+- 17 September 2019: first publication of ASI-2 hyperspectral aerosol composition maps.
+- 4 March 2020: temporary safe-mode entry following a single-event upset in the attitude control computer; recovery completed within forty-eight hours.
+- 22 July 2021: first publication, in the journal Geoscience Letters, of in-orbit data from the FILAMENT-3 biosensor.
+- 11 November 2022: completion of the satellite's third anniversary of operations, marked publicly at City Hall in Veridian.
+- 1 February 2023: extension of the joint Halden-Consortium science campaign through 2025.
+
+8. Predecessors and Successors
+
+MERIDIAN-6 was launched in 2014 and operated until 2017. The mission was rated a partial success; it accomplished most of its primary science objectives but failed early due to a deployment anomaly in one of its solar arrays and a subsequent power budget shortfall. MERIDIAN-6's instruments were predecessors to the present payload but used a smaller bus and a different orbit (a non-sun-synchronous mid-inclination orbit at 488 kilometers altitude). MERIDIAN-6 had no biosensor payload; FILAMENT-3 is the first such instrument to fly in the series.
+
+The Consortium has indicated that planning for a successor mission in the same series is under way but has not announced a launch year, instrument complement, or principal investigator. No firm budgetary commitment for such a successor has yet been published.
+
+9. Risks and Margins
+
+Routine risks to the mission include the natural degradation of the solar arrays (presently within budgeted margins), reaction wheel wear (no anomalies to date), and the cumulative single-event upset rate at the satellite's orbital altitude (within predicted bounds and well within the redundancy margins of the flight computer). The instrument suite is rated for the full planned mission duration; the FILAMENT-3 instrument in particular carries a planned ten-year hardware lifetime, which exceeds the satellite's planned operational lifetime by a comfortable margin.
+
+10. Publication and Public Engagement
+
+A full mission summary is published in each annual Trans-Saren Aerospace Consortium science yearbook. The most recent edition, covering 2022, includes a comprehensive instrument-by-instrument performance report and a substantial section on the unique FILAMENT-3 results, prepared in collaboration with Dr. Tomasz Lebid of the Halden Institute.
+
+Public outreach is coordinated jointly by the Consortium and (for FILAMENT-3-specific content) the Halden Institute. The mission is featured in a standing exhibit at the Heights Observatory and Museum in Veridian.
+
+End of technical summary.

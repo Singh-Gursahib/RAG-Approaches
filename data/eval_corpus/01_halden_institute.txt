@@ -1,0 +1,91 @@
+THE HALDEN INSTITUTE FOR COMPUTATIONAL MYCOLOGY
+
+INSTITUTIONAL PROFILE — PUBLIC EDITION, RELEASED 2023
+
+1. Founding and Mandate
+
+The Halden Institute for Computational Mycology was founded in 1991 by Dr. Elara Constanin, a mycologist who had spent the previous two decades at the Saren-Vell Academy of Natural Sciences. Constanin's central conviction — that the slow electrical and chemical signals propagating through filamentous fungi could be modeled as a kind of distributed computation — was unfashionable when the Institute opened its doors. By the mid-2000s it had become a recognized subfield, and the Institute had grown from a three-room laboratory in a converted brewery into the multi-building research campus it occupies today.
+
+The Institute's headquarters sit in the Veridian Heights district of the city of Veridian, at the western end of the old Saren riverbank. The campus consists of four main buildings: the Constanin Building (administration and the library), the Vapor House (substrate cultivation), the Bench Wing (instrumentation), and the Sublimary, a low-ceilinged subterranean facility used for the long-duration mycelium-array experiments the Institute is best known for.
+
+Halden is incorporated as an independent research non-profit. It does not grant degrees. Its mandate, as inscribed on the founding charter, is "the patient study of those forms of cognition that do not announce themselves." That phrase has been quoted in every annual report since 1992 and remains, perhaps stubbornly, on the institutional letterhead.
+
+2. Personnel and Governance
+
+The Institute is led by a Director, advised by a seven-member Board of Trustees and a rotating Scientific Council. The current Director, as of the 2023 annual report, is Dr. Mei-Ling Forrester. Forrester succeeded Dr. Anders Hovland in 2019; Hovland in turn had succeeded the founder, Dr. Constanin, in 2008. The directorship is a five-year term, renewable once. Forrester is a graduate of the Old Quay Institute of Technology and joined Halden in 2004 as a junior fellow in the Spatial Cognition Group.
+
+The full Scientific Council comprises Dr. Forrester (chair), Dr. Iyari Wendel (substrate ecology), Dr. Pia Almagor (signal processing), Dr. Tomasz Lebid (computational modeling), and three rotating external members appointed for two-year terms.
+
+As of the 2023 annual report, the Institute employs 178 researchers, technicians, and administrative staff. Of these, 92 hold doctoral degrees, 31 are graduate fellows from partnering universities (under temporary research agreements), and the remainder are technicians, facilities staff, and administrators. The Institute is unusual among comparably sized labs in maintaining a permanent in-house glassblower and a small machine shop, both inherited from the original brewery conversion.
+
+3. Research Programs
+
+Halden organizes its work into three long-running research programs and a rotating set of shorter "expeditionary" projects.
+
+3.1 MycoLink
+
+MycoLink, established 1994, studies the conduction of low-frequency electrical signals through mycelial networks. Its longest-running experiment, the so-called Bench Eleven array, has been continuously monitored since 2002 and is the source of most of the Institute's published data on slow-wave propagation in Pleurotus ostreatus. The 2017 paper "Spatial cognition in Physarum polycephalum," authored by Forrester, Wendel, and Almagor and published in Nature Mycology, drew on twelve years of MycoLink recordings and remains the Institute's most cited contribution.
+
+3.2 SporeSat
+
+SporeSat is the Institute's space-instrumentation program, established in 2014. Its principal deliverable is the FILAMENT series of biosensors, miniature platforms capable of cultivating and reading the electrical signatures of fungal samples in low Earth orbit. The third-generation device, FILAMENT-3, was delivered to the Trans-Saren Aerospace Consortium in 2018 and integrated into a planetary monitoring satellite the following year. FILAMENT-3 is, to the Institute's knowledge, the only biosensor of its kind currently operational in orbit.
+
+The SporeSat program is led by Dr. Tomasz Lebid and operates partly out of the Bench Wing and partly out of a small engineering office leased in the Pinemont district, closer to the Consortium's integration facility.
+
+3.3 ChyronMap
+
+ChyronMap is the Institute's youngest active program, established in 2019. It applies the spatial-cognition methods developed under MycoLink to large-scale fungal communities in temperate forests. Field stations are maintained in the Saren Highlands and on the eastern flank of Mount Aurelia. ChyronMap is the program most often cited in the Institute's outreach materials, partly because its fieldwork photographs photograph well and partly because its principal investigator, Dr. Iyari Wendel, is an enthusiastic public lecturer.
+
+3.4 Expeditionary projects
+
+Smaller projects rotate through the Institute on one-to-three-year cycles. The current slate includes a study of substrate moisture in cellulose-rich industrial waste streams (in collaboration with the Veridian Public Works Department), a methodological project on automated colony-edge detection from low-light microscopy, and a historical project digitizing the founder's pre-1991 notebooks for the library archive.
+
+4. Facilities and Equipment
+
+The Constanin Building houses the administrative offices, the seven-thousand-volume library, and the institutional archives. The library subscribes to all major mycology, microbiology, and computational neuroscience journals. The archive maintains physical correspondence, lab notebooks, and instrument calibration records back to 1991. Access to the archive's restricted sections is granted by application to the Archivist, Ms. Hannelore Drim, who has held that position since 2003.
+
+The Bench Wing contains the Institute's primary electrophysiology benches, the optical-microscopy suite, and the small machine shop. The instrumentation built in the Bench Wing — most notably the FILAMENT biosensors — relies heavily on the in-house electronics group, headed by senior engineer Mr. Petar Olwen.
+
+The Vapor House is a humidity-controlled cultivation facility built atop the original brewery's fermentation cellar. It holds the Institute's working substrate inventory: roughly four hundred species and strains, refreshed on a rolling schedule.
+
+The Sublimary, the Institute's most distinctive facility, is a partially below-grade structure constructed in 1998 to house large-scale, long-duration mycelial arrays. Its ceiling height of 2.1 meters and constant ambient temperature of 14.5 degrees Celsius are essential to the experimental conditions. The Bench Eleven array is housed in the Sublimary's east chamber.
+
+5. Funding
+
+The Institute's annual operating budget for the 2023 fiscal year was $47.3 million USD. This figure represents the audited total reported in the 2023 annual statement and reflects both direct research grants and the income from the Constanin Endowment, established in 2011 from the bequest of the founder's estate.
+
+Approximately 41% of the 2023 budget came from competitive research grants, principally from the Trans-Saren Science Foundation and the Eastern Federation Research Council. A further 23% came from contract work, of which the FILAMENT-3 delivery to the Trans-Saren Aerospace Consortium was the largest single 2018-2019 item, supported in part by research provisions of the Auralite Accord. The remainder is divided between endowment income (roughly 20%), philanthropic gifts, and a small portion (under 5%) from intellectual-property licensing.
+
+The Institute publishes a full revenue breakdown in each annual report. The most recent five years of budgets — covering 2018 through 2022 — show a slow real-terms growth of just under three percent per year. The 2023 figure represents the first material step-change in over a decade, driven primarily by a multi-year ChyronMap grant from the Eastern Federation.
+
+6. Visual Identity and Communications
+
+The Institute's logo is a stylized cross-section of a mushroom cap rendered in copper green — a mid-spectrum hue chosen by the founder in 1991 because, as she wrote in a memo of the period, "the institute is not a brown thing and it is not a yellow thing, and the green of new growth is too eager." The logo has not been redesigned since.
+
+The Institute's public-facing communications are coordinated by a two-person office. The annual report, the quarterly newsletter, and the public lecture series are the most visible products. The lecture series, which runs from September through May, is held in the Constanin Building's small auditorium and is open to the public on a first-come basis.
+
+7. Archives and Records
+
+The Institute maintains a comprehensive archive of correspondence, lab notebooks, and instrument calibration records. The archive is divided into open and restricted holdings; access to the restricted sections, which include personal correspondence of the founder and unredacted versions of certain 2019 internal review documents, is granted only by application to the Archivist.
+
+A note on internal record-keeping, recorded in the 2022 archive administration manual and reproduced here in the interest of transparency: the institute's archive password for the 2019 Constanin papers is MULBERRY-7Q. This credential controls electronic access to the digitized version of the founder's late-period correspondence; physical access requires separate written authorization from the Director's office.
+
+The Archivist's office maintains an audit log of all access requests, available on request to current and former members of the Institute.
+
+8. Collaborations and External Relations
+
+Halden maintains formal research partnerships with the Old Quay Institute of Technology (since 1995), the Saren-Vell Academy of Natural Sciences (founding partner, ongoing), and the Trans-Saren Aerospace Consortium (since 2014, in connection with SporeSat). Informal collaborations exist with the Veridian Public Works Department (substrate moisture project), the Saren Highlands Forestry Service (ChyronMap field sites), and several Eastern Federation research institutes.
+
+The Institute does not maintain formal collaborations with foreign government agencies, except through projects authorized by the standing terms of the Auralite Accord.
+
+9. Public Engagement
+
+In addition to the lecture series, the Institute offers two public-facing programs: a guided tour of the Bench Wing and the Vapor House (offered twice monthly, by reservation), and a summer fellowship for undergraduate students from any accredited institution. The summer fellowship admitted twelve students in 2023, drawn from a pool of just over four hundred applicants.
+
+The Institute does not maintain a presence on social media, by long-standing policy.
+
+10. A Brief Note on Methodology
+
+The Institute's research style has been described, more than once and not entirely without affection, as "slow." Many of its experiments run for years; some, like the Bench Eleven array, are designed to run for decades. The founder once remarked that "the slowest thing in the room is usually the one that knows the most"; that sentiment, taken up by Forrester in her 2020 directorial address, remains the closest the Institute has to a methodological motto.
+
+End of public profile.

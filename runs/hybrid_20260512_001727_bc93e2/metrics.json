@@ -1,0 +1,48 @@
+{
+  "run_id": "hybrid_20260512_001727_bc93e2",
+  "approach": "hybrid",
+  "n_questions": 34,
+  "em": 0.6176470588235294,
+  "f1": 0.7938375350140057,
+  "accuracy": 0.6176470588235294,
+  "per_type": {
+    "distractor": {
+      "n": 8,
+      "em": 0.375,
+      "f1": 0.7738095238095237,
+      "accuracy": 0.375
+    },
+    "hallucination": {
+      "n": 6,
+      "em": 1.0,
+      "f1": 1.0,
+      "accuracy": 1.0
+    },
+    "multi_hop": {
+      "n": 8,
+      "em": 0.375,
+      "f1": 0.5375,
+      "accuracy": 0.375
+    },
+    "needle": {
+      "n": 8,
+      "em": 0.625,
+      "f1": 0.8125,
+      "accuracy": 0.625
+    },
+    "sanity": {
+      "n": 4,
+      "em": 1.0,
+      "f1": 1.0,
+      "accuracy": 1.0
+    }
+  },
+  "cost_usd": 0.012160199999999998,
+  "tokens_in": 38959,
+  "tokens_out": 189,
+  "latency_p50_ms": 2084.6024160273373,
+  "latency_p95_ms": 2705.1247088238597,
+  "wall_clock_s": 73.09833679185249,
+  "cumulative_spend_usd": 0.0326968,
+  "budget_cap_usd": 5.0
+}

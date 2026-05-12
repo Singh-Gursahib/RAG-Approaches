@@ -1,0 +1,11 @@
+# Recursive (map-reduce) Summarization.
+# Setup: per-doc detail-preserving summary (one-time, question-agnostic).
+# Per question: combine summaries → single LLM call.
+
+approach: recursive_summary
+
+llm:
+  # Summaries should be expansive enough to preserve specific facts;
+  # we boost the output cap *only* for the summarization step downstream
+  # if needed. The answer step still emits short answers.
+  max_output_tokens: 1024

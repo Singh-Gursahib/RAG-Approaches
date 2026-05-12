@@ -1,0 +1,148 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=0.75in]{geometry}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{times}
+
+% Define colors
+\definecolor{darkblue}{rgb}{0.1,0.3,0.6}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=darkblue,
+    filecolor=darkblue,
+    urlcolor=darkblue,
+}
+
+% Simple header
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[R]{\textit{Best RAG Approaches Project}}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.5pt}
+
+\title{\vspace{-0.5in}\textbf{{\Large Best RAG Approaches Project}}\\\textit{2-Month Implementation Plan}\\{\normalsize May 15 -- July 15, 2026}\vspace{-0.3in}}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+% =====================================================================
+\section*{Executive Summary}
+% =====================================================================
+
+This project aims to find the best ways for AI systems to answer questions using large documents. We will test 21+ different methods (12 in the first 2 months) across 7 different fields: law, medicine, education, finance, research, software, and general knowledge. Each method will be tested fairly using the same questions and measurements.
+
+\vspace{0.2cm}
+\noindent
+\textbf{What we'll accomplish in 2 months:} Test 12 different approaches across all 7 fields, measure how well each one works, and create a simple guide showing which approach works best for which situation.
+
+\vspace{0.2cm}
+\noindent
+\textbf{What you'll get by July 15:}
+\begin{enumerate}\setlength{\itemsep}{0pt}
+    \item A working software system that can test all 12 approaches
+    \item Test questions and answers for all 7 fields (140+ questions total)
+    \item Scores for each approach showing which works best
+    \item A ranking table comparing all approaches
+    \item A summary report with findings and recommendations
+\end{enumerate}
+
+% =====================================================================
+\section*{2-Month Timeline Overview}
+% =====================================================================
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabularx}{\textwidth}{l|c|X}
+\toprule
+\textbf{Phase} & \textbf{Weeks} & \textbf{What gets built} \\
+\midrule
+1. Setup & 1--2 & The core system and infrastructure to run experiments \\
+2. Collect Data & 1--2 & Gather documents from all 7 fields and create test questions \\
+3. Simple Methods & 1 & Test 3 basic approaches (keyword search, full document, summary-based) \\
+4. Smart Methods & 2 & Test 6 more sophisticated retrieval techniques \\
+5. Advanced Methods & 2 & Test 3 complex graph-based and memory-based techniques \\
+8. Build Scoring & 1 & Create tools to fairly measure and compare all approaches \\
+9. Run Tests & 2 & Test all 12 approaches, collect results, analyze findings \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\noindent
+\textbf{What Happens Each Week:}
+\begin{itemize}\setlength{\itemsep}{2pt}
+    \item \textbf{Week 1--2} (May 15--28): Build the core system and gather test data
+    \item \textbf{Week 3--4} (May 29--Jun 11): Test simple and moderate approaches (50\% done)
+    \item \textbf{Week 5--6} (Jun 12--25): Finish testing moderate approaches, start complex ones
+    \item \textbf{Week 7--9} (Jun 26--Jul 15): Complete all tests, run comparisons, write findings
+\end{itemize}
+
+% =====================================================================
+\section*{Technical Approach}
+% =====================================================================
+
+\textbf{The 12 Approaches We'll Test:}
+\begin{itemize}\setlength{\itemsep}{0pt}
+    \item \textbf{Simple (3):} Basic keyword matching, using full documents, using summaries
+    \item \textbf{Moderate (6):} Combining keywords and meaning search, question rephrasing, hierarchical organization, and compression techniques
+    \item \textbf{Complex (3):} Using knowledge graphs, tree structures, and memory systems
+\end{itemize}
+
+\noindent
+\textbf{Technology:} We'll use Python and a popular AI system (Gemini) to test everything. Data will be stored in search databases and graph systems.
+
+\noindent
+\textbf{How We Measure Success:} For each approach, we'll check how well it finds relevant documents, how accurate its answers are, how fast it runs, and how much it costs. We'll use statistical tests to show which methods are truly better.
+
+% =====================================================================
+\section*{Expected Outcomes}
+% =====================================================================
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabularx}{\textwidth}{l|X}
+\toprule
+\textbf{What We'll Deliver} & \textbf{Details} \\
+\midrule
+Working Software & A system that can run all 12 approaches and compare them \\
+Results & A ranking showing which approach works best for each field \\
+Comparison Charts & Visual graphs showing cost vs. accuracy for each method \\
+Recommendations & A guide showing which approach to use for different situations \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\vspace{0.2cm}
+\noindent
+\textbf{Budget:} Approximately \$125--225 (using AI APIs to run tests). We can adjust this if needed.
+
+% =====================================================================
+\section*{Success Criteria}
+% =====================================================================
+
+By \textbf{July 15, 2026}, we will have:
+\begin{enumerate}\setlength{\itemsep}{2pt}
+    \item All 12 approaches working and tested on all 7 fields
+    \item Test questions answered and scored for all fields
+    \item Performance scores for each approach
+    \item Statistical analysis showing which approaches are truly better
+    \item A ranking table and recommendation guide
+    \item Clear documentation and code on GitHub
+\end{enumerate}
+
+\vspace{0.3cm}
+\noindent
+\textbf{After July 15:} We will spend one additional week writing up a research paper summarizing all the findings, results, and recommendations from this project.
+
+\end{document}
+

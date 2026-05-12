@@ -1,0 +1,10 @@
+# Cross-Encoder Rerank RAG: dense top-20 → bge-reranker-base → top-5 → generate.
+
+approach: rerank
+
+retrieval:
+  top_n_for_rerank: 20   # candidate pool from dense retrieval
+  top_k: 5               # post-rerank passages handed to the LLM
+
+reranker:
+  model: BAAI/bge-reranker-base

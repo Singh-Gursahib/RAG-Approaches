@@ -1,0 +1,7 @@
+# Naive Vector RAG: embed query → Chroma top-k → single LLM call.
+# Inherits chunking, llm, embedding, budget, and paths from configs/base.yaml.
+
+approach: naive
+
+retrieval:
+  top_k: 5

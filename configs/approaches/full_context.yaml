@@ -1,0 +1,9 @@
+# Full-Context Injection: pass the entire corpus into a single LLM call.
+# Upper-bound baseline for the "does retrieval even help?" question.
+
+approach: full_context
+
+llm:
+  # Larger output token allowance — full-context occasionally produces slightly
+  # longer answers because more context = more ground-truth surface forms in view.
+  max_output_tokens: 512
