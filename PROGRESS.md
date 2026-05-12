@@ -6,7 +6,7 @@
 
 ## Current Phase
 
-**Phase 6 — Non-RAG Approaches** *(✅ complete; awaiting `Go Phase 7`)*
+**Phase 7 — Evaluation Hardening** *(✅ complete; awaiting `Go Phase 8`)*
 
 > See [IMPLEMENTATION_PLAN.md §7](IMPLEMENTATION_PLAN.md) for the full 10-phase plan.
 
@@ -14,7 +14,9 @@
 
 ## Next Action
 
-Await user `Go Phase 7`. All 7 approaches are now runnable head-to-head. Phase 7 hardens the evaluation framework: bootstrap CIs, paired Wilcoxon for pairwise significance, an optional LLM-judged faithfulness rubric on a small sample, and a grading helper for the user's manual spot-check pass.
+Await user `Go Phase 8`. Phase 8 builds a clean Streamlit dashboard: three pages (Run launcher with live progress, Compare with side-by-side metrics + per-question diffs, Pareto plot for cost × quality). Custom theme, distinctive typography per the frontend skill. No API spend in this phase.
+
+**Key Phase 7 result:** With Holm-corrected paired Wilcoxon at N=34, **only `recursive_summary` is statistically separable** (Holm-adjusted p ≤ 0.003 vs every other approach). The other 6 approaches are statistically indistinguishable on EM — bootstrap 95% CIs overlap substantially (EM CI widths ≈ ±0.15). This is honest signal for the paper: rank order from point estimates ≠ defensible statistical claims at this N. Phase 9's 3-seed sweep widens the data.
 
 **Full 7-approach headline** (F1, sorted):
 
@@ -42,7 +44,7 @@ Hallucination = 1.000 across all 7. Sanity = 1.000 except recursive_summary (0.2
 | 4 | Baseline RAG + Runner + Eval | ✅ Done |
 | 5 | Advanced RAG (Hybrid / HyDE / Reranker) | ✅ Done |
 | 6 | Non-RAG (Full-Context / Recursive / Sliding) | ✅ Done |
-| 7 | Evaluation Hardening | ⚪ Pending |
+| 7 | Evaluation Hardening | ✅ Done |
 | 8 | Streamlit Dashboard | ⚪ Pending |
 | 9 | Full Experimental Sweep & Analysis | ⚪ Pending |
 | 10 | Paper Draft & Repro Package | ⚪ Pending |
@@ -66,6 +68,7 @@ Legend: ✅ Done · 🟡 In Progress · 🟠 Blocked · ⚪ Pending · 🔴 Fail
 
 > Append a one-line dated entry per work session. Most recent first.
 
+- **2026-05-11** — **Phase 7 complete.** Built `eval/stats.py` (percentile-bootstrap CI, paired Wilcoxon signed-rank, Holm-Bonferroni correction), `analysis.py` (aggregate `runs/<id>/` artifacts; headline + per-probe tables with bootstrap CIs; pairwise significance matrices), `scripts/grade.py` (emit per-run review.md + grep-verify mode for disputed golds). 8 stats tests added; full suite 69/69. Ran analysis on existing 7 runs → headline/per_probe/pairwise CSVs saved to `paper/tables/`. **Key statistical finding:** At N=34 with Holm correction, only `recursive_summary` is significantly different from the other 6 (p ≤ 0.003); the top 6 are statistically indistinguishable. EM CI widths ≈ ±0.15. No API spend this phase; cumulative still **$0.2594 / $5.00**.
 - **2026-05-11** — **Phase 6 complete.** Built `approaches/full_context.py` (corpus → single prompt), `approaches/recursive_summary.py` (per-doc detail-preserving summaries at setup, amortized; 1 answer call per question), `approaches/sliding_window.py` (4 windows = 4 docs, running-state carryover). Added 3 e2e tests with mocked LLM; full suite 61/61 passing. **Three live runs completed.** All 7 approaches now runnable. **Updated F1 leaderboard:** sliding_window 0.901 > full_context 0.886 > rerank 0.836 > naive 0.823 > hyde 0.798 > hybrid 0.794 > recursive_summary 0.221. Recursive summary catastrophically lost specific facts (MULBERRY-7Q, M7-RX-204-A, 12%, dates) despite "preserve facts" instructions — strong negative paper material. Hallucination 1.000 across all 7. Cumulative spend: **$0.2594 / $5.00 (5.2%)**.
 - **2026-05-11** — **Phase 5 complete.** Built `indexing/reranker.py` (bge-reranker-base cross-encoder), `approaches/hybrid.py` (BM25+dense RRF), `approaches/hyde.py` (hypothetical-answer embedding), `approaches/rerank.py` (dense top-20 → bge-reranker top-5). Refactored Naive to share the answer prompt module so retrieval is the only variable. 4 e2e tests with mocked LLM added; full suite 58/58 passing. Three live runs completed. **Headline (F1, sorted):** rerank **0.836** · naive 0.823 · hyde 0.798 · hybrid 0.794. EM ties at 0.647 for naive/hyde/rerank; hybrid 0.618 (lost `hop-01`). Hallucination + sanity perfect across all four. Rerank wins on multi-hop F1 (0.718). HyDE costs 1.6x with no EM gain at this corpus scale. Hybrid surprisingly underperforms naive on this dataset (BM25 lexical bias hurt one cross-doc multi-hop). Cumulative spend: **$0.0643 / $5.00**.
 - **2026-05-11** — **Phase 4 complete.** User provided a fresh API key with longer testing window; Naive RAG re-ran cleanly end-to-end on the full eval set: **EM 0.647 / F1 0.823 / cost $0.0122 / wall 77s**. Per-type EM: needle 0.625, multi-hop 0.500, distractor 0.375, **hallucination 1.000**, **sanity 1.000**. F1 of 0.823 confirms most "EM-wrong" answers are factually correct but verbose. Cumulative spend: **$0.0205 / $5.00**.

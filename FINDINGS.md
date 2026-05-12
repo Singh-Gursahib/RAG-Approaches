@@ -16,6 +16,31 @@
 
 ---
 
+## 2026-05-11 — Statistical significance (Phase 7)
+
+Bootstrap 95% CIs and Holm-corrected paired Wilcoxon over the 7 single-seed runs (N=34 per approach):
+
+| Approach | EM (95% CI) | F1 (95% CI) |
+|---|---|---|
+| sliding_window | 0.706 [0.559, 0.853] | 0.901 [0.840, 0.955] |
+| full_context | 0.676 [0.529, 0.824] | 0.886 [0.824, 0.946] |
+| rerank | 0.647 [0.471, 0.794] | 0.836 [0.741, 0.919] |
+| naive | 0.647 [0.471, 0.794] | 0.823 [0.713, 0.912] |
+| hyde | 0.647 [0.471, 0.794] | 0.798 [0.683, 0.903] |
+| hybrid | 0.618 [0.441, 0.765] | 0.794 [0.677, 0.893] |
+| recursive_summary | 0.206 [0.088, 0.353] | 0.221 [0.088, 0.368] |
+
+**Pairwise EM p-values (Holm-corrected).** All cells against `recursive_summary` are ≤ 0.003 (significantly worse). **All other pairs have adjusted p = 1.000** — at N=34 we lack power to separate the top 6 approaches on EM, even though their point estimates span 0.618–0.706.
+
+**Implications for the paper.**
+
+- **One defensible significance claim:** recursive summarization is significantly worse than every other approach (Holm-adjusted p ≤ 0.003).
+- **Six undifferentiated approaches:** the rank order from point estimates (sliding_window > full_context > rerank > naive > hyde > hybrid) is *consistent with the data* but not *statistically distinguishable* at this N.
+- **What to do about it:** Phase 9 runs each approach with 3 seeds, expanding N from 34 to 102 per approach when pooled. That moves us into a range where the F1 spread (0.794–0.901) could become defensible. If the rank order replicates across seeds, the paper can claim it with rank-stability arguments even where Wilcoxon p-values still overflow due to ties.
+- **Honest framing recommended:** "Non-RAG approaches achieve the highest point estimates; only the failure of pre-summarization is statistically significant at this sample size. The rank ordering is consistent and warrants the larger sweep planned in §X."
+
+---
+
 ## 2026-05-11 — Seven approaches, full head-to-head (Phase 6 complete)
 
 **Setup.** Single seed per approach. All 34 questions. Identical eval set and answer prompt across approaches.
