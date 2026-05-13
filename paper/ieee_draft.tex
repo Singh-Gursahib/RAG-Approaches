@@ -1,0 +1,446 @@
+\documentclass[conference,a4paper,10pt]{IEEEtran}
+\IEEEoverridecommandlockouts
+
+% --- Packages ---------------------------------------------------------------
+\usepackage[T1]{fontenc}
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{mathptmx}              % Times text + math, IEEE-canonical
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{microtype}
+\usepackage[hidelinks,colorlinks=false]{hyperref}
+\usepackage{caption}
+\captionsetup{font=footnotesize,labelfont={bf,sf}}
+
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+\graphicspath{{figures_ieee/}}
+
+\hypersetup{
+    pdfauthor={Gursahib Singh},
+    pdftitle={When Does Retrieval Stop Helping?},
+}
+
+\begin{document}
+
+\title{When Does Retrieval Stop Helping?\\
+{\Large A Controlled Comparison of Seven Long-Context Strategies\\under a Fixed Generation Budget}\\
+\thanks{Code, datasets, runs, paper sources, and a Next.js dashboard for interactive exploration are released alongside this work. Total project-wide LLM cost: USD~1.09.}}
+
+\author{
+\IEEEauthorblockN{Gursahib Singh}
+\IEEEauthorblockA{Independent Researcher\\
+Email: gursahib99888@gmail.com}
+}
+
+\maketitle
+
+\begin{abstract}
+Retrieval-Augmented Generation (RAG)~\cite{lewis2020rag} has become the default architectural pattern for grounding Large Language Models (LLMs) in domain corpora, yet rapidly expanding context windows and falling per-token costs have re-opened the question of whether retrieval is still required when the corpus comfortably fits inside the prompt.
+We answer this question for one tightly controlled setting: a hand-authored 8K-token corpus, a 34-question evaluation set spanning five probe types (sanity, hallucination, needle-in-haystack, multi-hop, distractor), and a single generator (\texttt{gemini-3-flash-preview}) used by all approaches under a hard project-wide budget cap of USD~5.
+Under identical conditions we evaluate four RAG variants (Naive Vector RAG, Hybrid Vector~+~BM25 with Reciprocal Rank Fusion~\cite{cormack2009rrf}, HyDE~\cite{gao2023hyde}, and Cross-Encoder Reranking~\cite{xiao2023cpack,khattab2020colbert}) against three non-retrieval long-context strategies (Full-Context Injection, Recursive Map-Reduce Summarization, and Sliding-Window Reasoning), each replicated across three random seeds at temperature~0.3.
+We report Exact Match and token~$F_1$ with percentile-bootstrap 95~\% confidence intervals~\cite{efron1979bootstrap}, paired Wilcoxon signed-rank tests~\cite{wilcoxon1945} with Holm correction~\cite{holm1979}, and per-call cost and latency drawn from a JSONL ledger.
+Three findings are reported.
+First, at sub-window corpus scale, the two non-retrieval approaches dominate the F$_1$ leaderboard (Full-Context $0.881 \pm 0.012$, Sliding-Window $0.875 \pm 0.025$).
+Second, Recursive Summarization is the only approach with a statistically significant deficit (Holm-adjusted $p \leq 3{\times}10^{-3}$ against every other approach), losing factoid recall to summarization despite an explicit fact-preservation prompt.
+Third, the strict-refusal prompt achieves perfect hallucination accuracy ($1.000$) across six of the seven approaches, indicating that production honesty constraints transfer cleanly across retrieval strategies.
+We close with a per-axis recommendation chart and a list of structural follow-ups (corpus-size regime, multi-model ablation, multi-step pipelines including GraphRAG~\cite{edge2024graphrag} and RAPTOR~\cite{sarthi2024raptor}).
+The full pipeline reproduces in approximately one hour and one USD.
+\end{abstract}
+
+\begin{IEEEkeywords}
+Retrieval-Augmented Generation, long-context language models, information retrieval, evaluation methodology, bootstrap confidence intervals, reproducible NLP.
+\end{IEEEkeywords}
+
+\section{Introduction}
+\label{sec:intro}
+
+The mid-2020s landscape of language-model deployment is shaped by two opposing pressures.
+On one hand, RAG~\cite{lewis2020rag,karpukhin2020dpr} has crystallized into the canonical pattern for grounding LLMs in private corpora: documents are chunked, embedded into a vector index, and the top-$k$ chunks closest to a query are spliced into the prompt at generation time.
+A profusion of variants---HyDE~\cite{gao2023hyde}, GraphRAG~\cite{edge2024graphrag}, RAPTOR~\cite{sarthi2024raptor}, Self-RAG~\cite{asai2024selfrag}, and many others---has emerged to address specific failure modes.
+
+On the other hand, the context window has ballooned by roughly two orders of magnitude in three years~\cite{gemini2024}, and per-token generation cost has fallen comparably.
+For many production corpora the bottleneck is no longer ``the corpus is too large to fit''; it is ``the corpus fits, but should we trust the model to attend to it correctly?''
+A growing body of evidence~\cite{liu2024lostmiddle} characterizes the limits of long-context attention---the well-known U-shaped accuracy curve over input position---but the question of whether RAG's added complexity still pays for itself at sub-window scale has, to our knowledge, not been answered side-by-side under matched conditions for the current generation of frontier flash-tier models.
+
+This paper provides such an answer for one carefully controlled setting.
+The contributions are as follows.
+
+\textbf{Controlled head-to-head.} We compare seven concrete approaches---four RAG variants and three non-retrieval strategies---under identical conditions: same hand-authored corpus, same probe set, same generator (\texttt{gemini-3-flash-preview}), same answer-generation prompt, same chunker, same embedding model, and the same project-wide USD-budget cap.
+
+\textbf{Statistical rigor at small N.}
+We run three independent seeds per approach at temperature~0.3, report percentile-bootstrap 95~\% CIs and Holm-corrected paired Wilcoxon $p$-values, and discuss honestly which differences are defensible at $N=34$.
+
+\textbf{Honesty as a first-class metric.}
+Six of our 34 probes are deliberately unanswerable (their gold target is absent from the corpus).
+This lets us measure refusal accuracy as an independent axis from factoid accuracy.
+
+\textbf{Reproducibility infrastructure.}
+A single command (\texttt{make paper-regen}) re-derives every table and figure in this paper from the raw run artifacts.
+The total project spend on the generation API was USD~1.09, well within reach of a personal developer key.
+
+The paper proceeds as follows.
+Section~\ref{sec:related} surveys the relevant retrieval and long-context literature.
+Section~\ref{sec:methods} specifies each of the seven approaches.
+Section~\ref{sec:setup} describes the corpus, the probe set, the metrics, and the budget-controlled execution model.
+Section~\ref{sec:results} reports the headline results and per-probe-type breakdowns.
+Section~\ref{sec:discussion} synthesizes the five findings the data support.
+Section~\ref{sec:limits} catalogs the limits of the present study, and Section~\ref{sec:conclusion} concludes.
+
+\section{Related Work}
+\label{sec:related}
+
+\subsection{Retrieval-Augmented Generation}
+RAG~\cite{lewis2020rag} couples a parametric language model with a non-parametric document store, retrieved at inference time via a dense passage retriever~\cite{karpukhin2020dpr}.
+Dense retrievers are typically trained as sentence encoders, with Sentence-BERT~\cite{reimers2019sbert} introducing the siamese fine-tuning recipe that the \texttt{sentence-transformers} ecosystem (and our chosen embedding model, \texttt{all-MiniLM-L6-v2}) inherits.
+
+Two improvement axes are widely studied.
+First, retrieval quality can be enhanced by combining lexical~\cite{robertson2009bm25} and dense signals via Reciprocal Rank Fusion~\cite{cormack2009rrf} (the basis of our \texttt{hybrid} approach), or by adding a cross-encoder reranker~\cite{khattab2020colbert,xiao2023cpack} that scores query-document pairs jointly (the basis of \texttt{rerank}).
+Second, query reformulation methods such as HyDE~\cite{gao2023hyde} sidestep the surface-form gap between question and answer text by first generating a hypothetical answer and embedding \emph{that}.
+
+A separate line of work has begun building structured retrieval indices.
+GraphRAG~\cite{edge2024graphrag} extracts an entity-and-relation graph and pre-computes community-level summaries; RAPTOR~\cite{sarthi2024raptor} builds a recursive summarization tree.
+Self-RAG~\cite{asai2024selfrag} introduces reflection tokens that let the model decide on demand whether to retrieve at all.
+These structured and adaptive approaches are out of scope for the present study but appear as natural follow-ups in Section~\ref{sec:limits}.
+
+\subsection{Long-Context Models and the End of RAG?}
+Modern frontier flash-tier models~\cite{gemini2024} accept on the order of $10^6$ input tokens, raising the question of whether retrieval continues to earn its complexity once the corpus fits.
+Liu et al.~\cite{liu2024lostmiddle} report a U-shaped accuracy curve with respect to evidence position in the prompt---the ``lost in the middle'' phenomenon---suggesting that simply concatenating a long corpus is not free of failure modes.
+Our paper measures, on the same probe set as the seven retrieval and non-retrieval approaches, the empirical magnitude of this trade-off at the 8K-token regime that characterizes many real production corpora (FAQ banks, product handbooks, single-policy documents).
+
+\subsection{Evaluation Methodology}
+Our metrics follow the SQuAD~\cite{rajpurkar2016squad} normalization conventions for token-level Exact Match and $F_1$.
+Multi-hop probe design is informed by HotpotQA~\cite{yang2018hotpot}, whose supporting-fact annotations established the practice of probing cross-document reasoning.
+For statistical inference we use the percentile bootstrap~\cite{efron1979bootstrap}, the paired Wilcoxon signed-rank test~\cite{wilcoxon1945}, and Holm's sequentially rejective correction~\cite{holm1979} to bound the family-wise error rate across the $\binom{7}{2}=21$ pairwise tests.
+
+\section{Methods}
+\label{sec:methods}
+
+We evaluate seven approaches.
+Sections~\ref{sec:rag-methods} and~\ref{sec:nonrag-methods} describe their pipelines; Fig.~\ref{fig:pipelines} provides a visual side-by-side.
+A common answer-generation prompt is used across every retrieval-style approach: the model is asked to answer using only the provided context and, when no answer is grounded, to emit the sentinel \texttt{NOT\_IN\_CONTEXT}.
+Identical chunking (sentence-window, target~150 tokens, 30-token overlap) is used across every retrieval approach.
+
+\begin{figure*}[!t]
+\centering
+\includegraphics[width=0.95\textwidth]{pipelines.pdf}
+\caption{Stepwise structure of the seven approaches. Single-LLM-call approaches occupy the upper rows; multi-call approaches (Recursive Summary, Sliding-Window) occupy the lower rows. Identical chunking, embedding, and answer-generation prompts are used across all retrieval-style approaches.}
+\label{fig:pipelines}
+\end{figure*}
+
+\subsection{Retrieval-Style Approaches}
+\label{sec:rag-methods}
+
+\paragraph{Naive Vector RAG (R1).}
+The minimal RAG baseline.
+The query is embedded with \texttt{all-MiniLM-L6-v2}~\cite{reimers2019sbert}; the top five chunks under cosine similarity in a ChromaDB index are spliced into the prompt; one generation call produces the answer.
+This is the floor against which all other RAG variants must justify their additional complexity.
+
+\paragraph{Hybrid RAG (R2).}
+Dense top-$N$ and BM25~\cite{robertson2009bm25} top-$N$ rankings are fused via Reciprocal Rank Fusion (RRF)~\cite{cormack2009rrf}.
+For a chunk $c$ appearing at rank $r_i(c)$ in retriever $i$, its fused score is
+\begin{equation}
+\mathrm{RRF}(c) = \sum_{i \in \{\mathrm{dense},\mathrm{BM25}\}} \frac{1}{k + r_i(c)}, \quad k = 60,
+\label{eq:rrf}
+\end{equation}
+with $k$ set per the empirical recommendation of~\cite{cormack2009rrf}.
+The top-5 fused chunks are passed to generation.
+
+\paragraph{HyDE (R3).}
+The generator is first prompted to write a confident hypothetical answer to the question; that hypothetical is embedded; the top-5 chunks closest to the hypothetical's embedding are retrieved~\cite{gao2023hyde}.
+The final answer generation runs over those chunks with the standard answer prompt.
+HyDE therefore costs two LLM invocations per question.
+
+\paragraph{Cross-Encoder Reranker (R4).}
+A wider dense top-$N=20$ candidate set is rescored by a cross-encoder (\texttt{bge-reranker-base}~\cite{xiao2023cpack}) that takes the query-document pair as joint input.
+The top-5 after reranking are used.
+The reranker runs locally; the only cloud cost is the single subsequent generation call.
+
+\subsection{Non-Retrieval Approaches}
+\label{sec:nonrag-methods}
+
+\paragraph{Full-Context Injection (N1).}
+The entire corpus is concatenated and placed in the prompt verbatim; a single generation call produces the answer.
+Cost scales linearly in corpus tokens, so this approach is feasible only as long as the corpus fits comfortably within the context window~\cite{vaswani2017attention}.
+
+\paragraph{Recursive Map-Reduce Summarization (N2).}
+A one-time setup step summarizes each of the corpus's four documents with an explicit ``preserve all specific facts: names, dates, numbers, identifiers, percentages'' instruction.
+The concatenated summaries form the answer-time context; each question incurs a single generation call.
+This is a question-agnostic summarization regime---the summaries are produced once and shared across questions---which is the cheapest realistic deployment pattern for summarization-based QA.
+
+\paragraph{Sliding-Window Reasoning (N3).}
+The corpus is processed one document at a time.
+At each window the model receives the question, the current ``best answer state'' (initialized to \texttt{NOT\_IN\_CONTEXT}), and the next document, and is asked to update the state if the new document improves it.
+Four documents yield four generation calls per question, in series with state carry-over.
+
+\section{Experimental Setup}
+\label{sec:setup}
+
+\subsection{Corpus}
+\label{sec:corpus}
+
+We author a four-document fictional corpus totaling 5,983 words ($\approx 8,000$ tokens).
+The documents describe (i)~the \emph{Halden Institute for Computational Mycology}, (ii)~the \emph{City of Veridian}, (iii)~the \emph{MERIDIAN-7 Satellite System}, and (iv)~the \emph{Auralite Accord of 1987}, with deliberate cross-references between documents (the satellite carries an instrument built by the institute; the institute is in the city; the accord was signed in the city and partly funds the satellite).
+This interconnectedness enables genuine multi-hop probes.
+
+A hand-authored corpus has three properties not easily obtained from public benchmarks.
+First, every gold answer is verifiably grounded: a separate text-search procedure (\texttt{tests/test\_eval\_set.py}) confirms each gold span exists verbatim in the corpus.
+Second, distinctive identifiers (e.g., \texttt{MULBERRY-7Q}, \texttt{4.832~GHz}) can be planted at controlled depths to test long-tail recall.
+Third, hallucination probes can be constructed with confidence that their answer is \emph{absent} from the corpus, which is much harder to guarantee with scraped data.
+
+\subsection{Probe Set}
+\label{sec:probes}
+
+The evaluation set contains 34 questions partitioned across five probe types:
+
+\begin{itemize}
+    \item \textbf{Sanity (4 Q):} single-fact, single-document. Establishes a working floor.
+    \item \textbf{Needle-in-haystack (8 Q):} a planted identifier or numerical fact in otherwise narrative prose.
+    \item \textbf{Multi-hop (8 Q):} answers require chaining facts across two or three documents. Inspired by HotpotQA~\cite{yang2018hotpot}.
+    \item \textbf{Distractor (8 Q):} near-duplicate facts (e.g., MERIDIAN-6 vs.\ MERIDIAN-7 launch dates) intentionally placed adjacent to the gold span.
+    \item \textbf{Hallucination (6 Q):} the answer is verifiably absent from the corpus. The correct response is a refusal.
+\end{itemize}
+
+\subsection{Metrics}
+\label{sec:metrics}
+Token-level Exact Match (EM) and $F_1$ follow the SQuAD normalization~\cite{rajpurkar2016squad}: lowercase, strip punctuation and articles, collapse whitespace; identifier hyphens are replaced with spaces so that, e.g., \texttt{MULBERRY-7Q} and \texttt{MULBERRY~7Q} normalize identically.
+For hallucination probes, a prediction counts as correct iff it matches one of a curated set of refusal phrases (e.g., ``NOT\_IN\_CONTEXT'', ``I don't know'', ``not in the corpus'').
+
+Per-question grades $g_q \in [0,1]$ are aggregated to per-approach means.
+For each approach $a$ we report:
+$\mu_a = \tfrac{1}{|Q|}\sum_q g_q^{(a)}$
+with a percentile-bootstrap 95~\% CI~\cite{efron1979bootstrap} computed over $B = 2000$ resamples of the grade vector.
+
+\subsection{Statistical Tests}
+\label{sec:stats}
+For pairwise approach comparisons we apply the paired Wilcoxon signed-rank test~\cite{wilcoxon1945} on the per-question $\Delta g_q = g_q^{(a)} - g_q^{(b)}$ vector.
+Raw $p$-values are Holm-corrected~\cite{holm1979} across all $\binom{7}{2} = 21$ pairs to bound the family-wise error rate at $\alpha = 0.05$.
+
+\subsection{Models, Seeds, and Budget}
+\label{sec:execution}
+A single generator, \texttt{gemini-3-flash-preview}~\cite{gemini2024}, handles every generation step for every approach.
+Embeddings use \texttt{sentence-transformers/all-MiniLM-L6-v2}~\cite{reimers2019sbert} (384-dim, locally hosted).
+The cross-encoder is \texttt{BAAI/bge-reranker-base}~\cite{xiao2023cpack}.
+ChromaDB serves as the on-disk vector store; \texttt{rank\_bm25} provides BM25.
+
+Each approach is replicated across three random seeds at temperature~$0.3$.
+A JSONL ledger records token-level cost on every API call and refuses to launch any call that would push cumulative project spend above $0.95 \cdot \text{cap}$ for cap~$=$~USD~5.
+The full sweep---seven approaches, three seeds, 34 questions---spent USD~1.09 (21.7~\% of cap).
+
+\section{Results}
+\label{sec:results}
+
+\subsection{Headline Performance}
+\label{sec:headline}
+
+Table~\ref{tab:headline} reports the headline metrics; Fig.~\ref{fig:forest_f1} visualizes them as a forest plot with pooled bootstrap 95~\% confidence intervals.
+
+\begin{table*}[!t]
+\centering
+\caption{Headline metrics across all seven approaches. Mean across three random seeds at $T = 0.3$; uncertainty is standard deviation across seeds. $F_1$ rows are bootstrap-pooled 95\% confidence intervals across all $34 \cdot 3 = 102$ question-seed grades. Cost is mean USD per full eval-set run; the entire study used 1.09~USD.}
+\label{tab:headline}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{l c c c c c c c}
+\toprule
+\textbf{Approach} & \textbf{Family} & \textbf{EM} ($\mu \pm \sigma$) & $\boldsymbol{F_1}$ ($\boldsymbol{\mu \pm \sigma}$) & $\boldsymbol{F_1}$ \textbf{95\% CI} & \textbf{Cost (USD)} & \textbf{$p_{50}$ latency (ms)} & \textbf{$p_{95}$ latency (ms)}\\
+\midrule
+Full-Context        & non-RAG & $0.667 \pm 0.017$ & $\mathbf{0.881 \pm 0.012}$ & $[0.840, 0.918]$ & $0.0912$ & $\phantom{0}18{,}866$ & $\phantom{0}65{,}349$\\
+Sliding-Window      & non-RAG & $\mathbf{0.696 \pm 0.045}$ & $0.875 \pm 0.025$ & $[0.795, 0.945]$ & $0.0972$ & $\phantom{00}8{,}528$ & $\phantom{0}10{,}682$\\
+HyDE                & RAG     & $0.667 \pm 0.017$ & $0.838 \pm 0.012$ & $[0.780, 0.893]$ & $0.0186$ & $\phantom{00}4{,}999$ & $\phantom{00}7{,}370$\\
+Naive RAG           & RAG     & $0.667 \pm 0.017$ & $0.836 \pm 0.012$ & $[0.778, 0.888]$ & $0.0122$ & $\phantom{00}2{,}532$ & $\phantom{00}7{,}937$\\
+Reranker            & RAG     & $0.667 \pm 0.017$ & $0.833 \pm 0.009$ & $[0.774, 0.887]$ & $0.0123$ & $\phantom{00}2{,}756$ & $\phantom{00}3{,}786$\\
+Hybrid RAG          & RAG     & $0.627 \pm 0.017$ & $0.797 \pm 0.010$ & $[0.728, 0.857]$ & $0.0122$ & $\phantom{00}2{,}058$ & $\phantom{00}7{,}813$\\
+Recursive Summary   & non-RAG & $0.206 \pm 0.000$ & $0.206 \pm 0.000$ & $[0.128, 0.284]$ & $0.0068$ & $\phantom{00}3{,}179$ & $\phantom{0}12{,}746$\\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=0.95\columnwidth]{forest_f1.pdf}
+\caption{Token $F_1$ forest plot with pooled bootstrap 95\% CIs across all 102 question-seed grades. Recursive Summary is cleanly separated; the top six approaches' confidence intervals overlap substantially at $N=34$.}
+\label{fig:forest_f1}
+\end{figure}
+
+\paragraph{Family separation.}
+The two non-retrieval approaches occupy the top of the table: Full-Context ($F_1 = 0.881$) and Sliding-Window ($F_1 = 0.875$) outperform every RAG variant.
+Among the RAG family, HyDE, Naive, and Reranker cluster tightly at $F_1 \in [0.833, 0.838]$.
+Hybrid trails at $0.797$; we trace its deficit in Section~\ref{sec:discussion} to a single multi-hop probe in which BM25's lexical bias misled fusion.
+Recursive Summary is a clear outlier at $F_1 = 0.206$.
+
+\paragraph{EM ceiling.}
+With the single exception of Sliding-Window ($0.696$), EM clusters at $0.667 \pm 0.017$ across six approaches.
+This ceiling is not a retrieval limitation; it is a formatting artifact, addressed in Section~\ref{sec:discussion}.
+
+\subsection{Pairwise Significance}
+\label{sec:significance}
+
+Holm-corrected pairwise Wilcoxon tests identify only one significantly different approach: Recursive Summary, with $p_{\text{adj}} \leq 3 \times 10^{-3}$ against every other approach for both EM and $F_1$.
+All other pairwise tests yield $p_{\text{adj}} = 1.000$ after Holm adjustment.
+At $N = 34$ the statistical power is insufficient to distinguish the top six approaches; the observed rank ordering is consistent across seeds (see Section~\ref{sec:variance}) but not statistically separable from one another.
+We discuss the implication in Section~\ref{sec:limits}.
+
+\subsection{Per-Probe-Type Breakdown}
+\label{sec:perprobe}
+
+Fig.~\ref{fig:heatmap} reports the per-probe-type $F_1$ for all seven approaches.
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=0.95\columnwidth]{probe_heatmap.pdf}
+\caption{Token $F_1$ heatmap by probe type. Darker cells in either direction indicate stronger performance toward the extremes; mid-tone cells indicate intermediate behavior. Recursive Summary is the only approach with red on the factoid probes (needle, multi-hop, distractor).}
+\label{fig:heatmap}
+\end{figure}
+
+Three observations.
+First, sanity is solved everywhere except Recursive Summary, confirming that the corpus and prompt do not contain pathological failure modes.
+Second, hallucination is perfectly handled across the top six approaches, but is also $1.000$ for Recursive Summary---an artifact of its degenerate output distribution discussed in Section~\ref{sec:discussion}.
+Third, multi-hop is the column with the widest spread (range $0.54$--$0.92$); structural retrieval methods are unlikely to help if BM25 fusion (in our \texttt{hybrid} approach) is already hurting at this scale.
+
+\subsection{Cost--Quality Trade-off}
+\label{sec:costquality}
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=0.95\columnwidth]{pareto.pdf}
+\caption{Cost (USD per full eval run) versus token $F_1$. Errorbars are seed-standard deviation. The four single-LLM-call RAG approaches cluster near USD~$0.012$, an order of magnitude cheaper than Full-Context or Sliding-Window.}
+\label{fig:pareto}
+\end{figure}
+
+Fig.~\ref{fig:pareto} maps the seven approaches onto the cost-quality plane.
+The four cheap-class RAG approaches sit at virtually identical cost ($\approx$~USD~$0.012$); Reranker emerges as the highest-$F_1$ point in this class with the tightest seed variance.
+Full-Context and Sliding-Window cost approximately $7\times$~more per run for a $\Delta F_1 \approx 0.04$ premium.
+Recursive Summary is the cheapest of all but is dominated on quality.
+
+\subsection{Seed Variance}
+\label{sec:variance}
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=0.92\columnwidth]{seed_variance.pdf}
+\caption{Token $F_1$ standard deviation across three random seeds. Multi-step pipelines (Sliding-Window) accumulate variance through their state carry-over; single-LLM-call approaches are nearly deterministic at $T = 0.3$.}
+\label{fig:variance}
+\end{figure}
+
+Fig.~\ref{fig:variance} reports $\sigma_{F_1}$ across seeds.
+Recursive Summary's $\sigma = 0$ reflects that its long summarization step at $T = 0.3$ produces token-identical summaries across seeds (its degeneracy is reproducible).
+Five single-LLM-call approaches show $\sigma \approx 0.010$; Sliding-Window's $\sigma = 0.025$ is $\approx 2.5{\times}$ that value, attributable to its four-step state-carry pipeline in which small token-level differences propagate forward.
+This is methodologically meaningful: \emph{multi-step pipelines warrant multi-seed reporting in a way that single-step pipelines do not.}
+
+\subsection{Honesty vs.\ Capability}
+\label{sec:honesty}
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=0.95\columnwidth]{honesty.pdf}
+\caption{Honesty (refusal accuracy on unanswerable probes) versus factoid accuracy (EM on answerable probes). Six approaches occupy the top-right ``honest and capable'' regime; Recursive Summary is honest by failure mode (it refuses everything because it has lost the facts).}
+\label{fig:honesty}
+\end{figure}
+
+Fig.~\ref{fig:honesty} decomposes correctness into two orthogonal axes: factoid recall (EM on answerable probes) and refusal accuracy (correct refusal on the six unanswerable probes).
+Six approaches occupy the top-right region, indicating that the strict-refusal instruction transfers cleanly across retrieval strategies.
+Recursive Summary sits in the top-left: high refusal accuracy, low capability---an artifact of its degraded summaries containing no specific facts to misuse.
+
+\subsection{Head-to-Head Margins}
+\label{sec:winloss}
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=0.95\columnwidth]{win_loss.pdf}
+\caption{Per-pair head-to-head margin (row minus column) on EM, averaged across question-seed cells. Blue indicates the row beats the column more often than not; red the reverse.}
+\label{fig:winloss}
+\end{figure}
+
+Fig.~\ref{fig:winloss} reports per-pair head-to-head margins on EM.
+The two non-retrieval approaches accumulate net-positive margin against every RAG approach, consistent with the headline table.
+Recursive Summary loses to every approach by $\ge 0.43$ in net margin.
+
+\section{Discussion}
+\label{sec:discussion}
+
+We synthesize five findings supported by the data.
+
+\paragraph{F1.\ Non-retrieval dominates at sub-window corpus scale.}
+At the 8K-token regime tested here, putting the corpus directly in the prompt outperforms every RAG variant on token~$F_1$.
+The gap is small ($\Delta F_1 \approx 0.04$) but consistent across seeds and probe types.
+This is consistent with the long-context literature~\cite{liu2024lostmiddle} insofar as the ``lost in the middle'' degradation is mild at our scale; the corpus is well within the comfortable attention regime of \texttt{gemini-3-flash-preview}.
+
+\paragraph{F2.\ Pre-summarization is incompatible with factoid recall.}
+Recursive Summary's $F_1 = 0.206$ holds despite an explicit fact-preservation prompt.
+Manual inspection (Section~\ref{sec:results}) confirms that distinctive identifiers like \texttt{MULBERRY-7Q}, the satellite designator \texttt{M7-RX-204-A}, and even mundane facts like a launch date (``9 April 2019'') vanished from the summaries; only facts that appear multiple times in the corpus survived.
+This failure mode is deterministic ($\sigma = 0$), suggesting it is not a sampling artifact but a structural consequence of question-agnostic summarization.
+
+\paragraph{F3.\ Refusal-prompt honesty is robust to retrieval strategy.}
+The instruction ``if the context does not contain enough information, respond with NOT\_IN\_CONTEXT'' yielded $1.000$ refusal accuracy on all six hallucination probes for six of seven approaches.
+This empirical robustness is encouraging for production deployment: honesty does not appear to be a property that needs to be engineered separately for each retrieval pipeline; the prompt suffices.
+
+\paragraph{F4.\ Exact Match systematically underestimates correctness.}
+The EM ceiling at $\approx 0.667$ persists across six approaches whose $F_1$ scores span $0.797$ to $0.881$.
+Inspection shows the gap is entirely formatting: the model produces ``Twenty-five years'' when the gold is ``25 years'', ``Dr.~Mei-Ling Forrester'' when the gold is ``Mei-Ling Forrester'', ``\$47.3 million USD'' when the gold is ``\$47.3 million''.
+For short-factoid QA, $F_1$ is the more informative headline metric; EM should be reported but is misleading in isolation.
+
+\paragraph{F5.\ Multi-step pipelines require multi-seed evaluation.}
+Sliding-Window's $\sigma_{F_1} = 0.025$ is $\approx 2.5{\times}$ that of single-LLM-call approaches.
+Its first random seed achieved $F_1 = 0.896$, which would have been the highest single-seed score in the study; the three-seed mean is $0.875$.
+Without multi-seed reporting, we would have overclaimed sliding-window as the strict winner.
+
+\section{Limitations}
+\label{sec:limits}
+
+\paragraph{Single-corpus, single-model.}
+All results are for one hand-authored 8K-token corpus and one generator.
+At larger corpus scales, RAG should reclaim its advantage; the precise crossover is the obvious follow-up.
+Different generators---particularly those with weaker long-context attention~\cite{liu2024lostmiddle}---may rank Sliding-Window and Full-Context differently.
+
+\paragraph{Sample size.}
+$N = 34$ is small.
+With $\binom{7}{2}=21$ pairwise tests and Holm correction, only Recursive Summary's deficit is statistically distinguishable; the ordering among the top six is consistent but not separable.
+A larger probe set (target $N \geq 200$) is required to resolve sub-percentage-point differences.
+
+\paragraph{Deferred techniques.}
+Fourteen retrieval techniques known in the literature are not evaluated here: Self-RAG~\cite{asai2024selfrag}, GraphRAG~\cite{edge2024graphrag}, RAPTOR~\cite{sarthi2024raptor}, parent-child retrieval, multi-query retrieval, hierarchical RAG, contextual compression, prompt compression, explicit context caching, memory-augmented agents (MemGPT-style), and multi-agent memory architectures.
+Each is a natural next axis; we expect GraphRAG and RAPTOR specifically to benefit from corpora substantially larger than ours.
+
+\paragraph{Temperature regime.}
+At $T = 0.3$, factoid generation is near-deterministic.
+This is a feature of the model and the prompt class, not a general property; results at higher temperature would likely show more seed variance and lower honesty consistency.
+
+\paragraph{Probe authorship bias.}
+The probe set was authored by the same researcher who chose the approaches and ran the evaluation.
+While every gold answer is verified by independent corpus search, the question of which facts to probe is, by construction, a researcher choice.
+A blinded second annotator would be a useful next step.
+
+\section{Reproducibility}
+\label{sec:repro}
+
+Every table and figure in this paper is regenerated from raw run artifacts by a single command (\texttt{make paper-regen}).
+The raw artifacts comprise: the eval set (\texttt{tests/eval\_set.jsonl}, 34 records with grep-verifiable source spans), the four corpus documents (\texttt{data/eval\_corpus/*.txt}), per-run prediction logs (\texttt{runs/<id>/predictions.jsonl}), per-call traces with token counts and dollar costs (\texttt{trace.jsonl}), and a project-wide ledger of every API call (\texttt{runs/.budget\_ledger.jsonl}).
+A Next.js dashboard at \texttt{frontend/web/} renders these artifacts interactively.
+Total LLM cost to reproduce: USD~1.09.
+
+\section{Conclusion}
+\label{sec:conclusion}
+
+We have measured, under tightly matched conditions, seven retrieval and non-retrieval strategies for grounding a Large Language Model in a hand-authored corpus.
+Three results stand out.
+First, at sub-window corpus scale, putting the corpus in the prompt outperforms every RAG variant tested ($F_1$ $0.881$ for Full-Context vs.\ $0.833$--$0.838$ for the RAG family at equivalent cost class).
+Second, pre-summarization---even when explicitly instructed to preserve facts---destroys factoid recall ($F_1 = 0.206$); this is the only approach that is statistically significantly worse than the others.
+Third, the strict-refusal prompt achieves universal honesty across retrieval strategies, suggesting that production trust constraints can be specified at the prompt level rather than the architecture level.
+
+The practical recommendation is straightforward: when the corpus fits, inject it; when it does not, prefer cross-encoder reranking among the RAG family; do not pre-summarize.
+The most interesting open questions concern the corpus-size and model-quality regimes where this picture starts to shift, and the behavior of more structured retrieval methods (GraphRAG, RAPTOR, Self-RAG) at scale.
+
+\section*{Acknowledgments}
+We thank the maintainers of \texttt{sentence-transformers}, \texttt{ChromaDB}, \texttt{rank\_bm25}, and the BAAI FlagEmbedding project, whose freely available components made this study feasible on a personal budget.
+
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+\end{document}

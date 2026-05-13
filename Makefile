@@ -22,11 +22,17 @@ run:  ## Run one approach. Usage: make run config=configs/approaches/naive.yaml
 dashboard-data:  ## Regenerate frontend/web/lib/data.json from runs/.
 	.venv/bin/python scripts/build_dashboard_data.py
 
-paper:  ## Build paper/draft.pdf from paper/draft.tex (requires tectonic).
+paper:  ## Build paper/draft.pdf (accessible v1) from paper/draft.tex.
 	./paper/build.sh
 
-paper-regen:  ## Regen sweep aggregates + figures, then build paper.
+paper-ieee:  ## Build paper/ieee_draft.pdf (IEEE conference, 2-column).
+	./paper/build.sh ieee_draft
+
+paper-regen:  ## Regen all sweep aggregates + figures, then build the accessible v1.
 	./paper/build.sh --regen
+
+paper-ieee-regen:  ## Regen IEEE figures, then build the IEEE paper.
+	./paper/build.sh ieee_draft --regen
 
 ui:  ## Launch the Next.js dashboard (regenerates data first).
 	@$(MAKE) dashboard-data

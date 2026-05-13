@@ -48,9 +48,13 @@ frontend/web/.turbo/
 .claude/
 
 # LaTeX build intermediates (keep the .pdf, drop the rest)
-paper/draft.aux
-paper/draft.log
-paper/draft.out
-paper/draft.fdb_latexmk
-paper/draft.fls
+paper/*.aux
+paper/*.log
+paper/*.out
+paper/*.bbl
+paper/*.blg
+paper/*.fdb_latexmk
+paper/*.fls
+paper/*.toc
 paper/preview-*.png
+paper/ieee_preview-*.png
