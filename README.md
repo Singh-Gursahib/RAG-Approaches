@@ -12,6 +12,14 @@ The older 15-phase / 21-technique research-grade plan is **archived** under [`ar
 
 ---
 
+## 🗺️ RAG Atlas — interactive studio
+
+[**`studio/`**](studio/README.md) is an interactive Next.js + FastAPI app that lets anyone test the seven strategies **live on their own documents with their own Gemini API key** — compare answers, grade on gold sets (EM/F1 + bootstrap CIs + significance), profile cost/latency, replay the paper's case study, and get a domain-aware recommendation. Launch both servers with `make studio` (or `./studio/run.sh`); details in [`studio/README.md`](studio/README.md).
+
+> Distinct from [`frontend/web/`](frontend/web), which is the *static* dashboard of the paper's fixed results.
+
+---
+
 ## ⚡ For Future Agents / Contributors — Read This First
 
 Before editing code, read in order:

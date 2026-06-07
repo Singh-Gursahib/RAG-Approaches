@@ -1,0 +1,11 @@
+# RAG Atlas — backend server dependencies.
+# The server reuses the `ragureap` package (installed editable from the repo root:
+#   python -m venv .venv && .venv/bin/pip install -e ".[dev]"
+# ), so the heavy approach stack (chromadb, sentence-transformers, rank-bm25,
+# google-generativeai, scipy, numpy) comes from the repo's pyproject.toml.
+#
+# These are the additional web-server-only dependencies:
+fastapi>=0.110
+uvicorn[standard]>=0.29
+python-multipart>=0.0.9
+sse-starlette>=2.1

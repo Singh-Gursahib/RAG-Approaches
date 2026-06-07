@@ -32,7 +32,7 @@
 
 \title{Which RAG for Which Domain?\\
 {\Large An Open, Model-Agnostic Framework for\\Comparative Evaluation of Retrieval-Augmented Generation Strategies}\\
-\thanks{This work is released as an open-source research framework. The complete codebase---reference approach implementations, evaluation harness, statistical tooling, interactive dashboard, and reproducibility scripts---will be made available on GitHub for community use, extension, and contribution. The framework is intentionally model-agnostic: practitioners are encouraged to plug in their own datasets, swap in alternative generators or retrievers, and reuse the per-call cost ledger to characterize their specific deployment.}}
+\thanks{This work is released as an open-source research framework. The complete codebase---reference approach implementations, evaluation harness, statistical tooling, interactive dashboard, and reproducibility scripts---is publicly available at \url{https://github.com/Singh-Gursahib/RAG-Approaches} for community use, extension, and contribution. The framework is intentionally model-agnostic: practitioners are encouraged to plug in their own datasets, swap in alternative generators or retrievers, and reuse the per-call cost ledger to characterize their specific deployment.}}
 
 \author{
 \IEEEauthorblockN{Gursahib Singh$^{1}$ and Deeparsh Singh Dang$^{2}$}
@@ -473,7 +473,7 @@ The recurring theme is that the framework is intentionally a research scaffold r
 \label{sec:repro}
 
 Every table and figure in this paper is regenerated from raw run artifacts by a single command (\texttt{make paper-ieee-regen}).
-The complete framework---including the eval-set authoring guide, the seven reference approach implementations, the statistical-analysis CLI, the Next.js dashboard, and the per-run JSONL artifacts---will be released as an open-source repository on GitHub under a permissive license.
+The complete framework---including the eval-set authoring guide, the seven reference approach implementations, the statistical-analysis CLI, the Next.js dashboard, and the per-run JSONL artifacts---is publicly available as an open-source repository at \url{https://github.com/Singh-Gursahib/RAG-Approaches} under a permissive license.
 Total LLM cost to reproduce the case study: USD~1.09.
 Cost to reproduce against a different model or a larger corpus is precomputable from the same JSONL ledger.
 

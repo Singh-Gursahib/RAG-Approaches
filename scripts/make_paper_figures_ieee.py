@@ -89,33 +89,48 @@ def _setup_style() -> None:
 # ----------------------------- figures -----------------------------
 
 def fig_pareto(headline: pd.DataFrame, out: Path, two_col: bool = False) -> None:
-    """Cost × F1 Pareto with hand-tuned label offsets to avoid the cheap-RAG cluster overlap."""
-    # Per-approach (dx, dy) offsets in points; tuned for our 7-approach layout.
-    LABEL_OFFSET = {
-        "full_context":      (-10, 8),
-        "sliding_window":    (-58, -4),
-        "rerank":            (8, -2),
-        "naive":             (-30, 14),
-        "hyde":              (-58, 8),
-        "hybrid":            (8, -10),
-        "recursive_summary": (8, 4),
+    """Cost × F1 Pareto.
+
+    Strategy for clean labels: distinct marker shapes per approach + a legend.
+    Inline text labels overlap badly because four cheap RAG approaches cluster
+    at ~$0.01 cost and two long-context approaches cluster at ~$0.09. A legend
+    is the standard IEEE solution for tightly clustered scatter points.
+    """
+    # Distinct marker shapes — picked for visual separation when colors are
+    # similar in greyscale print. Order matters: same order as legend.
+    MARKERS = {
+        "full_context":      "s",   # square
+        "sliding_window":    "D",   # diamond
+        "rerank":            "^",   # up triangle
+        "naive":             "o",   # circle
+        "hyde":              "v",   # down triangle
+        "hybrid":            "P",   # plus (filled)
+        "recursive_summary": "X",   # cross (filled)
     }
-    fig, ax = plt.subplots(figsize=(7.0 if two_col else 3.4, 2.6 if two_col else 2.6))
-    for _, row in headline.iterrows():
-        color = APPROACH_COLOR.get(row["approach"], "#000")
+    # Plot order = same as legend so the legend reads top-to-bottom by F1.
+    order = headline.sort_values("f1_seed_mean", ascending=False)["approach"].tolist()
+
+    fig, ax = plt.subplots(figsize=(7.0 if two_col else 3.4, 2.7))
+    handles = []
+    by_approach = {row["approach"]: row for _, row in headline.iterrows()}
+    for approach in order:
+        row = by_approach[approach]
+        color = APPROACH_COLOR.get(approach, "#000")
+        marker = MARKERS.get(approach, "o")
         ax.errorbar(
             row["cost_mean"], row["f1_seed_mean"],
             yerr=row["f1_seed_std"],
-            fmt="o", color=color, markersize=5.5,
+            fmt=marker, color=color, markersize=6.0,
+            markeredgecolor="white", markeredgewidth=0.5,
             elinewidth=0.8, capsize=2.0, capthick=0.6,
         )
-        dx, dy = LABEL_OFFSET.get(row["approach"], (6, 4))
-        ax.annotate(
-            APPROACH_LABEL.get(row["approach"], row["approach"]),
-            (row["cost_mean"], row["f1_seed_mean"]),
-            xytext=(dx, dy), textcoords="offset points",
-            fontsize=7.2, color="#111",
-        )
+        # Build legend entry separately so marker edge matches.
+        h = plt.Line2D([0], [0], marker=marker, color="none",
+                       markerfacecolor=color, markeredgecolor="white",
+                       markeredgewidth=0.5, markersize=6.0,
+                       label=APPROACH_LABEL.get(approach, approach))
+        handles.append(h)
+
     ax.set_xlim(-0.005, 0.115)
     ax.set_ylim(0.0, 1.0)
     ax.set_xlabel(r"Cost per eval run (USD)")
@@ -123,6 +138,20 @@ def fig_pareto(headline: pd.DataFrame, out: Path, two_col: bool = False) -> None
     ax.set_title("Cost--quality Pareto frontier", loc="left")
     ax.grid(True, alpha=0.5, axis="y")
     ax.set_axisbelow(True)
+
+    # Legend in the empty mid-right area (around cost ~0.04--0.07, F1 ~0.3--0.7).
+    leg = ax.legend(
+        handles=handles,
+        loc="center right",
+        bbox_to_anchor=(0.98, 0.42),
+        frameon=True, framealpha=0.92,
+        edgecolor="#cccccc",
+        handletextpad=0.5, borderpad=0.5,
+        labelspacing=0.35,
+        fontsize=7.0,
+    )
+    leg.get_frame().set_linewidth(0.4)
+
     fig.savefig(out)
     plt.close(fig)
 
@@ -230,6 +259,12 @@ def fig_seed_variance(headline: pd.DataFrame, out: Path) -> None:
 
 
 def fig_honesty(per_q: pd.DataFrame, out: Path) -> None:
+    """Honesty vs capability scatter.
+
+    Strategy: distinct marker shapes per approach + a legend. Six approaches
+    cluster at the top-right ``honest and capable'' regime so inline labels
+    are infeasible; only the Recursive Summary outlier sits alone.
+    """
     factoid_acc = (
         per_q[per_q["type"] != "hallucination"]
         .groupby("approach")["em"].mean()
@@ -238,45 +273,66 @@ def fig_honesty(per_q: pd.DataFrame, out: Path) -> None:
         per_q[per_q["type"] == "hallucination"]
         .groupby("approach")["em"].mean()
     )
+    MARKERS = {
+        "full_context":      "s",
+        "sliding_window":    "D",
+        "rerank":            "^",
+        "naive":             "o",
+        "hyde":              "v",
+        "hybrid":            "P",
+        "recursive_summary": "X",
+    }
+    # Legend order = best-to-worst factoid accuracy.
+    order = factoid_acc.sort_values(ascending=False).index.tolist()
 
-    fig, ax = plt.subplots(figsize=(3.4, 2.9))
+    fig, ax = plt.subplots(figsize=(3.4, 3.1))
     ax.axhline(0.5, color="#bbbbbb", linewidth=0.4, linestyle=":")
     ax.axvline(0.5, color="#bbbbbb", linewidth=0.4, linestyle=":")
-    ax.text(0.98, 0.55, "honest +\ncapable", fontsize=6.5,
-            color="#0b2545", weight="bold", ha="right", alpha=0.7)
-    ax.text(0.02, 0.55, "honest but\nlimited", fontsize=6.5, color="#5e6472", alpha=0.7)
-    ax.text(0.98, 0.42, "capable but\nfabricates", fontsize=6.5, color="#9a1f1c", ha="right", alpha=0.7)
-    ax.text(0.02, 0.42, "low quality", fontsize=6.5, color="#9a1f1c", alpha=0.7)
+    # Quadrant labels in corners, away from data points.
+    ax.text(0.02, 0.97, "honest but limited", fontsize=6.3,
+            color="#5e6472", alpha=0.75, va="top")
+    ax.text(0.98, 0.97, "honest & capable", fontsize=6.3,
+            color="#0b2545", weight="bold", alpha=0.85, ha="right", va="top")
+    ax.text(0.02, 0.03, "low quality", fontsize=6.3,
+            color="#9a1f1c", alpha=0.75, va="bottom")
+    ax.text(0.98, 0.03, "fabricates", fontsize=6.3,
+            color="#9a1f1c", alpha=0.75, ha="right", va="bottom")
 
-    # Strategy: label only Recursive Summary (the outlier); list the cluster's
-    # six approaches in a corner legend with one dot per approach.
-    for approach in factoid_acc.index:
+    handles = []
+    for approach in order:
         x = factoid_acc[approach]
         y = halluc_acc.get(approach, 0)
         color = APPROACH_COLOR.get(approach, "#000")
-        ax.scatter(x, y, s=55, c=color, edgecolors="white", linewidth=0.6, zorder=3)
-        if approach == "recursive_summary":
-            ax.annotate(APPROACH_LABEL.get(approach, approach),
-                        (x, y), xytext=(8, -3), textcoords="offset points",
-                        fontsize=7.0, color="#111")
-    # Cluster annotation.
-    cluster_approaches = [a for a in factoid_acc.index if a != "recursive_summary"]
-    cluster_x = float(np.mean([factoid_acc[a] for a in cluster_approaches]))
-    cluster_y = 1.0
-    ax.annotate(
-        f"6 approaches\n(EM 0.63--0.70)",
-        xy=(cluster_x, cluster_y),
-        xytext=(cluster_x - 0.32, 0.78),
-        fontsize=7.0, color="#111",
-        arrowprops=dict(arrowstyle="-", color="#666", lw=0.5),
-    )
+        marker = MARKERS.get(approach, "o")
+        ax.scatter(x, y, s=55, c=color, marker=marker,
+                   edgecolors="white", linewidth=0.6, zorder=3)
+        h = plt.Line2D([0], [0], marker=marker, color="none",
+                       markerfacecolor=color, markeredgecolor="white",
+                       markeredgewidth=0.5, markersize=6.0,
+                       label=APPROACH_LABEL.get(approach, approach))
+        handles.append(h)
+
     ax.set_xlim(0, 1)
-    ax.set_ylim(-0.04, 1.18)
+    ax.set_ylim(-0.02, 1.06)
     ax.set_xlabel("Factoid accuracy (EM on answerable Qs)")
     ax.set_ylabel("Honesty (refusal on unanswerable Qs)")
     ax.set_title("Honesty vs capability", loc="left")
     ax.grid(True, alpha=0.5)
     ax.set_axisbelow(True)
+
+    # Legend placed in the empty mid-left region (factoid 0--0.5, honesty ~0.5).
+    leg = ax.legend(
+        handles=handles,
+        loc="center left",
+        bbox_to_anchor=(0.03, 0.55),
+        frameon=True, framealpha=0.92,
+        edgecolor="#cccccc",
+        handletextpad=0.5, borderpad=0.45,
+        labelspacing=0.32,
+        fontsize=6.5,
+    )
+    leg.get_frame().set_linewidth(0.4)
+
     fig.savefig(out)
     plt.close(fig)
 

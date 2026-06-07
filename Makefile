@@ -1,4 +1,4 @@
-.PHONY: help install lint test ingest run ui clean
+.PHONY: help install lint test ingest run ui studio clean
 
 help:  ## Show this help.
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-12s\033[0m %s\n", $$1, $$2}'
@@ -37,6 +37,9 @@ paper-ieee-regen:  ## Regen IEEE figures, then build the IEEE paper.
 ui:  ## Launch the Next.js dashboard (regenerates data first).
 	@$(MAKE) dashboard-data
 	cd frontend/web && npm install --silent && npm run dev
+
+studio:  ## Launch RAG Atlas (FastAPI backend + Next.js app) together.
+	./studio/run.sh
 
 clean:  ## Remove build artifacts and caches (NOT runs/ or data/).
 	rm -rf build dist *.egg-info .pytest_cache .ruff_cache
