@@ -98,7 +98,10 @@ package read-only via a FastAPI server and surfaces it through a polished UI.
   Two generators (Gemini sweep $1.09 est.; GLM $0.26 billed). New: Table II cross-model, Fig cross_model_f1, figure* heatmap +
   Pareto (both models), Sec "Reasoning Headroom". Claims verified vs CSVs: RAG |Δ|≤3.8 (mean 3.1), within-model spread 67.5/38.1,
   5/7 in Gemini CIs w/ headroom, ρ=0.39, RS 0.206→0.717, SW refusal 0.667 on GLM. Forest_f1 figure dropped from tex.
-  Not updated (not asked): FINDINGS.md, paper/draft.tex (accessible v1).
+  FINDINGS.md updated with the GLM entry (2026-09-11). paper/draft.tex (accessible v1) not updated.
+- ✅ PUSHED (2026-09-11): commit 52ba6cb → https://github.com/Singh-Gursahib/RAG-Approaches (PUBLIC), local `master` tracks
+  `origin/main`. Push via SSH key `~/.ssh/id_ed25519` (authenticates as Singh-Gursahib); the `gh` CLI account
+  singhgursahib0007 has pull-only access. No "claude" in commit messages (user preference). History scanned: no keys ever committed.
 - Fixed during test: Next dev proxy gzip buffered SSE → `compress:false` + `Cache-Control: no-cache, no-transform` + 15s keepalive.
 
 ## User's pending asks (in order) — see conversation
