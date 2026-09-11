@@ -1,6 +1,6 @@
 // SSE-over-POST streaming client + a React hook.
 //
-// Native EventSource can't send headers (we need X-Gemini-Key) or POST bodies,
+// Native EventSource can't send headers (we need X-OpenRouter-Key) or POST bodies,
 // so we stream with fetch + a ReadableStream reader and parse `event:`/`data:`
 // frames ourselves.
 
@@ -24,7 +24,7 @@ export async function streamSSE(
   };
   if (opts.withKey) {
     const key = getKey();
-    if (key) headers["X-Gemini-Key"] = key;
+    if (key) headers["X-OpenRouter-Key"] = key;
   }
 
   let resp: Response;

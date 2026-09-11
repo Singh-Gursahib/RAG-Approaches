@@ -1,0 +1,2 @@
+approach,n_seeds,n_questions_per_seed,em_seed_mean,em_seed_std,em_pooled_lo,em_pooled_hi,f1_seed_mean,f1_seed_std,f1_pooled_lo,f1_pooled_hi,cost_mean,cost_std,p50_ms_mean,p95_ms_mean
+full_context,3,34,0.7549,0.0170,0.6667,0.8333,0.9148,0.0075,0.8795,0.9473,0.0070,0.0004,1106.0950,5564.7570

@@ -1,26 +1,30 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
-import { Play, Square, KeyRound, Download, ClipboardCheck, Save } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Play, Square, KeyRound, ClipboardCheck } from "lucide-react";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Tag } from "@/components/ui/Tag";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { Segmented } from "@/components/ui/Controls";
 import { HelpPopover } from "@/components/ui/Tooltip";
 import { useToast } from "@/components/ui/Toast";
 import { KeyModal } from "@/components/shell/KeyModal";
 import { CorpusUploader, type CorpusState } from "@/components/run/CorpusUploader";
 import { ApproachPicker } from "@/components/run/ApproachPicker";
+import { ModelPicker, RunsControl, modelLabel, useModelCatalog } from "@/components/run/ModelPicker";
 import { QuestionSetEditor, type EvalRow } from "@/components/eval/QuestionSetEditor";
 import { EvalProgress, type ApproachProgress } from "@/components/eval/EvalProgress";
 import { EvalResultsView } from "@/components/eval/EvalResultsView";
+import { LoadPreviousButton } from "@/components/eval/SavedResultsModal";
+import { ResultMetaCard } from "@/components/eval/ResultMetaCard";
 import { api, ApiError } from "@/lib/api";
 import { useStream } from "@/lib/sse";
 import { useKey } from "@/lib/useKey";
+import { useLLMConfig } from "@/lib/model";
+import { APPROACHES } from "@/lib/approaches";
 import { fmtUSD } from "@/lib/format";
 import { saveEval, newId } from "@/lib/store";
-import type { ApproachKey, EvalResults, SSEvent } from "@/lib/types";
+import type { ApproachKey, EvalResults, SavedResult, SSEvent } from "@/lib/types";
 
 const DEFAULT_CORPUS: CorpusState = {
   documents: [],
@@ -33,15 +37,20 @@ export default function EvaluatePage() {
   const { present } = useKey();
   const toast = useToast();
   const { running, start, stop } = useStream();
+  const catalog = useModelCatalog();
 
   const [corpus, setCorpus] = useState<CorpusState>(DEFAULT_CORPUS);
   const [rows, setRows] = useState<EvalRow[]>([]);
   const [approaches, setApproaches] = useState<ApproachKey[]>(["naive", "rerank", "full_context"]);
+  const [llm, setLLM] = useLLMConfig({ temperature: 0, max_output_tokens: 512 });
+  const [repeats, setRepeats] = useState(1);
   const [keyModal, setKeyModal] = useState(false);
   const [estimateCost, setEstimateCost] = useState<number | null>(null);
 
   const [progress, setProgress] = useState<Record<string, ApproachProgress>>({});
   const [results, setResults] = useState<EvalResults | null>(null);
+  const [saved, setSaved] = useState<SavedResult | null>(null);
+  const [loaded, setLoaded] = useState(false);
   const [metric, setMetric] = useState<"em" | "f1">("f1");
   const submittedRef = useRef<EvalRow[]>([]);
 
@@ -60,22 +69,40 @@ export default function EvaluatePage() {
           approaches,
           corpus_tokens: corpus.stats!.est_tokens,
           n_docs: corpus.stats!.n_docs,
+          llm,
+          repeats,
         })
         .then((e) => setEstimateCost(e.total_cost_usd))
         .catch(() => setEstimateCost(null));
     }, 350);
     return () => clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [corpus.stats, validRows.length, approaches]);
+  }, [corpus.stats, validRows.length, approaches, llm, repeats]);
+
+  function handleLoad(r: SavedResult) {
+    setProgress({});
+    setResults(r.results);
+    setSaved(r);
+    setLoaded(true);
+    toast(`Loaded “${r.label}”.`, "success");
+  }
 
   async function handleRun() {
     if (!present) return setKeyModal(true);
     if (!ready) return;
     setResults(null);
+    setSaved(null);
+    setLoaded(false);
     submittedRef.current = validRows;
+    const runLLM = llm;
+    const runRepeats = repeats;
+    const label = modelLabel(catalog, runLLM.model);
+    const n = validRows.length;
 
     const init: Record<string, ApproachProgress> = {};
-    approaches.forEach((a) => (init[a] = { approach: a, done: 0, total: validRows.length, cost: 0, status: "queued" }));
+    approaches.forEach(
+      (a) => (init[a] = { approach: a, done: 0, total: n * runRepeats, cost: 0, status: "queued", run: 1, runs: runRepeats }),
+    );
     setProgress(init);
 
     let sessionId: string;
@@ -88,7 +115,7 @@ export default function EvaluatePage() {
     }
 
     const patch = (a: string, fn: (p: ApproachProgress) => ApproachProgress) =>
-      setProgress((prev) => ({ ...prev, [a]: fn(prev[a]) }));
+      setProgress((prev) => (prev[a] ? { ...prev, [a]: fn(prev[a]) } : prev));
 
     await start(
       "/eval",
@@ -97,7 +124,9 @@ export default function EvaluatePage() {
         questions: validRows.map((r) => ({ question: r.question, gold_answer: r.gold_answer, type: r.type })),
         approaches,
         retrieval: { top_k: 5, top_n_for_rerank: 20 },
-        llm: { model: "gemini-3-flash-preview", temperature: 0, max_output_tokens: 256 },
+        llm: runLLM,
+        repeats: runRepeats,
+        label: corpus.label ? `${label} · ${corpus.label}` : undefined,
       },
       (e: SSEvent) => {
         const ap = e.approach as string | undefined;
@@ -112,31 +141,50 @@ export default function EvaluatePage() {
             if (ap) patch(ap, (p) => ({ ...p, status: "running" }));
             break;
           case "question_done":
-            if (ap)
-              patch(ap, (p) => ({ ...p, status: "running", done: e.i as number, cost: p.cost + (e.cost_usd as number) }));
+            if (ap) {
+              const rep = (e.repeat as number) ?? 0;
+              patch(ap, (p) => ({
+                ...p,
+                status: "running",
+                run: rep + 1,
+                done: rep * n + (e.i as number),
+                cost: p.cost + (e.cost_usd as number),
+              }));
+            }
             break;
           case "approach_eval_done":
             if (ap) patch(ap, (p) => ({ ...p, status: "done", done: p.total }));
             break;
+          case "approach_eval_error":
+            if (ap) patch(ap, (p) => ({ ...p, status: "error" }));
+            toast(`${APPROACHES[ap as ApproachKey]?.label ?? ap}: ${e.message as string}`, "error");
+            break;
+          case "save_error":
+            toast(`The results could not be saved to disk: ${e.message as string}`, "error");
+            break;
           case "eval_done": {
             const res = e.results as EvalResults;
-            // Attach question text by index (backend omits it).
             res.questions = res.questions.map((q, i) => ({
               ...q,
-              question_text: submittedRef.current[i]?.question,
+              question_text: q.question_text ?? submittedRef.current[i]?.question,
             }));
+            const savedId = (e.saved_result_id as string | null) ?? null;
             setResults(res);
             saveEval({
               id: newId(),
               kind: "eval",
               createdAt: Date.now(),
-              label: corpus.label || `${corpus.stats?.n_docs ?? 0} docs · ${res.totals.n_questions} Q`,
+              label: `${corpus.label || `${corpus.stats?.n_docs ?? 0} docs`} · ${label} · ${res.totals.n_questions} Q`,
               source: "custom",
               approaches: res.approaches,
               results: res,
               totalCost: res.totals.cost_usd,
+              model: runLLM.model,
+              modelLabel: label,
+              savedResultId: savedId ?? undefined,
             });
-            toast("Evaluation complete and saved to history.", "success");
+            if (savedId) api.result(savedId).then(setSaved).catch(() => {});
+            toast("Evaluation complete and saved.", "success");
             break;
           }
           case "fatal":
@@ -152,16 +200,19 @@ export default function EvaluatePage() {
 
   return (
     <div className="shell space-y-6 py-10">
-      <div>
-        <p className="eyebrow">Evaluate</p>
-        <h1 className="mt-2 font-display text-[44px] leading-none tracking-tightest">
-          Grade strategies on your data
-        </h1>
-        <p className="mt-3 max-w-[56ch] text-[15px] text-ink-muted">
-          Bring questions with known answers. RAG Atlas runs every strategy, scores them with EM and F1,
-          and reports confidence intervals, significance, and refusal honesty — the paper’s methodology,
-          on your corpus.
-        </p>
+      <div className="flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <p className="eyebrow">Evaluate</p>
+          <h1 className="mt-2 font-display text-[44px] leading-none tracking-tightest">
+            Grade strategies on your data
+          </h1>
+          <p className="mt-3 max-w-[56ch] text-[15px] text-ink-muted">
+            Bring questions with known answers. RAG Atlas runs every strategy, scores them with EM and F1,
+            and reports confidence intervals, significance, and refusal honesty: the paper&apos;s methodology,
+            on your corpus and your choice of model.
+          </p>
+        </div>
+        <LoadPreviousButton source="custom" onLoad={handleLoad} disabled={running} />
       </div>
 
       <Step n={1} title="Corpus" hint="The documents your questions are about.">
@@ -176,6 +227,13 @@ export default function EvaluatePage() {
         <ApproachPicker selected={approaches} onChange={setApproaches} corpusTokens={corpus.stats?.est_tokens ?? null} />
       </Step>
 
+      <Step n={4} title="Model" hint="Any OpenRouter model. Every strategy uses the same model and settings.">
+        <ModelPicker llm={llm} onChange={setLLM} showTemperature disabled={running} />
+        <div className="mt-5">
+          <RunsControl value={repeats} onChange={setRepeats} disabled={running} />
+        </div>
+      </Step>
+
       <Card className="flex flex-wrap items-center gap-3 p-5">
         {running ? (
           <Button variant="danger" leftIcon={<Square className="h-4 w-4" />} onClick={stop}>
@@ -184,6 +242,7 @@ export default function EvaluatePage() {
         ) : present ? (
           <Button leftIcon={<Play className="h-4 w-4" />} onClick={handleRun} disabled={!ready}>
             Evaluate {validRows.length} question{validRows.length === 1 ? "" : "s"} × {approaches.length}
+            {repeats > 1 ? ` × ${repeats} runs` : ""}
           </Button>
         ) : (
           <Button leftIcon={<KeyRound className="h-4 w-4" />} onClick={() => setKeyModal(true)}>
@@ -193,7 +252,10 @@ export default function EvaluatePage() {
         {estimateCost != null && (
           <span className="inline-flex items-center gap-1.5 text-[12.5px] text-ink-muted">
             <Tag tone="neutral">≈ {fmtUSD(estimateCost)} total</Tag>
-            <HelpPopover>Pre-flight estimate across {approaches.length} strategies × {validRows.length} questions.</HelpPopover>
+            <HelpPopover>
+              Pre-flight estimate across {approaches.length} strategies × {validRows.length} questions × {repeats}{" "}
+              {repeats === 1 ? "run" : "runs"} at {modelLabel(catalog, llm.model)}&apos;s list price.
+            </HelpPopover>
           </span>
         )}
         {!ready && <span className="text-[12.5px] text-ink-faint">Add a corpus, at least one question with a gold answer, and a strategy.</span>}
@@ -209,6 +271,8 @@ export default function EvaluatePage() {
           <EvalProgress items={progressItems} />
         </Card>
       )}
+
+      {saved && <ResultMetaCard result={saved} loaded={loaded} />}
 
       {/* results */}
       {results ? (

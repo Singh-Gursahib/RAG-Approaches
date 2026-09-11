@@ -3,24 +3,31 @@
 This is the only module that touches the `ragureap` approaches. It reuses the
 package's registry, approaches, metrics, and stats unchanged. Two seams are kept
 injectable so tests run with zero model downloads and zero API spend:
-    * `get_approach_class(name)` — resolve an Approach class.
-    * `make_client(...)`        — build the LLM client.
+    * `get_approach_class(name)` - resolve an Approach class.
+    * `make_client(...)`        - build the LLM client.
 Tests monkeypatch both.
 """
 from __future__ import annotations
 
+import threading
 import time
 import uuid
-from pathlib import Path
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from datetime import datetime, timezone
 from typing import Any, Callable
 
-from ragureap.approaches.base import AnswerWithTrace
-from ragureap.eval.cost import BudgetLedger
-from ragureap.eval.metrics import aggregate, grade_one
-from ragureap.eval.stats import bootstrap_ci, holm_correction, paired_wilcoxon
-from ragureap.llm.gemini import GeminiClient
+import numpy as np
 
+from ragureap.approaches.base import AnswerWithTrace
+from ragureap.eval.cost import BudgetLedger, Price
+from ragureap.eval.metrics import grade_one, is_refusal
+from ragureap.eval.stats import bootstrap_ci, holm_correction, paired_wilcoxon
+from ragureap.indexing import chroma_store as _chroma_store
+
+from . import models_catalog, results_store
 from .catalog import APPROACH_BY_KEY
+from .deps import redact
+from .openrouter import OpenRouterClient, request_max_tokens, resolve_reasoning
 from .pricing import resolve_price
 from .sessions import Session
 
@@ -29,8 +36,59 @@ from ragureap.runner import APPROACH_REGISTRY, _eager_register  # noqa: E402
 
 _eager_register()
 
-# A practically-unbounded cap when the user sets no soft cap.
-_NO_CAP = 1e9
+# Approaches whose answer() only touches the LLM client and read-only state, so
+# questions can be answered concurrently. Retrieval approaches share the
+# embedding and reranker models, so they stay sequential.
+PARALLEL_SAFE = frozenset({"full_context", "sliding_window", "recursive_summary"})
+EVAL_CONCURRENCY = 4
+
+# Approaches that cache LLM output on the instance (per-document summaries). Each
+# repeat gets a fresh instance so repeats are independent samples, like the
+# paper's one-process-per-seed runs.
+STATEFUL_APPROACHES = frozenset({"recursive_summary"})
+
+
+# --- Chroma collection isolation ------------------------------------------
+# The approaches build ChromaStore(embedder=...) with the default collection name
+# "ragureap", and chromadb's in-memory clients share one system per process. The
+# research runner used one process per approach, so that was safe. Here several
+# approaches and sessions share a process, and building a second store deletes
+# the first store's collection. Every store gets a unique name instead; this is a
+# runtime shim and ragureap itself is unchanged.
+if not getattr(_chroma_store.ChromaStore, "_ragatlas_isolated", False):
+    _original_chroma_init = _chroma_store.ChromaStore.__init__
+
+    def _isolated_chroma_init(self, embedder=None, collection_name="ragureap", persist_dir=None):
+        if collection_name == "ragureap":
+            collection_name = f"ragatlas_{uuid.uuid4().hex[:12]}"
+        _original_chroma_init(
+            self, embedder=embedder, collection_name=collection_name, persist_dir=persist_dir
+        )
+
+    _chroma_store.ChromaStore.__init__ = _isolated_chroma_init
+    _chroma_store.ChromaStore._ragatlas_isolated = True
+
+
+def _release_instance(instance: Any) -> None:
+    """Drop the Chroma collections an approach instance created."""
+    for attr in ("store", "vec"):
+        store = getattr(instance, attr, None)
+        client = getattr(store, "_client", None)
+        name = getattr(store, "collection_name", None)
+        if client is not None and name:
+            try:
+                client.delete_collection(name)
+            except Exception:  # noqa: BLE001 - already gone
+                pass
+
+
+def release_session(session: Session) -> None:
+    """Free every index a session built (used by one-shot replay sessions)."""
+    with session.lock:
+        instances = list(session._approach_cache.values())
+        session._approach_cache.clear()
+    for instance in instances:
+        _release_instance(instance)
 
 
 # --- injectable seams (patched in tests) ---------------------------------
@@ -45,18 +103,78 @@ def get_approach_class(name: str):
 def make_client(
     api_key: str,
     llm_cfg: dict,
-    price,
-    ledger: BudgetLedger,
+    price: Price,
+    ledger: BudgetLedger | None,
     run_id: str,
-) -> GeminiClient:
-    return GeminiClient(
-        model_name=llm_cfg.get("model", "gemini-3-flash-preview"),
-        api_key=api_key,
+    seed: int | None = None,
+) -> OpenRouterClient:
+    model = llm_cfg.get("model") or models_catalog.DEFAULT_MODEL
+    info = models_catalog.get_model_info(model)
+    return OpenRouterClient(
+        model,
+        api_key,
         temperature=float(llm_cfg.get("temperature", 0.0)),
         max_output_tokens=int(llm_cfg.get("max_output_tokens", 512)),
+        reasoning=llm_cfg.get("reasoning") or "lowest",
+        reasoning_info=info.get("reasoning"),
+        model_max_completion=info.get("max_completion_tokens"),
+        seed=seed if seed is not None else llm_cfg.get("seed"),
         budget_ledger=ledger,
         price=price,
         run_id=run_id,
+    )
+
+
+# --- pricing + model description -----------------------------------------
+
+def price_for(llm_cfg: dict, price_cfg: dict) -> Price:
+    """Explicit price overrides win; otherwise the model's OpenRouter list price."""
+    info = models_catalog.get_model_info(llm_cfg.get("model") or models_catalog.DEFAULT_MODEL)
+    input_per_m = price_cfg.get("input_per_m")
+    output_per_m = price_cfg.get("output_per_m")
+    return resolve_price(
+        input_per_m if input_per_m is not None else info.get("input_per_m"),
+        output_per_m if output_per_m is not None else info.get("output_per_m"),
+    )
+
+
+def describe_llm(llm_cfg: dict) -> dict:
+    """The exact model settings a run used, recorded with saved results."""
+    model_id = llm_cfg.get("model") or models_catalog.DEFAULT_MODEL
+    info = models_catalog.get_model_info(model_id)
+    mode = llm_cfg.get("reasoning") or "lowest"
+    effort = resolve_reasoning(mode, info.get("reasoning"))
+    budget = int(llm_cfg.get("max_output_tokens", 512))
+    return {
+        "model": {
+            "id": model_id,
+            "label": models_catalog.label_for(model_id),
+            "lab": models_catalog.lab_for(model_id),
+            "name": info.get("name"),
+            "open_weights": bool(info.get("hugging_face_id")),
+            "hugging_face_id": info.get("hugging_face_id"),
+            "pricing_per_m": {"input": info.get("input_per_m"), "output": info.get("output_per_m")},
+            "metadata_source": info.get("source"),
+        },
+        "temperature": float(llm_cfg.get("temperature", 0.0)),
+        "reasoning_requested": mode,
+        "reasoning_effort_sent": effort,
+        "answer_token_budget": budget,
+        "max_tokens_sent": request_max_tokens(
+            budget, effort, info.get("reasoning"), info.get("max_completion_tokens")
+        ),
+    }
+
+
+def _ledger(session: Session, soft_cap_usd: float | None, prefix: str) -> BudgetLedger | None:
+    """A per-run budget guard, only when the user set a soft cap."""
+    if not soft_cap_usd:
+        return None
+    return BudgetLedger(
+        path=session.tmp_dir / f".{prefix}_{uuid.uuid4().hex[:6]}.jsonl",
+        cap_usd=float(soft_cap_usd),
+        warn_pct=0.5,
+        abort_pct=0.95,
     )
 
 
@@ -67,7 +185,7 @@ def _build_config(session: Session, approach: str, retrieval: dict, llm_cfg: dic
     return {
         "approach": approach,
         "llm": {
-            "model": llm_cfg.get("model", "gemini-3-flash-preview"),
+            "model": llm_cfg.get("model") or models_catalog.DEFAULT_MODEL,
             "temperature": float(llm_cfg.get("temperature", 0.0)),
             "max_output_tokens": int(llm_cfg.get("max_output_tokens", 512)),
         },
@@ -93,17 +211,19 @@ def _get_or_build_approach(
     retrieval: dict,
     llm_cfg: dict,
     emit: Callable[[dict], None] | None,
+    cache: bool = True,
 ) -> Any:
-    """Return a cached, set-up Approach instance (builds + caches on first use).
+    """Return a set-up Approach instance, cached per session unless `cache=False`.
 
     The embedding + reranker models are process-global singletons in ragureap, so
     a cache miss only re-embeds this corpus's chunks, not a model reload.
     """
     sig = _retrieval_sig(approach, retrieval)
-    with session.lock:
-        cached = session._approach_cache.get(sig)
-        if cached is not None:
-            return cached
+    if cache:
+        with session.lock:
+            cached = session._approach_cache.get(sig)
+            if cached is not None:
+                return cached
 
     if emit:
         emit({"event": "index_building", "approach": approach})
@@ -112,8 +232,9 @@ def _get_or_build_approach(
     instance = get_approach_class(approach)()
     instance.setup(session.chunks, session.full_text, cfg)
     build_ms = (time.perf_counter() - t0) * 1000.0
-    with session.lock:
-        session._approach_cache[sig] = instance
+    if cache:
+        with session.lock:
+            session._approach_cache[sig] = instance
     if emit:
         emit({"event": "index_ready", "approach": approach, "ms": round(build_ms, 1)})
     return instance
@@ -148,12 +269,6 @@ def _retrieved_chunks(session: Session, aw: AnswerWithTrace) -> list[dict]:
     return []
 
 
-def _is_refusal(text: str) -> bool:
-    from ragureap.eval.metrics import is_refusal
-
-    return is_refusal(text)
-
-
 # --- single-question run (SSE worker) ------------------------------------
 
 def run_question_worker(
@@ -167,20 +282,16 @@ def run_question_worker(
     soft_cap_usd: float | None,
     emit: Callable[[dict], None],
 ) -> None:
-    price = resolve_price(price_cfg.get("input_per_m"), price_cfg.get("output_per_m"))
-    cap = float(soft_cap_usd) if soft_cap_usd else _NO_CAP
-    ledger = BudgetLedger(
-        path=session.tmp_dir / f".ledger_{uuid.uuid4().hex[:6]}.jsonl",
-        cap_usd=cap,
-        warn_pct=0.5,
-        abort_pct=0.95,
-    )
+    price = price_for(llm_cfg, price_cfg)
+    ledger = _ledger(session, soft_cap_usd, "ledger")
+    model_id = llm_cfg.get("model") or models_catalog.DEFAULT_MODEL
 
     emit({
         "event": "run_start",
         "question": question,
         "approaches": approaches,
-        "soft_cap_usd": None if cap >= _NO_CAP else cap,
+        "model": model_id,
+        "soft_cap_usd": soft_cap_usd or None,
     })
 
     run_total_cost = 0.0
@@ -201,34 +312,34 @@ def run_question_worker(
             wall_ms = (time.perf_counter() - t0) * 1000.0
 
             for i, step in enumerate(aw.trace):
-                d = step.to_dict()
                 emit({
                     "event": "step",
                     "approach": approach,
                     "index": i,
                     "n_steps": len(aw.trace),
-                    **d,
+                    **step.to_dict(),
                 })
 
             cost = aw.total_cost_usd
             run_total_cost += cost
             run_total_latency += wall_ms
+            stats = getattr(client, "stats", None) or {}
             emit({
                 "event": "approach_done",
                 "approach": approach,
                 "answer": aw.answer,
-                "refused": _is_refusal(aw.answer),
+                "refused": is_refusal(aw.answer),
                 "cost_usd": cost,
                 "latency_ms": aw.total_latency_ms,
                 "wall_ms": round(wall_ms, 1),
                 "tokens_in": aw.total_tokens_in,
                 "tokens_out": aw.total_tokens_out,
+                "reasoning_tokens": int(stats.get("reasoning_tokens", 0)),
+                "model": model_id,
                 "n_steps": len(aw.trace),
                 "retrieved": _retrieved_chunks(session, aw),
             })
         except Exception as e:  # noqa: BLE001
-            from .deps import redact
-
             emit({
                 "event": "approach_error",
                 "approach": approach,
@@ -242,13 +353,135 @@ def run_question_worker(
     })
 
 
-# --- eval (grade a question set) -----------------------------------------
+# --- eval (grade a question set, optionally several times) ----------------
 
 def _percentile(sorted_vals: list[float], p: float) -> float:
     if not sorted_vals:
         return 0.0
     i = max(0, min(len(sorted_vals) - 1, int(round(p * (len(sorted_vals) - 1)))))
     return sorted_vals[i]
+
+
+def _std(values: list[float]) -> float:
+    """Sample standard deviation across runs (0 for a single run)."""
+    return float(np.std(values, ddof=1)) if len(values) > 1 else 0.0
+
+
+def normalize_questions(questions: list[dict]) -> list[dict]:
+    return [
+        {
+            "id": q.get("id") or f"q{i + 1:03d}",
+            "type": q.get("type") or "sanity",
+            "question": q["question"],
+            "gold_answer": q["gold_answer"],
+        }
+        for i, q in enumerate(questions)
+    ]
+
+
+def make_record(
+    *,
+    rep: int,
+    qid: str,
+    qtype: str,
+    question: str,
+    gold: str,
+    pred: str,
+    cost_usd: float = 0.0,
+    latency_ms: float = 0.0,
+    tokens_in: int = 0,
+    tokens_out: int = 0,
+    error: str | None = None,
+) -> dict:
+    """One graded answer: the unit every eval statistic is built from."""
+    grade = grade_one(qid, qtype, pred, gold)
+    return {
+        "rep": int(rep),
+        "qid": qid,
+        "type": qtype,
+        "question": question,
+        "gold": gold,
+        "pred": pred,
+        "em": int(grade.em),
+        "f1": float(grade.f1),
+        "correct": int(grade.correct),
+        "cost_usd": float(cost_usd),
+        "latency_ms": float(latency_ms),
+        "tokens_in": int(tokens_in),
+        "tokens_out": int(tokens_out),
+        "error": error,
+    }
+
+
+def _answer_one(instance: Any, q: dict, rep: int, api_key: str) -> dict:
+    started = time.perf_counter()
+    try:
+        aw: AnswerWithTrace = instance.answer(q["question"], qid=q["id"])
+        return make_record(
+            rep=rep, qid=q["id"], qtype=q["type"], question=q["question"], gold=q["gold_answer"],
+            pred=aw.answer, cost_usd=aw.total_cost_usd, latency_ms=aw.total_latency_ms,
+            tokens_in=aw.total_tokens_in, tokens_out=aw.total_tokens_out,
+        )
+    except Exception as e:  # noqa: BLE001 - one failed question must not abort the run
+        return make_record(
+            rep=rep, qid=q["id"], qtype=q["type"], question=q["question"], gold=q["gold_answer"],
+            pred=f"[ERROR: {type(e).__name__}]",
+            latency_ms=(time.perf_counter() - started) * 1000.0,
+            error=redact(f"{type(e).__name__}: {e}", api_key)[:500],
+        )
+
+
+def _answer_all(
+    instance: Any,
+    questions: list[dict],
+    rep: int,
+    repeats: int,
+    approach: str,
+    emit: Callable[[dict], None],
+    api_key: str,
+    parallel: bool,
+) -> list[dict]:
+    """Answer every question once, emitting progress; results keep question order."""
+    n = len(questions)
+    out: list[dict | None] = [None] * n
+    lock = threading.Lock()
+    done = 0
+
+    def finish(k: int, rec: dict) -> None:
+        nonlocal done
+        with lock:
+            out[k] = rec
+            done += 1
+            count = done
+        emit({
+            "event": "question_done",
+            "approach": approach,
+            "qid": rec["qid"],
+            "type": rec["type"],
+            "repeat": rep,
+            "n_repeats": repeats,
+            "i": count,
+            "n": n,
+            "em": rec["em"],
+            "f1": round(rec["f1"], 4),
+            "correct": rec["correct"],
+            "cost_usd": round(rec["cost_usd"], 6),
+        })
+
+    if not parallel or n <= 1:
+        for k, q in enumerate(questions):
+            finish(k, _answer_one(instance, q, rep, api_key))
+    else:
+        # The first question runs alone so per-instance state (e.g. document
+        # summaries) is built exactly once before the rest run concurrently.
+        finish(0, _answer_one(instance, questions[0], rep, api_key))
+        with ThreadPoolExecutor(max_workers=EVAL_CONCURRENCY) as pool:
+            futures = {
+                pool.submit(_answer_one, instance, questions[k], rep, api_key): k for k in range(1, n)
+            }
+            for future in as_completed(futures):
+                finish(futures[future], future.result())
+    return [rec for rec in out if rec is not None]
 
 
 def run_eval_worker(
@@ -261,134 +494,172 @@ def run_eval_worker(
     api_key: str,
     soft_cap_usd: float | None,
     emit: Callable[[dict], None],
+    repeats: int = 1,
+    save_meta: dict | None = None,
 ) -> None:
-    price = resolve_price(price_cfg.get("input_per_m"), price_cfg.get("output_per_m"))
-    cap = float(soft_cap_usd) if soft_cap_usd else _NO_CAP
-    ledger = BudgetLedger(
-        path=session.tmp_dir / f".eval_ledger_{uuid.uuid4().hex[:6]}.jsonl",
-        cap_usd=cap,
-        warn_pct=0.5,
-        abort_pct=0.95,
-    )
+    repeats = max(1, int(repeats))
+    started_at = datetime.now(timezone.utc)
+    t_start = time.perf_counter()
+    price = price_for(llm_cfg, price_cfg)
+    ledger = _ledger(session, soft_cap_usd, "eval_ledger")
+    norm = normalize_questions(questions)
+    model_id = llm_cfg.get("model") or models_catalog.DEFAULT_MODEL
 
-    # Normalize questions: ensure id + type.
-    norm: list[dict] = []
-    for i, q in enumerate(questions):
-        norm.append({
-            "id": q.get("id") or f"q{i + 1:03d}",
-            "type": q.get("type") or "sanity",
-            "question": q["question"],
-            "gold_answer": q["gold_answer"],
-        })
+    emit({
+        "event": "eval_start",
+        "approaches": approaches,
+        "n_questions": len(norm),
+        "repeats": repeats,
+        "model": model_id,
+    })
 
-    emit({"event": "eval_start", "approaches": approaches, "n_questions": len(norm)})
-
-    # per_approach[approach] = {grades, costs, latencies, tokens_in, tokens_out, preds}
-    results: dict[str, dict] = {}
+    records: dict[str, list[dict]] = {}
+    llm_stats: dict[str, dict] = {}
 
     for approach in approaches:
-        emit({"event": "approach_eval_start", "approach": approach})
-        per = {"grades": [], "cost": 0.0, "latencies": [], "tokens_in": 0, "tokens_out": 0}
+        emit({"event": "approach_eval_start", "approach": approach, "repeats": repeats})
+        recs: list[dict] = []
+        stats = {"llm_calls": 0, "reasoning_tokens": 0, "truncation_retries": 0}
         try:
-            instance = _get_or_build_approach(session, approach, retrieval, llm_cfg, emit)
-            run_id = f"{session.session_id}:{approach}:eval"
-            client = make_client(api_key, llm_cfg, price, ledger, run_id)
-            if hasattr(instance, "attach_llm"):
-                instance.attach_llm(client)
-
-            for k, q in enumerate(norm):
-                t0 = time.perf_counter()
-                try:
-                    aw = instance.answer(q["question"], qid=q["id"])
-                    pred = aw.answer
-                    cost = aw.total_cost_usd
-                    lat = aw.total_latency_ms
-                    tin, tout = aw.total_tokens_in, aw.total_tokens_out
-                except Exception as e:  # noqa: BLE001
-                    pred = f"[ERROR: {type(e).__name__}]"
-                    cost, lat, tin, tout = 0.0, (time.perf_counter() - t0) * 1000.0, 0, 0
-                grade = grade_one(q["id"], q["type"], pred, q["gold_answer"])
-                per["grades"].append(grade)
-                per["cost"] += cost
-                per["latencies"].append(lat)
-                per["tokens_in"] += tin
-                per["tokens_out"] += tout
+            for rep in range(repeats):
+                seed = rep if llm_cfg.get("seed") is None else int(llm_cfg["seed"]) + rep
+                fresh = approach in STATEFUL_APPROACHES
+                instance = _get_or_build_approach(
+                    session, approach, retrieval, llm_cfg, emit, cache=not fresh
+                )
+                client = make_client(
+                    api_key, llm_cfg, price, ledger, f"{session.session_id}:{approach}:r{rep}", seed=seed
+                )
+                if hasattr(instance, "attach_llm"):
+                    instance.attach_llm(client)
+                recs.extend(
+                    _answer_all(
+                        instance, norm, rep, repeats, approach, emit, api_key,
+                        parallel=approach in PARALLEL_SAFE,
+                    )
+                )
+                for key, value in (getattr(client, "stats", None) or {}).items():
+                    stats[key] = stats.get(key, 0) + int(value)
+                if fresh:
+                    _release_instance(instance)
+            if recs:
                 emit({
-                    "event": "question_done",
+                    "event": "approach_eval_done",
                     "approach": approach,
-                    "qid": q["id"],
-                    "type": q["type"],
-                    "i": k + 1,
-                    "n": len(norm),
-                    "em": int(grade.em),
-                    "f1": round(grade.f1, 4),
-                    "correct": int(grade.correct),
-                    "cost_usd": round(cost, 6),
+                    "em": round(float(np.mean([r["em"] for r in recs])), 4),
+                    "f1": round(float(np.mean([r["f1"] for r in recs])), 4),
+                    "cost_usd": round(sum(r["cost_usd"] for r in recs) / repeats, 6),
                 })
-
-            agg = aggregate(per["grades"])
-            emit({
-                "event": "approach_eval_done",
-                "approach": approach,
-                "em": round(agg["overall"]["em"], 4),
-                "f1": round(agg["overall"]["f1"], 4),
-                "cost_usd": round(per["cost"], 6),
-            })
         except Exception as e:  # noqa: BLE001
-            from .deps import redact
-
             emit({
                 "event": "approach_eval_error",
                 "approach": approach,
                 "message": redact(f"{type(e).__name__}: {e}", api_key),
             })
-        results[approach] = per
+        records[approach] = recs
+        llm_stats[approach] = stats
 
-    emit({"event": "eval_done", "results": _assemble_eval_results(norm, results)})
+    results = assemble_results(norm, records, repeats)
+    for row in results["headline"]:
+        s = llm_stats.get(row["approach"], {})
+        row["llm_calls"] = round(s.get("llm_calls", 0) / repeats, 2)
+        row["reasoning_tokens"] = round(s.get("reasoning_tokens", 0) / repeats, 1)
+        row["truncation_retries"] = int(s.get("truncation_retries", 0))
+
+    saved_id = None
+    if save_meta is not None:
+        payload = build_result_payload(
+            save_meta=save_meta,
+            llm_cfg=llm_cfg,
+            retrieval=retrieval,
+            chunking=session.chunk_cfg,
+            repeats=repeats,
+            questions=norm,
+            results=results,
+            started_at=started_at,
+            finished_at=datetime.now(timezone.utc),
+            wall_s=time.perf_counter() - t_start,
+            llm_stats=llm_stats,
+            n_docs=len(session.documents),
+        )
+        try:
+            saved_id = results_store.save_result(payload)
+        except Exception as e:  # noqa: BLE001 - never lose the in-browser results over a disk error
+            emit({"event": "save_error", "message": str(e)})
+
+    emit({"event": "eval_done", "results": results, "saved_result_id": saved_id})
 
 
-def _assemble_eval_results(questions: list[dict], results: dict[str, dict]) -> dict:
-    """Build the full results object (mirrors the dashboard data shape)."""
-    approaches = [a for a in results if results[a]["grades"]]
+def assemble_results(questions: list[dict], records: dict[str, list[dict]], repeats: int) -> dict:
+    """Build the full results object from graded records (any number of repeats).
 
-    headline = []
-    per_probe = []
+    Headline numbers follow the paper's multi-seed convention: EM and F1 are the
+    mean of per-run means, `*_seed_std` is the sample standard deviation across
+    runs, confidence intervals are percentile bootstraps over all pooled
+    question-run grades (2000 resamples, seed 0), and cost, tokens and latency
+    are means per full run.
+    """
+    order = {q["id"]: i for i, q in enumerate(questions)}
+    approaches = [a for a, recs in records.items() if recs]
+    ordered = {
+        a: sorted(records[a], key=lambda r: (r["rep"], order.get(r["qid"], len(order))))
+        for a in approaches
+    }
+
+    headline: list[dict] = []
+    per_probe: list[dict] = []
     for a in approaches:
-        per = results[a]
-        grades = per["grades"]
-        agg = aggregate(grades)
-        em_arr = [float(g.em) for g in grades]
-        f1_arr = [g.f1 for g in grades]
-        em_ci = bootstrap_ci(em_arr)
-        f1_ci = bootstrap_ci(f1_arr)
-        lat = sorted(per["latencies"])
+        recs = ordered[a]
+        reps = sorted({r["rep"] for r in recs})
+        runs = [[r for r in recs if r["rep"] == rep] for rep in reps]
+
+        em_runs = [float(np.mean([r["em"] for r in run])) for run in runs]
+        f1_runs = [float(np.mean([r["f1"] for r in run])) for run in runs]
+        acc_runs = [float(np.mean([r["correct"] for r in run])) for run in runs]
+        cost_runs = [float(sum(r["cost_usd"] for r in run)) for run in runs]
+        tin_runs = [float(sum(r["tokens_in"] for r in run)) for run in runs]
+        tout_runs = [float(sum(r["tokens_out"] for r in run)) for run in runs]
+        p50_runs = [_percentile(sorted(r["latency_ms"] for r in run), 0.50) for run in runs]
+        p95_runs = [_percentile(sorted(r["latency_ms"] for r in run), 0.95) for run in runs]
+        em_ci = bootstrap_ci([float(r["em"]) for r in recs], n_boot=2000, seed=0)
+        f1_ci = bootstrap_ci([float(r["f1"]) for r in recs], n_boot=2000, seed=0)
+
         headline.append({
             "approach": a,
-            "n": len(grades),
-            "em": agg["overall"]["em"],
+            "n": len(recs),
+            "n_seeds": len(runs),
+            "n_questions_per_seed": len(runs[0]) if runs else 0,
+            "em": float(np.mean(em_runs)),
+            "em_seed_std": _std(em_runs),
             "em_lo": em_ci.ci_low,
             "em_hi": em_ci.ci_high,
-            "f1": agg["overall"]["f1"],
+            "f1": float(np.mean(f1_runs)),
+            "f1_seed_std": _std(f1_runs),
             "f1_lo": f1_ci.ci_low,
             "f1_hi": f1_ci.ci_high,
-            "accuracy": agg["overall"]["accuracy"],
-            "cost_usd": per["cost"],
-            "tokens_in": per["tokens_in"],
-            "tokens_out": per["tokens_out"],
-            "p50_ms": _percentile(lat, 0.50),
-            "p95_ms": _percentile(lat, 0.95),
+            "accuracy": float(np.mean(acc_runs)),
+            "cost_usd": float(np.mean(cost_runs)),
+            "cost_seed_std": _std(cost_runs),
+            "cost_total_usd": float(sum(cost_runs)),
+            "tokens_in": float(np.mean(tin_runs)),
+            "tokens_out": float(np.mean(tout_runs)),
+            "p50_ms": float(np.mean(p50_runs)),
+            "p95_ms": float(np.mean(p95_runs)),
+            "errors": sum(1 for r in recs if r.get("error")),
         })
-        # per-probe-type CIs
-        by_type: dict[str, list] = {}
-        for g in grades:
-            by_type.setdefault(g.type, []).append(g)
-        for t, gs in by_type.items():
-            e = bootstrap_ci([float(g.em) for g in gs])
-            f = bootstrap_ci([g.f1 for g in gs])
+
+        types: list[str] = []
+        for r in recs:
+            if r["type"] not in types:
+                types.append(r["type"])
+        for t in types:
+            group = [r for r in recs if r["type"] == t]
+            e = bootstrap_ci([float(r["em"]) for r in group], n_boot=2000, seed=0)
+            f = bootstrap_ci([float(r["f1"]) for r in group], n_boot=2000, seed=0)
             per_probe.append({
                 "approach": a,
                 "probe_type": t,
-                "n": len(gs),
+                "n": len(group),
                 "em": e.mean,
                 "em_lo": e.ci_low,
                 "em_hi": e.ci_high,
@@ -397,98 +668,160 @@ def _assemble_eval_results(questions: list[dict], results: dict[str, dict]) -> d
                 "f1_hi": f.ci_high,
             })
 
-    # Per-question record (gold + each approach's prediction/grade).
-    grade_by_aq: dict[str, dict[str, Any]] = {}
-    for a in approaches:
-        for g in results[a]["grades"]:
-            grade_by_aq.setdefault(g.qid, {})[a] = g
     questions_out = []
-    qtype = {q["id"]: q["type"] for q in questions}
-    qgold = {q["id"]: q["gold_answer"] for q in questions}
     for q in questions:
         preds = {}
         for a in approaches:
-            g = grade_by_aq.get(q["id"], {}).get(a)
-            if g is not None:
-                preds[a] = {
-                    "pred": g.pred,
-                    "em": int(g.em),
-                    "f1": round(g.f1, 4),
-                    "correct": int(g.correct),
-                }
+            rs = [r for r in ordered[a] if r["qid"] == q["id"]]
+            if not rs:
+                continue
+            rate = float(np.mean([r["correct"] for r in rs]))
+            preds[a] = {
+                "pred": rs[0]["pred"],
+                "em": float(np.mean([r["em"] for r in rs])),
+                "f1": round(float(np.mean([r["f1"] for r in rs])), 4),
+                "correct": 1 if rate >= 0.5 else 0,
+                "correct_rate": round(rate, 4),
+                "n_seeds": len(rs),
+                "preds": [
+                    {
+                        "repeat": r["rep"],
+                        "pred": r["pred"],
+                        "em": r["em"],
+                        "f1": round(r["f1"], 4),
+                        "correct": r["correct"],
+                        "cost_usd": r["cost_usd"],
+                        "latency_ms": round(r["latency_ms"], 1),
+                        "error": r.get("error"),
+                    }
+                    for r in rs
+                ],
+            }
         questions_out.append({
             "qid": q["id"],
-            "type": qtype[q["id"]],
-            "gold": qgold[q["id"]],
+            "type": q["type"],
+            "gold": q["gold_answer"],
+            "question_text": q["question"],
             "predictions": preds,
         })
 
-    pairwise_em = _pairwise(approaches, results, metric="em")
-    pairwise_f1 = _pairwise(approaches, results, metric="f1")
-    win_matrix = _win_matrix(approaches, results)
-
-    total_cost = sum(results[a]["cost"] for a in approaches)
     return {
         "approaches": approaches,
         "headline": headline,
         "per_probe": per_probe,
-        "pairwise_em": pairwise_em,
-        "pairwise_f1": pairwise_f1,
-        "win_matrix": win_matrix,
+        "pairwise_em": _pairwise(approaches, ordered, "em"),
+        "pairwise_f1": _pairwise(approaches, ordered, "f1"),
+        "win_matrix": _win_matrix(approaches, ordered),
         "questions": questions_out,
-        "totals": {"cost_usd": total_cost, "n_questions": len(questions)},
+        "totals": {
+            "cost_usd": float(sum(r["cost_usd"] for a in approaches for r in ordered[a])),
+            "n_questions": len(questions),
+            "repeats": repeats,
+            "n_graded": sum(len(ordered[a]) for a in approaches),
+        },
     }
 
 
-def _pairwise(approaches: list[str], results: dict, metric: str) -> dict[str, dict[str, float]]:
-    """Holm-corrected paired Wilcoxon adjusted p-values between every approach pair."""
-    arrays = {}
-    for a in approaches:
-        grades = results[a]["grades"]
-        arrays[a] = [float(g.em) if metric == "em" else g.f1 for g in grades]
-
-    pairs = []
-    raw_p = []
+def _pairwise(approaches: list[str], records: dict[str, list[dict]], metric: str) -> dict[str, dict[str, float]]:
+    """Holm-corrected paired Wilcoxon p-values, pairing grades by (run, question)."""
+    keyed = {a: {(r["rep"], r["qid"]): float(r[metric]) for r in records[a]} for a in approaches}
+    pairs, raw_p = [], []
     for i, a in enumerate(approaches):
         for b in approaches[i + 1:]:
-            if len(arrays[a]) == len(arrays[b]) and len(arrays[a]) > 0:
-                res = paired_wilcoxon(arrays[a], arrays[b])
+            common = sorted(set(keyed[a]) & set(keyed[b]))
+            if common:
+                res = paired_wilcoxon([keyed[a][k] for k in common], [keyed[b][k] for k in common])
                 pairs.append((a, b))
                 raw_p.append(res.p_value)
-    adj = holm_correction(raw_p) if raw_p else []
+    adjusted = holm_correction(raw_p) if raw_p else []
 
-    matrix: dict[str, dict[str, float]] = {a: {} for a in approaches}
-    for a in approaches:
-        matrix[a][a] = 1.0
-    for (a, b), p in zip(pairs, adj):
+    matrix: dict[str, dict[str, float]] = {a: {a: 1.0} for a in approaches}
+    for (a, b), p in zip(pairs, adjusted):
         matrix[a][b] = p
         matrix[b][a] = p
     return matrix
 
 
-def _win_matrix(approaches: list[str], results: dict) -> dict[str, dict[str, dict]]:
-    correct = {a: {g.qid: bool(g.correct) for g in results[a]["grades"]} for a in approaches}
-    qids = sorted({qid for a in approaches for qid in correct[a]})
+def _win_matrix(approaches: list[str], records: dict[str, list[dict]]) -> dict[str, dict[str, dict]]:
+    """Head-to-head correctness counts over (run, question) pairs."""
+    correct = {a: {(r["rep"], r["qid"]): bool(r["correct"]) for r in records[a]} for a in approaches}
     matrix: dict[str, dict[str, dict]] = {a: {} for a in approaches}
     for a in approaches:
         for b in approaches:
             if a == b:
                 matrix[a][b] = {"wins": 0, "losses": 0, "ties": 0, "n": 0}
                 continue
-            wins = losses = ties = n = 0
-            for qid in qids:
-                ca, cb = correct[a].get(qid), correct[b].get(qid)
-                if ca is None or cb is None:
-                    continue
-                n += 1
+            wins = losses = ties = 0
+            common = set(correct[a]) & set(correct[b])
+            for key in common:
+                ca, cb = correct[a][key], correct[b][key]
                 if ca and not cb:
                     wins += 1
                 elif cb and not ca:
                     losses += 1
                 else:
                     ties += 1
-            matrix[a][b] = {"wins": wins, "losses": losses, "ties": ties, "n": n}
+            matrix[a][b] = {"wins": wins, "losses": losses, "ties": ties, "n": len(common)}
     return matrix
+
+
+def build_result_payload(
+    *,
+    save_meta: dict,
+    llm_cfg: dict,
+    retrieval: dict,
+    chunking: dict,
+    repeats: int,
+    questions: list[dict],
+    results: dict,
+    started_at: datetime,
+    finished_at: datetime,
+    wall_s: float,
+    llm_stats: dict[str, dict],
+    n_docs: int,
+) -> dict:
+    """Everything needed to reopen a finished test exactly as it ran."""
+    llm = describe_llm(llm_cfg)
+    seed0 = llm_cfg.get("seed")
+    return {
+        "schema_version": 1,
+        "created_at": finished_at.isoformat(),
+        "source": save_meta.get("source", "custom"),
+        "label": save_meta.get("label") or f"{llm['model']['label']} · {len(questions)} questions",
+        "provider": "openrouter",
+        "model": llm["model"],
+        "config": {
+            "temperature": llm["temperature"],
+            "answer_token_budget": llm["answer_token_budget"],
+            "max_tokens_sent": llm["max_tokens_sent"],
+            "reasoning_requested": llm["reasoning_requested"],
+            "reasoning_effort_sent": llm["reasoning_effort_sent"],
+            "repeats": repeats,
+            "seeds": [rep if seed0 is None else int(seed0) + rep for rep in range(repeats)],
+            "retrieval": dict(retrieval),
+            "chunking": dict(chunking),
+            "approaches": results["approaches"],
+            "eval_concurrency": EVAL_CONCURRENCY,
+            "attribution_headers_sent": False,
+        },
+        "dataset": {
+            "name": save_meta.get("dataset", "custom"),
+            "n_questions": len(questions),
+            "n_docs": n_docs,
+            "questions": questions,
+        },
+        "runtime": {
+            "started_at": started_at.isoformat(),
+            "finished_at": finished_at.isoformat(),
+            "wall_s": round(wall_s, 1),
+            "total_cost_usd": results["totals"]["cost_usd"],
+            "llm_calls": sum(s.get("llm_calls", 0) for s in llm_stats.values()),
+            "reasoning_tokens": sum(s.get("reasoning_tokens", 0) for s in llm_stats.values()),
+            "truncation_retries": sum(s.get("truncation_retries", 0) for s in llm_stats.values()),
+            "per_approach": llm_stats,
+        },
+        "results": results,
+    }
 
 
 # --- pre-flight cost estimate (no key, no spend) -------------------------
@@ -501,8 +834,10 @@ def estimate_cost(
     retrieval: dict,
     llm_cfg: dict,
     price_cfg: dict,
+    repeats: int = 1,
 ) -> dict:
-    price = resolve_price(price_cfg.get("input_per_m"), price_cfg.get("output_per_m"))
+    price = price_for(llm_cfg, price_cfg)
+    repeats = max(1, int(repeats))
     max_out = int(llm_cfg.get("max_output_tokens", 512))
     top_k = int(retrieval.get("top_k", 5))
     # crude: a 150-token chunk ≈ 150 tokens; answer prompt overhead ≈ 80 tokens.
@@ -534,10 +869,11 @@ def estimate_cost(
             calls = n_questions * 2
             tin = n_questions * (prompt_overhead + top_k * chunk_tokens + prompt_overhead)
             tout = n_questions * (120 + min(max_out, 40))
-        else:  # naive, hybrid, rerank — single answer call over top_k chunks
+        else:  # naive, hybrid, rerank: single answer call over top_k chunks
             calls = n_questions
             tin = n_questions * (top_k * chunk_tokens + prompt_overhead)
             tout = n_questions * min(max_out, 40)
+        calls, tin, tout = calls * repeats, tin * repeats, tout * repeats
         cost = price.usd(tin, tout)
         per_approach.append({
             "approach": a,
@@ -554,8 +890,8 @@ def estimate_cost(
         "total_llm_calls": total_calls,
         "total_cost_usd": round(total_cost, 6),
         "note": (
-            "Rough upper-bound estimate from token heuristics; actual cost depends "
-            "on answer length and exact tokenization. Sliding-Window and Full-Context "
-            "dominate cost at large corpus sizes."
+            "Rough estimate from token heuristics and the model's OpenRouter list price. "
+            "Reasoning tokens are not included, and actual cost depends on answer length. "
+            "Sliding-Window and Full-Context dominate cost at large corpus sizes."
         ),
     }

@@ -4,6 +4,41 @@
 
 ---
 
+## 2026-09-11 — Cross-model replication on GLM 5.3 Flash (RAG Atlas replay)
+
+**Setup.** The Phase 9 case study rerun on a second generator, `z-ai/glm-5.3-flash` (open weights, `zai-org/GLM-5.3-Flash`), through OpenRouter from RAG Atlas's Replay mode. Same corpus, 34 questions, prompts, chunking (150/30), top-k 5, rerank pool 20, grading, and statistics as the Gemini sweep; 3 seeds (0, 1, 2) at T=0.3 with a 512-token answer budget. GLM 5.3 Flash always reasons: the main run requested **low** effort with `max_tokens` 640; a Full-Context follow-up used **high** effort with `max_tokens` 2,560 (same 512 tokens left for the answer). Costs are the amounts OpenRouter billed (Gemini costs above are ledger estimates, so cost comparisons are approximate).
+
+**Evidence.** Saved tests in `studio/results/`: `20260911T062638Z_replay_z-ai-glm-5-3-flash_bebd51.json` (7 strategies), `…_662a06.json` (Full-Context, high effort), `…_0220b6.json` (Full-Context check after the headroom fix, 1 seed). Exported to `paper/tables/glm53_*.csv` and `paper/tables/cross_model_f1.csv` by `scripts/export_cross_model_tables.py`. Spend: $0.2276 + $0.0211 + $0.0091 = **$0.26**.
+
+| Approach | Gemini 3 Flash F1 | GLM 5.3 Flash F1 ± std | GLM F1 95% CI | Δ F1 | GLM EM | GLM cost/run (billed) |
+|---|---|---|---|---|---|---|
+| full_context | 0.881 | 0.490 ± 0.038 | [0.405, 0.573] | −0.391 | 0.363 | $0.0094 |
+| sliding_window | 0.875 | 0.808 ± 0.041 | [0.743, 0.868] | −0.066 | 0.647 | $0.0348 |
+| hyde | 0.838 | 0.813 ± 0.017 | [0.744, 0.875] | −0.025 | 0.657 | $0.0073 |
+| naive | 0.836 | 0.862 ± 0.000 | [0.806, 0.911] | +0.026 | 0.706 | $0.0042 |
+| rerank | 0.833 | **0.871 ± 0.007** | [0.823, 0.917] | +0.038 | 0.696 | $0.0051 |
+| hybrid | 0.797 | 0.833 ± 0.000 | [0.768, 0.889] | +0.036 | 0.676 | $0.0043 |
+| recursive_summary | 0.206 | 0.717 ± 0.044 | [0.631, 0.792] | +0.511 | 0.598 | $0.0109 |
+| full_context, high effort | 0.881 | **0.915 ± 0.007** | [0.880, 0.947] | +0.034 | 0.755 | $0.0070 |
+
+### Findings
+
+1. **Retrieval pipelines transfer across generators.** The four RAG strategies move by at most 3.8 F1 points between models (mean |Δ| 3.1), and every GLM estimate lies inside the matching Gemini 95% CI. Across strategies on one model, F1 spans 67.5 points (Gemini) and 38.1 points (GLM as run; 19.8 with the high-effort Full-Context). For these two generators, the choice of pipeline matters far more than the choice of model.
+2. **Full-Context needs reasoning headroom on a model that always reasons.** At low effort, 20% of the 640-token limit (~128 tokens) was left for reasoning. On the ~8K-token prompt 11 of 102 answers were cut off and retried, the model answered `NOT_IN_CONTEXT` for present facts (the planted password) and misread numbers ("0.4 ppm" for "0.46 ppm"): F1 0.490, needle F1 0.24. With high effort and 2,560 tokens: 0 retries, fewer reasoning tokens per call (61 vs 209), F1 **0.915**, and a lower cost per run ($0.0070 vs $0.0094). The other six strategies used 1–15 reasoning tokens per call and were largely unaffected. **Fix shipped:** `studio/server/app/openrouter.py` now reserves `MIN_REASONING_TOKENS = 1024` (GLM low effort → 5,120-token limit); the 1-seed check at the default setting scored F1 0.931.
+3. **Summarization loss is structural in kind, model-dependent in size.** Recursive Summary rises from 0.206 to 0.717 on GLM (multi-hop 0.82, distractor 0.71), but needle recall stays poor (0.31 vs 0.00). Keep "avoid for fact lookup"; re-measure for synthesis-heavy use cases.
+4. **Honesty transfers for retrieval pipelines only.** All four RAG strategies and Recursive Summary refused 6/6 unanswerable probes on both generators. Sliding-Window fell to 0.667 on GLM; low-headroom Full-Context 0.944.
+5. **Significance (GLM, Holm-corrected Wilcoxon).** Low-headroom Full-Context differs from all six others (p_adj ≤ 4×10⁻⁴); Recursive Summary vs Reranker p_adj = 0.014; no pair of RAG strategies is separable, as on Gemini.
+6. **Fine rank order is not preserved.** Spearman ρ = 0.39 across all seven strategies (with the high-effort Full-Context; p = 0.38). Expected, because the RAG cluster is statistically tied on both models.
+7. **Seed variance again concentrates in multi-step pipelines.** GLM std: Sliding-Window 0.041, Recursive Summary 0.044; Naive and Hybrid 0.000, Reranker 0.007.
+8. **EM remains formatting-sensitive across models** (e.g. GLM "Seven years" for gold "7 years"); keep F1 as the headline.
+9. **Cost.** Summed over the seven strategies, one GLM run cost $0.076 billed against Gemini's $0.251 estimated (≈0.3×); per strategy the ratio ranges from 9.7× cheaper (Full-Context) to 1.6× more expensive (Recursive Summary).
+
+**Paper.** `paper/ieee_draft.tex` now reports both generators: Table II (cross-model), Fig. `cross_model_f1`, two-panel heatmap and cost–quality figures, and a "Reasoning Headroom" subsection.
+
+**Confidence.** High for the transfer of RAG pipelines on this corpus with these two flash-tier generators; medium for generality (one corpus, two models of similar tier).
+
+---
+
 ## 2026-05-11 — Corpus structure (Phase 2)
 
 **Observation.** The hand-authored corpus is denser than expected at ~8K total tokens across 4 documents (target was 15-25K). With 150-token sentence-window chunks at 30-token overlap, this produces **65 chunks**.
@@ -23,7 +58,7 @@
 | Approach | n_seeds | EM mean ± std | F1 mean ± std | F1 pooled 95% CI | Cost (mean) |
 |---|---|---|---|---|---|
 | full_context | 3 | 0.667 ± 0.017 | **0.881 ± 0.012** | [0.840, 0.918] | $0.0912 |
-| sliding_window | 3 | **0.696 ± 0.045** | 0.875 ± 0.025 | [0.795, 0.945] | $0.0972 |
+| sliding_window | 3 | **0.696 ± 0.045** | 0.875 ± 0.025 | [0.826, 0.920] | $0.0972 |
 | hyde | 3 | 0.667 ± 0.017 | 0.838 ± 0.012 | [0.780, 0.893] | $0.0186 |
 | naive | 3 | 0.667 ± 0.017 | 0.836 ± 0.012 | [0.778, 0.888] | $0.0122 |
 | rerank | 3 | 0.667 ± 0.017 | 0.833 ± 0.009 | [0.774, 0.887] | $0.0123 |

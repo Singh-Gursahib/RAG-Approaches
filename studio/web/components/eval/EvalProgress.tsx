@@ -11,6 +11,9 @@ export interface ApproachProgress {
   total: number;
   cost: number;
   status: "queued" | "building" | "running" | "done" | "error";
+  /** Current run (1-based) when the evaluation repeats. */
+  run?: number;
+  runs?: number;
 }
 
 export function EvalProgress({ items }: { items: ApproachProgress[] }) {
@@ -19,6 +22,12 @@ export function EvalProgress({ items }: { items: ApproachProgress[] }) {
       {items.map((p) => {
         const a = APPROACHES[p.approach];
         const pct = p.total ? (p.done / p.total) * 100 : 0;
+        const status =
+          p.status === "building"
+            ? "indexing…"
+            : p.status === "error"
+              ? "failed"
+              : `${p.done}/${p.total}${p.runs && p.runs > 1 && p.status === "running" ? ` · run ${p.run ?? 1}/${p.runs}` : ""}`;
         return (
           <div key={p.approach} className="grid grid-cols-[140px_1fr_auto] items-center gap-3">
             <span className="flex items-center gap-1.5 truncate text-[12.5px] text-ink">
@@ -35,8 +44,8 @@ export function EvalProgress({ items }: { items: ApproachProgress[] }) {
                 }}
               />
             </span>
-            <span className="tnum w-28 text-right font-mono text-[11.5px] text-ink-muted">
-              {p.status === "building" ? "indexing…" : `${p.done}/${p.total}`}
+            <span className="tnum min-w-28 whitespace-nowrap text-right font-mono text-[11.5px] text-ink-muted">
+              {status}
               {" · "}
               <CostTicker value={p.cost} />
             </span>

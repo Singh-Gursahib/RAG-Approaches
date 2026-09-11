@@ -11,6 +11,7 @@ export function Slider({
   step = 1,
   suffix,
   hint,
+  disabled = false,
   onChange,
 }: {
   label: React.ReactNode;
@@ -20,6 +21,7 @@ export function Slider({
   step?: number;
   suffix?: string;
   hint?: React.ReactNode;
+  disabled?: boolean;
   onChange: (v: number) => void;
 }) {
   const pct = max > min ? ((value - min) / (max - min)) * 100 : 0;
@@ -41,8 +43,9 @@ export function Slider({
         max={max}
         step={step}
         value={value}
+        disabled={disabled}
         onChange={(e) => onChange(Number(e.target.value))}
-        className="range w-full"
+        className="range w-full disabled:opacity-60"
         style={{
           background: `linear-gradient(to right, var(--accent) 0%, var(--accent) ${pct}%, rgba(26,26,26,0.10) ${pct}%, rgba(26,26,26,0.10) 100%)`,
         }}

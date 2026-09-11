@@ -1,50 +1,35 @@
-"""Validate a user's Gemini key with one tiny, cheap generation call."""
+"""Validate an OpenRouter key without spending anything (GET /api/v1/key)."""
 from __future__ import annotations
 
-import tempfile
-import uuid
-from pathlib import Path
+from typing import Optional
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Header
 
 from ..deps import redact, require_key
+from ..openrouter import OpenRouterError, fetch_key_info
 
 router = APIRouter(tags=["keys"])
 
 
 @router.post("/key/check")
-def key_check(api_key: str = Depends(require_key)) -> dict:
-    """Returns {ok, model, latency_ms, cost_usd} or {ok:false, message}.
+def key_check(
+    x_openrouter_key: Optional[str] = Header(default=None, alias="X-OpenRouter-Key"),
+    api_key: str = Depends(require_key),
+) -> dict:
+    """Returns {ok, source, ...} or {ok: false, message}. Never raises on a bad key.
 
-    Costs a fraction of a cent (max_output_tokens=5). Never raises on a bad key —
-    returns a friendly ok:false so the UI can show a clear message.
+    Only non-identifying fields are passed back: the key's label and creator id
+    are dropped.
     """
-    from ragureap.eval.cost import BudgetLedger
-    from ragureap.llm.gemini import GeminiClient
-
-    model = "gemini-3-flash-preview"
-    ledger = BudgetLedger(
-        path=Path(tempfile.gettempdir()) / f".ragatlas_keycheck_{uuid.uuid4().hex[:6]}.jsonl",
-        cap_usd=1.0,
-    )
+    source = "browser" if (x_openrouter_key or "").strip() else "server"
     try:
-        client = GeminiClient(
-            model_name=model,
-            api_key=api_key,
-            temperature=0.0,
-            max_output_tokens=5,
-            budget_ledger=ledger,
-            run_id="key-check",
-        )
-        resp = client.generate("Reply with the single word: OK")
-        return {
-            "ok": True,
-            "model": model,
-            "latency_ms": round(resp.latency_ms, 1),
-            "cost_usd": resp.cost_usd,
-        }
-    except Exception as e:  # noqa: BLE001
-        return {
-            "ok": False,
-            "message": redact(f"{type(e).__name__}: {e}", api_key),
-        }
+        info = fetch_key_info(api_key)
+    except OpenRouterError as e:
+        return {"ok": False, "source": source, "message": redact(str(e), api_key)}
+    return {
+        "ok": True,
+        "source": source,
+        "is_free_tier": info.get("is_free_tier"),
+        "limit_remaining": info.get("limit_remaining"),
+        "usage_usd": info.get("usage"),
+    }

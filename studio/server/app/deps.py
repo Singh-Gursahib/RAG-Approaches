@@ -1,30 +1,43 @@
-"""Request dependencies — chiefly the BYO Gemini API key.
+"""Request dependencies: the OpenRouter API key.
 
-HARD RULE: the key is read from the X-Gemini-Key header per request, used to
-construct a GeminiClient, and never logged or persisted. `redact()` scrubs the
-key from any string (e.g. an upstream error) before it leaves the server.
+Resolution order for every request that spends money:
+  1. the `X-OpenRouter-Key` header (bring your own key from the browser), else
+  2. `OPENROUTER_API_KEY` in the server environment or the repo's `.env`
+     (optional, for local or self-hosted use).
+The key is only used to call OpenRouter. It is never logged, returned, or
+written anywhere by this server, and `redact()` scrubs it from error strings.
 """
 from __future__ import annotations
 
+import os
+
 from fastapi import Header, HTTPException
+
+SERVER_KEY_ENV = "OPENROUTER_API_KEY"
+
+
+def server_key() -> str | None:
+    value = os.environ.get(SERVER_KEY_ENV, "").strip()
+    return value or None
 
 
 def require_key(
-    x_gemini_key: str | None = Header(default=None, alias="X-Gemini-Key"),
+    x_openrouter_key: str | None = Header(default=None, alias="X-OpenRouter-Key"),
 ) -> str:
-    """FastAPI dependency: 401 unless a non-empty key header is present."""
-    if not x_gemini_key or not x_gemini_key.strip():
+    """FastAPI dependency: the request's key, else the server key, else 401."""
+    key = (x_openrouter_key or "").strip() or server_key()
+    if not key:
         raise HTTPException(
             status_code=401,
             detail={
                 "message": (
-                    "Missing Gemini API key. Add your key in RAG Atlas — it is sent "
+                    "Missing OpenRouter API key. Add your key in RAG Atlas; it is sent "
                     "with each request and never stored on the server."
                 ),
                 "code": "missing_key",
             },
         )
-    return x_gemini_key.strip()
+    return key
 
 
 def redact(text: str, secret: str | None) -> str:

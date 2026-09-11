@@ -1,0 +1,2024 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-09-11T06:36:33.279738+00:00",
+  "source": "replay",
+  "label": "GLM 5.3 Flash \u00b7 paper case study \u00b7 3 runs \u00b7 Full-Context \u00b7 high reasoning",
+  "provider": "openrouter",
+  "model": {
+    "id": "z-ai/glm-5.3-flash",
+    "label": "GLM 5.3 Flash",
+    "lab": "Z.ai",
+    "name": "Z.ai: GLM 5.3 Flash",
+    "open_weights": true,
+    "hugging_face_id": "zai-org/GLM-5.3-Flash",
+    "pricing_per_m": {
+      "input": 0.15,
+      "output": 0.5
+    },
+    "metadata_source": "live"
+  },
+  "config": {
+    "temperature": 0.3,
+    "answer_token_budget": 512,
+    "max_tokens_sent": 2560,
+    "reasoning_requested": "high",
+    "reasoning_effort_sent": "high",
+    "repeats": 3,
+    "seeds": [
+      0,
+      1,
+      2
+    ],
+    "retrieval": {
+      "top_k": 5,
+      "top_n_for_rerank": 20
+    },
+    "chunking": {
+      "target_tokens": 150,
+      "overlap_tokens": 30
+    },
+    "approaches": [
+      "full_context"
+    ],
+    "eval_concurrency": 4,
+    "attribution_headers_sent": false
+  },
+  "dataset": {
+    "name": "RAG_Ureap case study",
+    "n_questions": 34,
+    "n_docs": 4,
+    "questions": [
+      {
+        "id": "needle-01",
+        "type": "needle",
+        "question": "What is the Halden Institute's archive password for the 2019 Constanin papers?",
+        "gold_answer": "MULBERRY-7Q"
+      },
+      {
+        "id": "needle-02",
+        "type": "needle",
+        "question": "What chlorination ratio (in ppm) does the Veridian municipal water system contain at point of distribution?",
+        "gold_answer": "0.46 ppm"
+      },
+      {
+        "id": "needle-03",
+        "type": "needle",
+        "question": "What is the internal Consortium designator assigned to the MERIDIAN-7 satellite?",
+        "gold_answer": "M7-RX-204-A"
+      },
+      {
+        "id": "needle-04",
+        "type": "needle",
+        "question": "At what frequency does MERIDIAN-7's primary telemetry channel operate?",
+        "gold_answer": "4.832 GHz"
+      },
+      {
+        "id": "needle-05",
+        "type": "needle",
+        "question": "What percentage of the Auralite Accord's joint research fund does Article 7-bis allocate to space-based atmospheric research?",
+        "gold_answer": "12%"
+      },
+      {
+        "id": "needle-06",
+        "type": "needle",
+        "question": "How many researchers, technicians, and administrative staff did the Halden Institute employ as of the 2023 annual report?",
+        "gold_answer": "178"
+      },
+      {
+        "id": "needle-07",
+        "type": "needle",
+        "question": "What was the planned nominal mission duration of MERIDIAN-7 from launch?",
+        "gold_answer": "7 years"
+      },
+      {
+        "id": "needle-08",
+        "type": "needle",
+        "question": "What is the constant ambient temperature (in degrees Celsius) maintained in the Halden Institute's Sublimary facility?",
+        "gold_answer": "14.5"
+      },
+      {
+        "id": "hop-01",
+        "type": "multi_hop",
+        "question": "In what city is the institute that built the FILAMENT-3 biosensor headquartered?",
+        "gold_answer": "Veridian"
+      },
+      {
+        "id": "hop-02",
+        "type": "multi_hop",
+        "question": "Who is the mayor of the city where the Auralite Accord was signed?",
+        "gold_answer": "Quentin Aldermann"
+      },
+      {
+        "id": "hop-03",
+        "type": "multi_hop",
+        "question": "The MERIDIAN-7 satellite carries a biosensor instrument from which research institute?",
+        "gold_answer": "Halden Institute for Computational Mycology"
+      },
+      {
+        "id": "hop-04",
+        "type": "multi_hop",
+        "question": "Under which treaty's research provisions is the satellite carrying the FILAMENT-3 biosensor partly funded?",
+        "gold_answer": "Auralite Accord"
+      },
+      {
+        "id": "hop-05",
+        "type": "multi_hop",
+        "question": "In what year was the Halden Institute founded, and in which district of Veridian is it located?",
+        "gold_answer": "1991, Veridian Heights"
+      },
+      {
+        "id": "hop-06",
+        "type": "multi_hop",
+        "question": "Who was the lead negotiator of the treaty signed at Veridian's City Hall in November 1987?",
+        "gold_answer": "Iola Penmarrick"
+      },
+      {
+        "id": "hop-07",
+        "type": "multi_hop",
+        "question": "Approximately how many years old, as of 2023, is the research institute that built the FILAMENT-3 biosensor?",
+        "gold_answer": "32 years"
+      },
+      {
+        "id": "hop-08",
+        "type": "multi_hop",
+        "question": "What is the operating altitude (in kilometers) of the satellite that helps fulfill the Auralite Accord's space-based atmospheric research allocation?",
+        "gold_answer": "542 km"
+      },
+      {
+        "id": "dist-01",
+        "type": "distractor",
+        "question": "In what year was MERIDIAN-7 (not MERIDIAN-6) launched?",
+        "gold_answer": "2019"
+      },
+      {
+        "id": "dist-02",
+        "type": "distractor",
+        "question": "Who is the current Director of the Halden Institute (not its founder)?",
+        "gold_answer": "Mei-Ling Forrester"
+      },
+      {
+        "id": "dist-03",
+        "type": "distractor",
+        "question": "What was the original term length of the Auralite Accord (before its 2012 renewal)?",
+        "gold_answer": "25 years"
+      },
+      {
+        "id": "dist-04",
+        "type": "distractor",
+        "question": "What was Veridian's population per the 2022 census (not the 2010 census)?",
+        "gold_answer": "2,847,000"
+      },
+      {
+        "id": "dist-05",
+        "type": "distractor",
+        "question": "What is the end-of-life solar-array power output of MERIDIAN-7 (not MERIDIAN-6)?",
+        "gold_answer": "4.2 kilowatts"
+      },
+      {
+        "id": "dist-06",
+        "type": "distractor",
+        "question": "In what year was the Crescent Bridge (not the Saren Bridge) built?",
+        "gold_answer": "1932"
+      },
+      {
+        "id": "dist-07",
+        "type": "distractor",
+        "question": "What was the Halden Institute's annual operating budget for the 2023 fiscal year?",
+        "gold_answer": "$47.3 million"
+      },
+      {
+        "id": "dist-08",
+        "type": "distractor",
+        "question": "Who is the principal investigator (not the deputy principal investigator) of the MERIDIAN-7 mission?",
+        "gold_answer": "Henrik Voss"
+      },
+      {
+        "id": "halluc-01",
+        "type": "hallucination",
+        "question": "What is the population of the city of Halden?",
+        "gold_answer": "NOT_IN_CORPUS"
+      },
+      {
+        "id": "halluc-02",
+        "type": "hallucination",
+        "question": "Who succeeded Dr. Mei-Ling Forrester as Director of the Halden Institute?",
+        "gold_answer": "NOT_IN_CORPUS"
+      },
+      {
+        "id": "halluc-03",
+        "type": "hallucination",
+        "question": "What were the science objectives of the MERIDIAN-8 mission?",
+        "gold_answer": "NOT_IN_CORPUS"
+      },
+      {
+        "id": "halluc-04",
+        "type": "hallucination",
+        "question": "What is the annual salary of the Mayor of Veridian?",
+        "gold_answer": "NOT_IN_CORPUS"
+      },
+      {
+        "id": "halluc-05",
+        "type": "hallucination",
+        "question": "Which university has a formal degree-granting partnership with the Halden Institute?",
+        "gold_answer": "NOT_IN_CORPUS"
+      },
+      {
+        "id": "halluc-06",
+        "type": "hallucination",
+        "question": "In what language was the Auralite Accord originally drafted?",
+        "gold_answer": "NOT_IN_CORPUS"
+      },
+      {
+        "id": "sanity-01",
+        "type": "sanity",
+        "question": "In what year was the Halden Institute for Computational Mycology founded?",
+        "gold_answer": "1991"
+      },
+      {
+        "id": "sanity-02",
+        "type": "sanity",
+        "question": "Who is the current Mayor of Veridian?",
+        "gold_answer": "Quentin Aldermann"
+      },
+      {
+        "id": "sanity-03",
+        "type": "sanity",
+        "question": "On what date was MERIDIAN-7 launched?",
+        "gold_answer": "9 April 2019"
+      },
+      {
+        "id": "sanity-04",
+        "type": "sanity",
+        "question": "On what date was the Auralite Accord signed?",
+        "gold_answer": "14 November 1987"
+      }
+    ]
+  },
+  "runtime": {
+    "started_at": "2026-09-11T06:34:33.848356+00:00",
+    "finished_at": "2026-09-11T06:36:33.279738+00:00",
+    "wall_s": 119.4,
+    "total_cost_usd": 0.021089109999999994,
+    "llm_calls": 102,
+    "reasoning_tokens": 6198,
+    "truncation_retries": 0,
+    "per_approach": {
+      "full_context": {
+        "llm_calls": 102,
+        "reasoning_tokens": 6198,
+        "truncation_retries": 0
+      }
+    }
+  },
+  "results": {
+    "approaches": [
+      "full_context"
+    ],
+    "headline": [
+      {
+        "approach": "full_context",
+        "n": 102,
+        "n_seeds": 3,
+        "n_questions_per_seed": 34,
+        "em": 0.7549019607843137,
+        "em_seed_std": 0.01698089027028305,
+        "em_lo": 0.6666666666666666,
+        "em_hi": 0.8333333333333334,
+        "f1": 0.9147525676937441,
+        "f1_seed_std": 0.007487868782607566,
+        "f1_lo": 0.8794561157796451,
+        "f1_hi": 0.9472980859010272,
+        "accuracy": 0.7549019607843137,
+        "cost_usd": 0.007029703333333334,
+        "cost_seed_std": 0.0004089053991247022,
+        "cost_total_usd": 0.02108911,
+        "tokens_in": 289278.0,
+        "tokens_out": 2248.3333333333335,
+        "p50_ms": 1106.0949860063072,
+        "p95_ms": 5564.756999995249,
+        "errors": 0,
+        "llm_calls": 34.0,
+        "reasoning_tokens": 2066.0,
+        "truncation_retries": 0
+      }
+    ],
+    "per_probe": [
+      {
+        "approach": "full_context",
+        "probe_type": "needle",
+        "n": 24,
+        "em": 0.75,
+        "em_lo": 0.5833333333333334,
+        "em_hi": 0.9166666666666666,
+        "f1": 0.875,
+        "f1_lo": 0.7916666666666666,
+        "f1_hi": 0.9583333333333334
+      },
+      {
+        "approach": "full_context",
+        "probe_type": "multi_hop",
+        "n": 24,
+        "em": 0.7083333333333334,
+        "em_lo": 0.5416666666666666,
+        "em_hi": 0.875,
+        "f1": 0.9055555555555556,
+        "f1_lo": 0.8388888888888889,
+        "f1_hi": 0.9667361111111107
+      },
+      {
+        "approach": "full_context",
+        "probe_type": "distractor",
+        "n": 24,
+        "em": 0.5,
+        "em_lo": 0.2916666666666667,
+        "em_hi": 0.7083333333333334,
+        "f1": 0.8571428571428572,
+        "f1_lo": 0.7797619047619048,
+        "f1_hi": 0.9262202380952379
+      },
+      {
+        "approach": "full_context",
+        "probe_type": "hallucination",
+        "n": 18,
+        "em": 1.0,
+        "em_lo": 1.0,
+        "em_hi": 1.0,
+        "f1": 1.0,
+        "f1_lo": 1.0,
+        "f1_hi": 1.0
+      },
+      {
+        "approach": "full_context",
+        "probe_type": "sanity",
+        "n": 12,
+        "em": 1.0,
+        "em_lo": 1.0,
+        "em_hi": 1.0,
+        "f1": 1.0,
+        "f1_lo": 1.0,
+        "f1_hi": 1.0
+      }
+    ],
+    "pairwise_em": {
+      "full_context": {
+        "full_context": 1.0
+      }
+    },
+    "pairwise_f1": {
+      "full_context": {
+        "full_context": 1.0
+      }
+    },
+    "win_matrix": {
+      "full_context": {
+        "full_context": {
+          "wins": 0,
+          "losses": 0,
+          "ties": 0,
+          "n": 0
+        }
+      }
+    },
+    "questions": [
+      {
+        "qid": "needle-01",
+        "type": "needle",
+        "gold": "MULBERRY-7Q",
+        "question_text": "What is the Halden Institute's archive password for the 2019 Constanin papers?",
+        "predictions": {
+          "full_context": {
+            "pred": "MULBERRY-7Q",
+            "em": 1.0,
+            "f1": 1.0,
+            "correct": 1,
+            "correct_rate": 1.0,
+            "n_seeds": 3,
+            "preds": [
+              {
+                "repeat": 0,
+                "pred": "MULBERRY-7Q",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.0008636,
+                "latency_ms": 1320.6,
+                "error": null
+              },
+              {
+                "repeat": 1,
+                "pred": "MULBERRY-7Q",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00018321,
+                "latency_ms": 1064.7,
+                "error": null
+              },
+              {
+                "repeat": 2,
+                "pred": "MULBERRY-7Q",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00021366,
+                "latency_ms": 4663.8,
+                "error": null
+              }
+            ]
+          }
+        }
+      },
+      {
+        "qid": "needle-02",
+        "type": "needle",
+        "gold": "0.46 ppm",
+        "question_text": "What chlorination ratio (in ppm) does the Veridian municipal water system contain at point of distribution?",
+        "predictions": {
+          "full_context": {
+            "pred": "0.46 ppm",
+            "em": 1.0,
+            "f1": 1.0,
+            "correct": 1,
+            "correct_rate": 1.0,
+            "n_seeds": 3,
+            "preds": [
+              {
+                "repeat": 0,
+                "pred": "0.46 ppm",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00019924,
+                "latency_ms": 805.1,
+                "error": null
+              },
+              {
+                "repeat": 1,
+                "pred": "0.46 ppm",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00018388,
+                "latency_ms": 538.9,
+                "error": null
+              },
+              {
+                "repeat": 2,
+                "pred": "0.46 ppm",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00019416,
+                "latency_ms": 1539.3,
+                "error": null
+              }
+            ]
+          }
+        }
+      },
+      {
+        "qid": "needle-03",
+        "type": "needle",
+        "gold": "M7-RX-204-A",
+        "question_text": "What is the internal Consortium designator assigned to the MERIDIAN-7 satellite?",
+        "predictions": {
+          "full_context": {
+            "pred": "M7-RX-204-A",
+            "em": 1.0,
+            "f1": 1.0,
+            "correct": 1,
+            "correct_rate": 1.0,
+            "n_seeds": 3,
+            "preds": [
+              {
+                "repeat": 0,
+                "pred": "M7-RX-204-A",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00020269,
+                "latency_ms": 1240.7,
+                "error": null
+              },
+              {
+                "repeat": 1,
+                "pred": "M7-RX-204-A",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00021498,
+                "latency_ms": 2527.0,
+                "error": null
+              },
+              {
+                "repeat": 2,
+                "pred": "M7-RX-204-A",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00021161,
+                "latency_ms": 2460.5,
+                "error": null
+              }
+            ]
+          }
+        }
+      },
+      {
+        "qid": "needle-04",
+        "type": "needle",
+        "gold": "4.832 GHz",
+        "question_text": "At what frequency does MERIDIAN-7's primary telemetry channel operate?",
+        "predictions": {
+          "full_context": {
+            "pred": "4.832 GHz",
+            "em": 1.0,
+            "f1": 1.0,
+            "correct": 1,
+            "correct_rate": 1.0,
+            "n_seeds": 3,
+            "preds": [
+              {
+                "repeat": 0,
+                "pred": "4.832 GHz",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00019934,
+                "latency_ms": 845.0,
+                "error": null
+              },
+              {
+                "repeat": 1,
+                "pred": "4.832 GHz",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00018398,
+                "latency_ms": 573.8,
+                "error": null
+              },
+              {
+                "repeat": 2,
+                "pred": "4.832 GHz",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00020966,
+                "latency_ms": 2380.7,
+                "error": null
+              }
+            ]
+          }
+        }
+      },
+      {
+        "qid": "needle-05",
+        "type": "needle",
+        "gold": "12%",
+        "question_text": "What percentage of the Auralite Accord's joint research fund does Article 7-bis allocate to space-based atmospheric research?",
+        "predictions": {
+          "full_context": {
+            "pred": "12%",
+            "em": 1.0,
+            "f1": 1.0,
+            "correct": 1,
+            "correct_rate": 1.0,
+            "n_seeds": 3,
+            "preds": [
+              {
+                "repeat": 0,
+                "pred": "12%",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00019824,
+                "latency_ms": 738.8,
+                "error": null
+              },
+              {
+                "repeat": 1,
+                "pred": "12%",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00018218,
+                "latency_ms": 442.6,
+                "error": null
+              },
+              {
+                "repeat": 2,
+                "pred": "12%",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00017264,
+                "latency_ms": 582.9,
+                "error": null
+              }
+            ]
+          }
+        }
+      },
+      {
+        "qid": "needle-06",
+        "type": "needle",
+        "gold": "178",
+        "question_text": "How many researchers, technicians, and administrative staff did the Halden Institute employ as of the 2023 annual report?",
+        "predictions": {
+          "full_context": {
+            "pred": "178",
+            "em": 1.0,
+            "f1": 1.0,
+            "correct": 1,
+            "correct_rate": 1.0,
+            "n_seeds": 3,
+            "preds": [
+              {
+                "repeat": 0,
+                "pred": "178",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00018218,
+                "latency_ms": 521.1,
+                "error": null
+              },
+              {
+                "repeat": 1,
+                "pred": "178",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00017194,
+                "latency_ms": 542.6,
+                "error": null
+              },
+              {
+                "repeat": 2,
+                "pred": "178",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00017194,
+                "latency_ms": 375.0,
+                "error": null
+              }
+            ]
+          }
+        }
+      },
+      {
+        "qid": "needle-07",
+        "type": "needle",
+        "gold": "7 years",
+        "question_text": "What was the planned nominal mission duration of MERIDIAN-7 from launch?",
+        "predictions": {
+          "full_context": {
+            "pred": "Seven years",
+            "em": 0.0,
+            "f1": 0.5,
+            "correct": 0,
+            "correct_rate": 0.0,
+            "n_seeds": 3,
+            "preds": [
+              {
+                "repeat": 0,
+                "pred": "Seven years",
+                "em": 0,
+                "f1": 0.5,
+                "correct": 0,
+                "cost_usd": 0.00020858,
+                "latency_ms": 2055.0,
+                "error": null
+              },
+              {
+                "repeat": 1,
+                "pred": "Seven years",
+                "em": 0,
+                "f1": 0.5,
+                "correct": 0,
+                "cost_usd": 0.00018141,
+                "latency_ms": 851.7,
+                "error": null
+              },
+              {
+                "repeat": 2,
+                "pred": "Seven years",
+                "em": 0,
+                "f1": 0.5,
+                "correct": 0,
+                "cost_usd": 0.00020591,
+                "latency_ms": 2011.1,
+                "error": null
+              }
+            ]
+          }
+        }
+      },
+      {
+        "qid": "needle-08",
+        "type": "needle",
+        "gold": "14.5",
+        "question_text": "What is the constant ambient temperature (in degrees Celsius) maintained in the Halden Institute's Sublimary facility?",
+        "predictions": {
+          "full_context": {
+            "pred": "14.5 degrees Celsius",
+            "em": 0.0,
+            "f1": 0.5,
+            "correct": 0,
+            "correct_rate": 0.0,
+            "n_seeds": 3,
+            "preds": [
+              {
+                "repeat": 0,
+                "pred": "14.5 degrees Celsius",
+                "em": 0,
+                "f1": 0.5,
+                "correct": 0,
+                "cost_usd": 0.00018523,
+                "latency_ms": 579.0,
+                "error": null
+              },
+              {
+                "repeat": 1,
+                "pred": "14.5 degrees Celsius",
+                "em": 0,
+                "f1": 0.5,
+                "correct": 0,
+                "cost_usd": 0.00021244,
+                "latency_ms": 2758.0,
+                "error": null
+              },
+              {
+                "repeat": 2,
+                "pred": "14.5 degrees Celsius",
+                "em": 0,
+                "f1": 0.5,
+                "correct": 0,
+                "cost_usd": 0.00021594,
+                "latency_ms": 2854.2,
+                "error": null
+              }
+            ]
+          }
+        }
+      },
+      {
+        "qid": "hop-01",
+        "type": "multi_hop",
+        "gold": "Veridian",
+        "question_text": "In what city is the institute that built the FILAMENT-3 biosensor headquartered?",
+        "predictions": {
+          "full_context": {
+            "pred": "Veridian",
+            "em": 1.0,
+            "f1": 1.0,
+            "correct": 1,
+            "correct_rate": 1.0,
+            "n_seeds": 3,
+            "preds": [
+              {
+                "repeat": 0,
+                "pred": "Veridian",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00018138,
+                "latency_ms": 523.5,
+                "error": null
+              },
+              {
+                "repeat": 1,
+                "pred": "Veridian",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00019656,
+                "latency_ms": 1526.8,
+                "error": null
+              },
+              {
+                "repeat": 2,
+                "pred": "Veridian",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00019971,
+                "latency_ms": 1800.0,
+                "error": null
+              }
+            ]
+          }
+        }
+      },
+      {
+        "qid": "hop-02",
+        "type": "multi_hop",
+        "gold": "Quentin Aldermann",
+        "question_text": "Who is the mayor of the city where the Auralite Accord was signed?",
+        "predictions": {
+          "full_context": {
+            "pred": "Quentin Aldermann",
+            "em": 1.0,
+            "f1": 1.0,
+            "correct": 1,
+            "correct_rate": 1.0,
+            "n_seeds": 3,
+            "preds": [
+              {
+                "repeat": 0,
+                "pred": "Quentin Aldermann",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00020193,
+                "latency_ms": 1543.2,
+                "error": null
+              },
+              {
+                "repeat": 1,
+                "pred": "Quentin Aldermann",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00019891,
+                "latency_ms": 1940.5,
+                "error": null
+              },
+              {
+                "repeat": 2,
+                "pred": "Quentin Aldermann",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00019576,
+                "latency_ms": 1390.8,
+                "error": null
+              }
+            ]
+          }
+        }
+      },
+      {
+        "qid": "hop-03",
+        "type": "multi_hop",
+        "gold": "Halden Institute for Computational Mycology",
+        "question_text": "The MERIDIAN-7 satellite carries a biosensor instrument from which research institute?",
+        "predictions": {
+          "full_context": {
+            "pred": "Halden Institute for Computational Mycology",
+            "em": 1.0,
+            "f1": 1.0,
+            "correct": 1,
+            "correct_rate": 1.0,
+            "n_seeds": 3,
+            "preds": [
+              {
+                "repeat": 0,
+                "pred": "Halden Institute for Computational Mycology",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00019993,
+                "latency_ms": 1321.2,
+                "error": null
+              },
+              {
+                "repeat": 1,
+                "pred": "The Halden Institute for Computational Mycology",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00017906,
+                "latency_ms": 594.9,
+                "error": null
+              },
+              {
+                "repeat": 2,
+                "pred": "The Halden Institute for Computational Mycology",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00018291,
+                "latency_ms": 672.0,
+                "error": null
+              }
+            ]
+          }
+        }
+      },
+      {
+        "qid": "hop-04",
+        "type": "multi_hop",
+        "gold": "Auralite Accord",
+        "question_text": "Under which treaty's research provisions is the satellite carrying the FILAMENT-3 biosensor partly funded?",
+        "predictions": {
+          "full_context": {
+            "pred": "The Auralite Accord",
+            "em": 1.0,
+            "f1": 1.0,
+            "correct": 1,
+            "correct_rate": 1.0,
+            "n_seeds": 3,
+            "preds": [
+              {
+                "repeat": 0,
+                "pred": "The Auralite Accord",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00019988,
+                "latency_ms": 1209.9,
+                "error": null
+              },
+              {
+                "repeat": 1,
+                "pred": "The Auralite Accord",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00027561,
+                "latency_ms": 7031.1,
+                "error": null
+              },
+              {
+                "repeat": 2,
+                "pred": "The Auralite Accord",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00019091,
+                "latency_ms": 1454.9,
+                "error": null
+              }
+            ]
+          }
+        }
+      },
+      {
+        "qid": "hop-05",
+        "type": "multi_hop",
+        "gold": "1991, Veridian Heights",
+        "question_text": "In what year was the Halden Institute founded, and in which district of Veridian is it located?",
+        "predictions": {
+          "full_context": {
+            "pred": "1991, Veridian Heights",
+            "em": 1.0,
+            "f1": 1.0,
+            "correct": 1,
+            "correct_rate": 1.0,
+            "n_seeds": 3,
+            "preds": [
+              {
+                "repeat": 0,
+                "pred": "1991, Veridian Heights",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00018573,
+                "latency_ms": 799.4,
+                "error": null
+              },
+              {
+                "repeat": 1,
+                "pred": "1991, Veridian Heights",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00018573,
+                "latency_ms": 720.1,
+                "error": null
+              },
+              {
+                "repeat": 2,
+                "pred": "1991; Veridian Heights",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00017816,
+                "latency_ms": 435.9,
+                "error": null
+              }
+            ]
+          }
+        }
+      },
+      {
+        "qid": "hop-06",
+        "type": "multi_hop",
+        "gold": "Iola Penmarrick",
+        "question_text": "Who was the lead negotiator of the treaty signed at Veridian's City Hall in November 1987?",
+        "predictions": {
+          "full_context": {
+            "pred": "Ambassador Iola Penmarrick",
+            "em": 0.0,
+            "f1": 0.8,
+            "correct": 0,
+            "correct_rate": 0.0,
+            "n_seeds": 3,
+            "preds": [
+              {
+                "repeat": 0,
+                "pred": "Ambassador Iola Penmarrick",
+                "em": 0,
+                "f1": 0.8,
+                "correct": 0,
+                "cost_usd": 0.00019588,
+                "latency_ms": 1321.1,
+                "error": null
+              },
+              {
+                "repeat": 1,
+                "pred": "Ambassador Iola Penmarrick",
+                "em": 0,
+                "f1": 0.8,
+                "correct": 0,
+                "cost_usd": 0.00023158,
+                "latency_ms": 3935.6,
+                "error": null
+              },
+              {
+                "repeat": 2,
+                "pred": "Ambassador Iola Penmarrick",
+                "em": 0,
+                "f1": 0.8,
+                "correct": 0,
+                "cost_usd": 0.00022366,
+                "latency_ms": 3390.8,
+                "error": null
+              }
+            ]
+          }
+        }
+      },
+      {
+        "qid": "hop-07",
+        "type": "multi_hop",
+        "gold": "32 years",
+        "question_text": "Approximately how many years old, as of 2023, is the research institute that built the FILAMENT-3 biosensor?",
+        "predictions": {
+          "full_context": {
+            "pred": "32 years (founded 1991)",
+            "em": 0.6666666666666666,
+            "f1": 0.8889,
+            "correct": 1,
+            "correct_rate": 0.6667,
+            "n_seeds": 3,
+            "preds": [
+              {
+                "repeat": 0,
+                "pred": "32 years (founded 1991)",
+                "em": 0,
+                "f1": 0.6667,
+                "correct": 0,
+                "cost_usd": 0.00019173,
+                "latency_ms": 1030.0,
+                "error": null
+              },
+              {
+                "repeat": 1,
+                "pred": "32 years",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00018254,
+                "latency_ms": 1005.6,
+                "error": null
+              },
+              {
+                "repeat": 2,
+                "pred": "32 years",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00017904,
+                "latency_ms": 839.0,
+                "error": null
+              }
+            ]
+          }
+        }
+      },
+      {
+        "qid": "hop-08",
+        "type": "multi_hop",
+        "gold": "542 km",
+        "question_text": "What is the operating altitude (in kilometers) of the satellite that helps fulfill the Auralite Accord's space-based atmospheric research allocation?",
+        "predictions": {
+          "full_context": {
+            "pred": "542 kilometers",
+            "em": 0.0,
+            "f1": 0.5556,
+            "correct": 0,
+            "correct_rate": 0.0,
+            "n_seeds": 3,
+            "preds": [
+              {
+                "repeat": 0,
+                "pred": "542 kilometers",
+                "em": 0,
+                "f1": 0.5,
+                "correct": 0,
+                "cost_usd": 0.00019183,
+                "latency_ms": 922.3,
+                "error": null
+              },
+              {
+                "repeat": 1,
+                "pred": "542 kilometers",
+                "em": 0,
+                "f1": 0.5,
+                "correct": 0,
+                "cost_usd": 0.00018229,
+                "latency_ms": 935.7,
+                "error": null
+              },
+              {
+                "repeat": 2,
+                "pred": "542",
+                "em": 0,
+                "f1": 0.6667,
+                "correct": 0,
+                "cost_usd": 0.00021799,
+                "latency_ms": 3325.6,
+                "error": null
+              }
+            ]
+          }
+        }
+      },
+      {
+        "qid": "dist-01",
+        "type": "distractor",
+        "gold": "2019",
+        "question_text": "In what year was MERIDIAN-7 (not MERIDIAN-6) launched?",
+        "predictions": {
+          "full_context": {
+            "pred": "2019",
+            "em": 1.0,
+            "f1": 1.0,
+            "correct": 1,
+            "correct_rate": 1.0,
+            "n_seeds": 3,
+            "preds": [
+              {
+                "repeat": 0,
+                "pred": "2019",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00022043,
+                "latency_ms": 3137.2,
+                "error": null
+              },
+              {
+                "repeat": 1,
+                "pred": "2019",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00018101,
+                "latency_ms": 573.7,
+                "error": null
+              },
+              {
+                "repeat": 2,
+                "pred": "2019",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00018136,
+                "latency_ms": 665.6,
+                "error": null
+              }
+            ]
+          }
+        }
+      },
+      {
+        "qid": "dist-02",
+        "type": "distractor",
+        "gold": "Mei-Ling Forrester",
+        "question_text": "Who is the current Director of the Halden Institute (not its founder)?",
+        "predictions": {
+          "full_context": {
+            "pred": "Dr. Mei-Ling Forrester",
+            "em": 0.0,
+            "f1": 0.8571,
+            "correct": 0,
+            "correct_rate": 0.0,
+            "n_seeds": 3,
+            "preds": [
+              {
+                "repeat": 0,
+                "pred": "Dr. Mei-Ling Forrester",
+                "em": 0,
+                "f1": 0.8571,
+                "correct": 0,
+                "cost_usd": 0.00018653,
+                "latency_ms": 857.9,
+                "error": null
+              },
+              {
+                "repeat": 1,
+                "pred": "Dr. Mei-Ling Forrester",
+                "em": 0,
+                "f1": 0.8571,
+                "correct": 0,
+                "cost_usd": 0.00018141,
+                "latency_ms": 681.7,
+                "error": null
+              },
+              {
+                "repeat": 2,
+                "pred": "Dr. Mei-Ling Forrester",
+                "em": 0,
+                "f1": 0.8571,
+                "correct": 0,
+                "cost_usd": 0.00017826,
+                "latency_ms": 506.4,
+                "error": null
+              }
+            ]
+          }
+        }
+      },
+      {
+        "qid": "dist-03",
+        "type": "distractor",
+        "gold": "25 years",
+        "question_text": "What was the original term length of the Auralite Accord (before its 2012 renewal)?",
+        "predictions": {
+          "full_context": {
+            "pred": "Twenty-five years",
+            "em": 0.0,
+            "f1": 0.4,
+            "correct": 0,
+            "correct_rate": 0.0,
+            "n_seeds": 3,
+            "preds": [
+              {
+                "repeat": 0,
+                "pred": "Twenty-five years",
+                "em": 0,
+                "f1": 0.4,
+                "correct": 0,
+                "cost_usd": 0.00018973,
+                "latency_ms": 986.6,
+                "error": null
+              },
+              {
+                "repeat": 1,
+                "pred": "Twenty-five years",
+                "em": 0,
+                "f1": 0.4,
+                "correct": 0,
+                "cost_usd": 0.00017691,
+                "latency_ms": 357.4,
+                "error": null
+              },
+              {
+                "repeat": 2,
+                "pred": "Twenty-five years",
+                "em": 0,
+                "f1": 0.4,
+                "correct": 0,
+                "cost_usd": 0.00017831,
+                "latency_ms": 929.7,
+                "error": null
+              }
+            ]
+          }
+        }
+      },
+      {
+        "qid": "dist-04",
+        "type": "distractor",
+        "gold": "2,847,000",
+        "question_text": "What was Veridian's population per the 2022 census (not the 2010 census)?",
+        "predictions": {
+          "full_context": {
+            "pred": "2,847,000",
+            "em": 1.0,
+            "f1": 1.0,
+            "correct": 1,
+            "correct_rate": 1.0,
+            "n_seeds": 3,
+            "preds": [
+              {
+                "repeat": 0,
+                "pred": "2,847,000",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00018518,
+                "latency_ms": 582.6,
+                "error": null
+              },
+              {
+                "repeat": 1,
+                "pred": "**2,847,000**",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00018076,
+                "latency_ms": 1212.1,
+                "error": null
+              },
+              {
+                "repeat": 2,
+                "pred": "2,847,000",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00018006,
+                "latency_ms": 922.3,
+                "error": null
+              }
+            ]
+          }
+        }
+      },
+      {
+        "qid": "dist-05",
+        "type": "distractor",
+        "gold": "4.2 kilowatts",
+        "question_text": "What is the end-of-life solar-array power output of MERIDIAN-7 (not MERIDIAN-6)?",
+        "predictions": {
+          "full_context": {
+            "pred": "4.2 kilowatts",
+            "em": 1.0,
+            "f1": 1.0,
+            "correct": 1,
+            "correct_rate": 1.0,
+            "n_seeds": 3,
+            "preds": [
+              {
+                "repeat": 0,
+                "pred": "4.2 kilowatts",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00018593,
+                "latency_ms": 697.1,
+                "error": null
+              },
+              {
+                "repeat": 1,
+                "pred": "4.2 kilowatts",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00017954,
+                "latency_ms": 1427.8,
+                "error": null
+              },
+              {
+                "repeat": 2,
+                "pred": "4.2 kilowatts",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00017954,
+                "latency_ms": 1508.8,
+                "error": null
+              }
+            ]
+          }
+        }
+      },
+      {
+        "qid": "dist-06",
+        "type": "distractor",
+        "gold": "1932",
+        "question_text": "In what year was the Crescent Bridge (not the Saren Bridge) built?",
+        "predictions": {
+          "full_context": {
+            "pred": "1932",
+            "em": 1.0,
+            "f1": 1.0,
+            "correct": 1,
+            "correct_rate": 1.0,
+            "n_seeds": 3,
+            "preds": [
+              {
+                "repeat": 0,
+                "pred": "1932",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00018548,
+                "latency_ms": 684.9,
+                "error": null
+              },
+              {
+                "repeat": 1,
+                "pred": "1932",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00017651,
+                "latency_ms": 375.6,
+                "error": null
+              },
+              {
+                "repeat": 2,
+                "pred": "1932",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00017756,
+                "latency_ms": 825.1,
+                "error": null
+              }
+            ]
+          }
+        }
+      },
+      {
+        "qid": "dist-07",
+        "type": "distractor",
+        "gold": "$47.3 million",
+        "question_text": "What was the Halden Institute's annual operating budget for the 2023 fiscal year?",
+        "predictions": {
+          "full_context": {
+            "pred": "$47.3 million USD",
+            "em": 0.0,
+            "f1": 0.8,
+            "correct": 0,
+            "correct_rate": 0.0,
+            "n_seeds": 3,
+            "preds": [
+              {
+                "repeat": 0,
+                "pred": "$47.3 million USD",
+                "em": 0,
+                "f1": 0.8,
+                "correct": 0,
+                "cost_usd": 0.00018508,
+                "latency_ms": 511.7,
+                "error": null
+              },
+              {
+                "repeat": 1,
+                "pred": "$47.3 million USD",
+                "em": 0,
+                "f1": 0.8,
+                "correct": 0,
+                "cost_usd": 0.00018031,
+                "latency_ms": 774.2,
+                "error": null
+              },
+              {
+                "repeat": 2,
+                "pred": "$47.3 million USD",
+                "em": 0,
+                "f1": 0.8,
+                "correct": 0,
+                "cost_usd": 0.00018031,
+                "latency_ms": 869.8,
+                "error": null
+              }
+            ]
+          }
+        }
+      },
+      {
+        "qid": "dist-08",
+        "type": "distractor",
+        "gold": "Henrik Voss",
+        "question_text": "Who is the principal investigator (not the deputy principal investigator) of the MERIDIAN-7 mission?",
+        "predictions": {
+          "full_context": {
+            "pred": "Dr. Henrik Voss",
+            "em": 0.0,
+            "f1": 0.8,
+            "correct": 0,
+            "correct_rate": 0.0,
+            "n_seeds": 3,
+            "preds": [
+              {
+                "repeat": 0,
+                "pred": "Dr. Henrik Voss",
+                "em": 0,
+                "f1": 0.8,
+                "correct": 0,
+                "cost_usd": 0.00018843,
+                "latency_ms": 748.5,
+                "error": null
+              },
+              {
+                "repeat": 1,
+                "pred": "Dr. Henrik Voss",
+                "em": 0,
+                "f1": 0.8,
+                "correct": 0,
+                "cost_usd": 0.00017981,
+                "latency_ms": 736.2,
+                "error": null
+              },
+              {
+                "repeat": 2,
+                "pred": "Dr. Henrik Voss",
+                "em": 0,
+                "f1": 0.8,
+                "correct": 0,
+                "cost_usd": 0.00018331,
+                "latency_ms": 1027.3,
+                "error": null
+              }
+            ]
+          }
+        }
+      },
+      {
+        "qid": "halluc-01",
+        "type": "hallucination",
+        "gold": "NOT_IN_CORPUS",
+        "question_text": "What is the population of the city of Halden?",
+        "predictions": {
+          "full_context": {
+            "pred": "NOT_IN_CONTEXT",
+            "em": 1.0,
+            "f1": 1.0,
+            "correct": 1,
+            "correct_rate": 1.0,
+            "n_seeds": 3,
+            "preds": [
+              {
+                "repeat": 0,
+                "pred": "NOT_IN_CONTEXT",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00024353,
+                "latency_ms": 4014.1,
+                "error": null
+              },
+              {
+                "repeat": 1,
+                "pred": "NOT_IN_CONTEXT",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00024401,
+                "latency_ms": 4463.6,
+                "error": null
+              },
+              {
+                "repeat": 2,
+                "pred": "NOT_IN_CONTEXT",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00023771,
+                "latency_ms": 8412.0,
+                "error": null
+              }
+            ]
+          }
+        }
+      },
+      {
+        "qid": "halluc-02",
+        "type": "hallucination",
+        "gold": "NOT_IN_CORPUS",
+        "question_text": "Who succeeded Dr. Mei-Ling Forrester as Director of the Halden Institute?",
+        "predictions": {
+          "full_context": {
+            "pred": "NOT_IN_CONTEXT",
+            "em": 1.0,
+            "f1": 1.0,
+            "correct": 1,
+            "correct_rate": 1.0,
+            "n_seeds": 3,
+            "preds": [
+              {
+                "repeat": 0,
+                "pred": "NOT_IN_CONTEXT",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00018788,
+                "latency_ms": 698.1,
+                "error": null
+              },
+              {
+                "repeat": 1,
+                "pred": "NOT_IN_CONTEXT",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00019011,
+                "latency_ms": 1031.2,
+                "error": null
+              },
+              {
+                "repeat": 2,
+                "pred": "NOT_IN_CONTEXT",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00019571,
+                "latency_ms": 1661.2,
+                "error": null
+              }
+            ]
+          }
+        }
+      },
+      {
+        "qid": "halluc-03",
+        "type": "hallucination",
+        "gold": "NOT_IN_CORPUS",
+        "question_text": "What were the science objectives of the MERIDIAN-8 mission?",
+        "predictions": {
+          "full_context": {
+            "pred": "NOT_IN_CONTEXT",
+            "em": 1.0,
+            "f1": 1.0,
+            "correct": 1,
+            "correct_rate": 1.0,
+            "n_seeds": 3,
+            "preds": [
+              {
+                "repeat": 0,
+                "pred": "NOT_IN_CONTEXT",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00019928,
+                "latency_ms": 1438.0,
+                "error": null
+              },
+              {
+                "repeat": 1,
+                "pred": "NOT_IN_CONTEXT",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00020851,
+                "latency_ms": 2114.9,
+                "error": null
+              },
+              {
+                "repeat": 2,
+                "pred": "NOT_IN_CONTEXT",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00018506,
+                "latency_ms": 2194.6,
+                "error": null
+              }
+            ]
+          }
+        }
+      },
+      {
+        "qid": "halluc-04",
+        "type": "hallucination",
+        "gold": "NOT_IN_CORPUS",
+        "question_text": "What is the annual salary of the Mayor of Veridian?",
+        "predictions": {
+          "full_context": {
+            "pred": "NOT_IN_CONTEXT",
+            "em": 1.0,
+            "f1": 1.0,
+            "correct": 1,
+            "correct_rate": 1.0,
+            "n_seeds": 3,
+            "preds": [
+              {
+                "repeat": 0,
+                "pred": "NOT_IN_CONTEXT",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00023058,
+                "latency_ms": 3176.7,
+                "error": null
+              },
+              {
+                "repeat": 1,
+                "pred": "NOT_IN_CONTEXT",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00019711,
+                "latency_ms": 2051.5,
+                "error": null
+              },
+              {
+                "repeat": 2,
+                "pred": "NOT_IN_CONTEXT",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00018766,
+                "latency_ms": 1288.4,
+                "error": null
+              }
+            ]
+          }
+        }
+      },
+      {
+        "qid": "halluc-05",
+        "type": "hallucination",
+        "gold": "NOT_IN_CORPUS",
+        "question_text": "Which university has a formal degree-granting partnership with the Halden Institute?",
+        "predictions": {
+          "full_context": {
+            "pred": "NOT_IN_CONTEXT",
+            "em": 1.0,
+            "f1": 1.0,
+            "correct": 1,
+            "correct_rate": 1.0,
+            "n_seeds": 3,
+            "preds": [
+              {
+                "repeat": 0,
+                "pred": "NOT_IN_CONTEXT",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00032733,
+                "latency_ms": 8015.5,
+                "error": null
+              },
+              {
+                "repeat": 1,
+                "pred": "NOT_IN_CONTEXT",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00025676,
+                "latency_ms": 15926.7,
+                "error": null
+              },
+              {
+                "repeat": 2,
+                "pred": "NOT_IN_CONTEXT",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00061691,
+                "latency_ms": 61158.4,
+                "error": null
+              }
+            ]
+          }
+        }
+      },
+      {
+        "qid": "halluc-06",
+        "type": "hallucination",
+        "gold": "NOT_IN_CORPUS",
+        "question_text": "In what language was the Auralite Accord originally drafted?",
+        "predictions": {
+          "full_context": {
+            "pred": "NOT_IN_CONTEXT",
+            "em": 1.0,
+            "f1": 1.0,
+            "correct": 1,
+            "correct_rate": 1.0,
+            "n_seeds": 3,
+            "preds": [
+              {
+                "repeat": 0,
+                "pred": "NOT_IN_CONTEXT",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00022113,
+                "latency_ms": 2885.7,
+                "error": null
+              },
+              {
+                "repeat": 1,
+                "pred": "NOT_IN_CONTEXT",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00027621,
+                "latency_ms": 16908.2,
+                "error": null
+              },
+              {
+                "repeat": 2,
+                "pred": "NOT_IN_CONTEXT",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00019991,
+                "latency_ms": 6486.4,
+                "error": null
+              }
+            ]
+          }
+        }
+      },
+      {
+        "qid": "sanity-01",
+        "type": "sanity",
+        "gold": "1991",
+        "question_text": "In what year was the Halden Institute for Computational Mycology founded?",
+        "predictions": {
+          "full_context": {
+            "pred": "1991",
+            "em": 1.0,
+            "f1": 1.0,
+            "correct": 1,
+            "correct_rate": 1.0,
+            "n_seeds": 3,
+            "preds": [
+              {
+                "repeat": 0,
+                "pred": "1991",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00019843,
+                "latency_ms": 1341.3,
+                "error": null
+              },
+              {
+                "repeat": 1,
+                "pred": "1991",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00017686,
+                "latency_ms": 418.7,
+                "error": null
+              },
+              {
+                "repeat": 2,
+                "pred": "1991",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00018036,
+                "latency_ms": 4387.8,
+                "error": null
+              }
+            ]
+          }
+        }
+      },
+      {
+        "qid": "sanity-02",
+        "type": "sanity",
+        "gold": "Quentin Aldermann",
+        "question_text": "Who is the current Mayor of Veridian?",
+        "predictions": {
+          "full_context": {
+            "pred": "Quentin Aldermann",
+            "em": 1.0,
+            "f1": 1.0,
+            "correct": 1,
+            "correct_rate": 1.0,
+            "n_seeds": 3,
+            "preds": [
+              {
+                "repeat": 0,
+                "pred": "Quentin Aldermann",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00018128,
+                "latency_ms": 484.6,
+                "error": null
+              },
+              {
+                "repeat": 1,
+                "pred": "Quentin Aldermann",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00017616,
+                "latency_ms": 504.3,
+                "error": null
+              },
+              {
+                "repeat": 2,
+                "pred": "Quentin Aldermann",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00017791,
+                "latency_ms": 473.0,
+                "error": null
+              }
+            ]
+          }
+        }
+      },
+      {
+        "qid": "sanity-03",
+        "type": "sanity",
+        "gold": "9 April 2019",
+        "question_text": "On what date was MERIDIAN-7 launched?",
+        "predictions": {
+          "full_context": {
+            "pred": "9 April 2019",
+            "em": 1.0,
+            "f1": 1.0,
+            "correct": 1,
+            "correct_rate": 1.0,
+            "n_seeds": 3,
+            "preds": [
+              {
+                "repeat": 0,
+                "pred": "9 April 2019",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00018533,
+                "latency_ms": 574.8,
+                "error": null
+              },
+              {
+                "repeat": 1,
+                "pred": "9 April 2019",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00018126,
+                "latency_ms": 1230.6,
+                "error": null
+              },
+              {
+                "repeat": 2,
+                "pred": "9 April 2019",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00018161,
+                "latency_ms": 931.7,
+                "error": null
+              }
+            ]
+          }
+        }
+      },
+      {
+        "qid": "sanity-04",
+        "type": "sanity",
+        "gold": "14 November 1987",
+        "question_text": "On what date was the Auralite Accord signed?",
+        "predictions": {
+          "full_context": {
+            "pred": "14 November 1987",
+            "em": 1.0,
+            "f1": 1.0,
+            "correct": 1,
+            "correct_rate": 1.0,
+            "n_seeds": 3,
+            "preds": [
+              {
+                "repeat": 0,
+                "pred": "14 November 1987",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00018463,
+                "latency_ms": 528.5,
+                "error": null
+              },
+              {
+                "repeat": 1,
+                "pred": "14 November 1987",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00017881,
+                "latency_ms": 1068.9,
+                "error": null
+              },
+              {
+                "repeat": 2,
+                "pred": "14 November 1987",
+                "em": 1,
+                "f1": 1.0,
+                "correct": 1,
+                "cost_usd": 0.00018196,
+                "latency_ms": 3408.0,
+                "error": null
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "totals": {
+      "cost_usd": 0.021089109999999994,
+      "n_questions": 34,
+      "repeats": 3,
+      "n_graded": 102
+    }
+  },
+  "id": "20260911T063633Z_replay_z-ai-glm-5-3-flash_662a06"
+}

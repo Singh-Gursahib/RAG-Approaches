@@ -5,6 +5,7 @@ from fastapi import APIRouter, Depends, HTTPException
 
 from .. import service
 from ..deps import require_key
+from ..models_catalog import label_for
 from ..schemas import EstimateRequest, EstimateResponse, EvalRequest
 from ..sessions import STORE
 from ..streaming import sse_response
@@ -14,8 +15,9 @@ router = APIRouter(tags=["eval"])
 
 @router.post("/eval")
 def evaluate(req: EvalRequest, api_key: str = Depends(require_key)):
-    """Stream grading progress. Terminal `eval_done` event carries the full results
-    object (headline + per-probe CIs + pairwise significance + win-loss + per-question).
+    """Stream grading progress. The terminal `eval_done` event carries the full results
+    object (headline + per-probe CIs + pairwise significance + win-loss + per-question)
+    and the id of the saved result file.
     """
     session = STORE.get(req.session_id)
     if session is None:
@@ -25,6 +27,7 @@ def evaluate(req: EvalRequest, api_key: str = Depends(require_key)):
         )
 
     questions = [q.model_dump() for q in req.questions]
+    llm_cfg = req.llm.model_dump()
 
     def worker(emit):
         service.run_eval_worker(
@@ -32,11 +35,17 @@ def evaluate(req: EvalRequest, api_key: str = Depends(require_key)):
             questions=questions,
             approaches=req.approaches,
             retrieval=req.retrieval.model_dump(),
-            llm_cfg=req.llm.model_dump(),
+            llm_cfg=llm_cfg,
             price_cfg=req.price.model_dump(),
             api_key=api_key,
             soft_cap_usd=req.soft_cap_usd,
             emit=emit,
+            repeats=req.repeats,
+            save_meta={
+                "source": "custom",
+                "label": req.label or f"{label_for(llm_cfg['model'])} · custom evaluation · {len(questions)} Q",
+                "dataset": "custom",
+            },
         )
 
     return sse_response(worker)
@@ -53,5 +62,6 @@ def estimate(req: EstimateRequest) -> EstimateResponse:
         retrieval=req.retrieval.model_dump(),
         llm_cfg=req.llm.model_dump(),
         price_cfg=req.price.model_dump(),
+        repeats=req.repeats,
     )
     return EstimateResponse(**out)

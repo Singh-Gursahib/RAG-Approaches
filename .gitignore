@@ -47,6 +47,12 @@ frontend/web/.turbo/
 # Claude Code local settings
 .claude/
 
+# RAG Atlas walkthrough automation: local-only artifacts (rebuilt by the scripts)
+studio/docs/walkthrough/automation/node_modules/
+studio/docs/walkthrough/automation/.browser-state.json
+studio/docs/walkthrough/screenshots/doc-images/
+studio/docs/walkthrough/*.out
+
 # LaTeX build intermediates (keep the .pdf, drop the rest)
 paper/*.aux
 paper/*.log

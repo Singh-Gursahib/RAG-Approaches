@@ -6,7 +6,7 @@ import { Modal } from "@/components/ui/Modal";
 import { Button } from "@/components/ui/Button";
 
 const STEPS = [
-  { icon: KeyRound, title: "Bring your own key", body: "Add your Gemini API key from the header. It stays in your browser tab — never uploaded, never logged. You only spend on the runs you trigger." },
+  { icon: KeyRound, title: "Bring your own key", body: "Add your OpenRouter API key from the header, then pick any model. The key stays in your browser tab, is never stored or logged, and requests carry no app attribution. You only spend on the runs you trigger." },
   { icon: Upload, title: "Load a corpus", body: "In the Playground, paste or upload documents — or hit “Load sample” to start instantly. RAG Atlas shows exactly how it chunks them." },
   { icon: Layers, title: "Pick strategies", body: "Choose any mix of the seven RAG and non-RAG strategies. Each card explains what it does, when it shines, and where it struggles." },
   { icon: Play, title: "Run & watch", body: "Ask a question and watch each strategy retrieve and reason live — side by side, with real cost and latency as it streams." },

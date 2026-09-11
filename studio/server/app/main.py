@@ -1,12 +1,15 @@
-"""RAG Atlas API — application entrypoint.
+"""RAG Atlas API: application entrypoint.
 
 Run (from repo root, with the venv active):
     .venv/bin/uvicorn studio.server.app.main:app --reload --port 8000
 
 Design rules enforced here:
   * CORS is restricted to the local Next.js dev origin.
-  * The user's Gemini API key travels in the `X-Gemini-Key` header per request
-    and is NEVER logged or persisted (see app/deps.py in Phase 2).
+  * Model calls go to OpenRouter from this server, never from the browser, and
+    carry no app-attribution headers (see app/openrouter.py).
+  * The OpenRouter key comes from the `X-OpenRouter-Key` request header, or from
+    OPENROUTER_API_KEY in the repo's .env for local use. It is never logged or
+    persisted (see app/deps.py).
 """
 from __future__ import annotations
 
@@ -16,6 +19,7 @@ import sys
 from contextlib import asynccontextmanager
 from pathlib import Path
 
+from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -29,7 +33,11 @@ _SRC = _REPO_ROOT / "src"
 if _SRC.is_dir() and str(_SRC) not in sys.path:
     sys.path.insert(0, str(_SRC))
 
-from .routers import corpus, eval as eval_router, keys, meta, replay, run  # noqa: E402
+# Optional local configuration (e.g. OPENROUTER_API_KEY). Real environment wins.
+load_dotenv(_REPO_ROOT / ".env", override=False)
+
+from .deps import server_key  # noqa: E402
+from .routers import corpus, eval as eval_router, keys, meta, replay, results, run  # noqa: E402
 
 logger = logging.getLogger("rag_atlas")
 
@@ -56,6 +64,7 @@ async def lifespan(app: FastAPI):
         "Note: local embedding + reranker models download on first use "
         "(~80MB MiniLM, ~1GB bge-reranker). First live run will be slow."
     )
+    logger.info("OpenRouter server key: %s", "configured" if server_key() else "not configured")
     logger.info("Repo root: %s", _REPO_ROOT)
     yield
     logger.info("RAG Atlas API shutting down.")
@@ -64,7 +73,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title="RAG Atlas API",
     description="Live, model-agnostic comparison harness for RAG / non-RAG strategies.",
-    version="0.1.0",
+    version="0.2.0",
     lifespan=lifespan,
 )
 
@@ -82,6 +91,7 @@ app.include_router(corpus.router)
 app.include_router(run.router)
 app.include_router(eval_router.router)
 app.include_router(replay.router)
+app.include_router(results.router)
 
 
 @app.get("/")

@@ -1,8 +1,8 @@
 // Typed fetch client for the RAG Atlas backend.
 //
 // Requests go to /api/* which Next rewrites to FastAPI (see next.config.mjs), so
-// the browser stays same-origin. The Gemini key is attached per-request from
-// sessionStorage via the X-Gemini-Key header on endpoints that spend.
+// the browser stays same-origin. The OpenRouter key is attached per-request from
+// sessionStorage via the X-OpenRouter-Key header on endpoints that spend.
 
 import { getKey } from "./key";
 import type {
@@ -14,7 +14,13 @@ import type {
   HealthResponse,
   KeyCheckResponse,
   LLMConfig,
+  ModelInfo,
+  ModelsResponse,
+  PricingResponse,
+  ReplayMeta,
   RetrievalConfig,
+  SavedResult,
+  SavedResultSummary,
   SessionCreateResponse,
 } from "./types";
 
@@ -44,7 +50,7 @@ async function request<T>(
   if (init.body) headers.set("Content-Type", "application/json");
   if (opts.withKey) {
     const key = getKey();
-    if (key) headers.set("X-Gemini-Key", key);
+    if (key) headers.set("X-OpenRouter-Key", key);
   }
 
   let resp: Response;
@@ -72,10 +78,13 @@ export const api = {
   approaches: () =>
     request<{ approaches: ApproachCatalogEntry[] }>("/approaches"),
 
-  pricing: () =>
-    request<{ input_per_m: number; output_per_m: number; currency: string; note: string }>(
-      "/pricing",
-    ),
+  models: () => request<ModelsResponse>("/models"),
+
+  modelLookup: (id: string) =>
+    request<ModelInfo>(`/models/lookup?id=${encodeURIComponent(id)}`),
+
+  pricing: (model?: string) =>
+    request<PricingResponse>(`/pricing${model ? `?model=${encodeURIComponent(model)}` : ""}`),
 
   checkKey: (signal?: AbortSignal) =>
     request<KeyCheckResponse>("/key/check", { method: "POST" }, { withKey: true, signal }),
@@ -104,18 +113,16 @@ export const api = {
     n_docs: number;
     retrieval?: RetrievalConfig;
     llm?: LLMConfig;
+    repeats?: number;
   }) =>
     request<EstimateResponse>("/eval/estimate", {
       method: "POST",
       body: JSON.stringify(params),
     }),
 
-  replayMeta: () =>
-    request<{
-      corpus: { n_docs: number; total_words: number; documents: { doc_id: string; words: number }[] };
-      eval_set: { n_questions: number; by_probe_type: Record<string, number> };
-      paper_headline: { approach: string; em: number; f1: number; cost_usd: number }[];
-      model: string;
-      note: string;
-    }>("/replay/meta"),
+  replayMeta: () => request<ReplayMeta>("/replay/meta"),
+
+  results: () => request<{ results: SavedResultSummary[] }>("/results"),
+
+  result: (id: string) => request<SavedResult>(`/results/${encodeURIComponent(id)}`),
 };

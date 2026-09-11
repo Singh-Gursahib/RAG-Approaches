@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ArrowRight, Upload, GitCompare, Compass } from "lucide-react";
 import { Reveal } from "@/components/ui/Reveal";
 import { BackendStatus } from "@/components/shell/BackendStatus";
-import { APPROACHES, APPROACH_ORDER } from "@/lib/approaches";
+import { ApproachExplorer } from "@/components/home/ApproachExplorer";
 
 export default function HomePage() {
   return (
@@ -23,7 +23,7 @@ export default function HomePage() {
           <p className="mt-8 max-w-[560px] text-[17px] leading-relaxed text-ink-muted">
             Seven RAG and non-RAG strategies, run live on{" "}
             <span className="text-ink">your own documents</span> with{" "}
-            <span className="text-ink">your own Gemini key</span>. Compare answers, cost,
+            <span className="text-ink">any model on OpenRouter</span>. Compare answers, cost,
             latency, and hallucination risk side by side — then get a recommendation tuned to
             your domain.
           </p>
@@ -50,43 +50,8 @@ export default function HomePage() {
         </Reveal>
       </section>
 
-      {/* ── APPROACH STRIP ───────────────────────────────────────────────── */}
-      <section className="shell pb-20">
-        <Reveal delay={0.24}>
-          <div className="card overflow-hidden p-0">
-            <div className="flex items-center justify-between border-b border-line px-6 py-4">
-              <p className="eyebrow">Seven strategies, one harness</p>
-              <p className="hidden text-[12.5px] text-ink-faint sm:block">
-                4 RAG · 3 non-RAG · identical answer prompt
-              </p>
-            </div>
-            <ul className="grid grid-cols-1 divide-y divide-line sm:grid-cols-2 sm:divide-y-0 lg:grid-cols-4">
-              {APPROACH_ORDER.map((k, i) => {
-                const a = APPROACHES[k];
-                return (
-                  <Reveal as="li" key={k} delay={0.28 + i * 0.04}>
-                    <div className="group flex h-full flex-col gap-2 border-line p-5 transition-colors hover:bg-canvas/60 sm:border-r">
-                      <span className="flex items-center gap-2">
-                        <span
-                          className="h-2.5 w-2.5 rounded-full"
-                          style={{ backgroundColor: a.color }}
-                        />
-                        <span className="font-medium tracking-tight">{a.label}</span>
-                      </span>
-                      <span className="text-[13px] leading-snug text-ink-muted">
-                        {a.tagline}
-                      </span>
-                      <span className="mt-auto font-mono text-[10.5px] uppercase tracking-[0.14em] text-ink-faint">
-                        {a.family}
-                      </span>
-                    </div>
-                  </Reveal>
-                );
-              })}
-            </ul>
-          </div>
-        </Reveal>
-      </section>
+      {/* ── APPROACH EXPLORER (animated simulations) ─────────────────────── */}
+      <ApproachExplorer />
 
       {/* ── HOW IT WORKS ─────────────────────────────────────────────────── */}
       <section className="shell pb-28">

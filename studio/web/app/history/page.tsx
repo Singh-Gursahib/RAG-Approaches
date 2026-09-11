@@ -220,6 +220,7 @@ function EvalRow({ ev, onDelete, onProfile }: { ev: StoredEval; onDelete: () => 
           {new Date(ev.createdAt).toLocaleString()} · {ev.results.totals.n_questions} Q · {fmtUSD(ev.totalCost)}
         </p>
       </div>
+      {ev.modelLabel && <Tag tone="neutral">{ev.modelLabel}</Tag>}
       {ev.source === "replay" && <Tag tone="accent">replay</Tag>}
       <ApproachDots approaches={ev.approaches} />
       <Button size="sm" variant="ghost" leftIcon={<Gauge className="h-4 w-4" />} onClick={onProfile}>Profile</Button>

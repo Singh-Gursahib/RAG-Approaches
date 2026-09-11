@@ -94,6 +94,11 @@ export interface StoredEval {
   approaches: ApproachKey[];
   results: EvalResults;
   totalCost: number;
+  /** OpenRouter model slug the evaluation ran on. */
+  model?: string;
+  modelLabel?: string;
+  /** Id of the matching JSON file in studio/results/, when the server saved one. */
+  savedResultId?: string;
 }
 
 function readEvals(): StoredEval[] {

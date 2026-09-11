@@ -50,6 +50,11 @@ fi
 if [ "$REGEN" = "1" ]; then
     echo "[paper] regenerating sweep aggregates + figures..."
     .venv/bin/python scripts/aggregate_seeds.py >/dev/null
+    if ls studio/results/*.json >/dev/null 2>&1; then
+        .venv/bin/python scripts/export_cross_model_tables.py >/dev/null
+    else
+        echo "[paper] no saved RAG Atlas results; keeping existing GLM 5.3 Flash tables."
+    fi
     .venv/bin/python scripts/make_paper_figures.py >/dev/null
     .venv/bin/python scripts/make_paper_figures_extra.py >/dev/null
     .venv/bin/python scripts/make_paper_figures_ieee.py >/dev/null

@@ -5,8 +5,8 @@
 
 ## Project summary
 **RAG Atlas** (product name — confirmed) is a new, world-class **Next.js + FastAPI** app (lives under `studio/`) that
-lets users live-test the 7 RAG / non-RAG strategies from the RAG_Ureap research project using **their
-own Gemini API key**, on **their own documents** — with an Apple-grade, educational interface. It is
+lets users live-test the 7 RAG / non-RAG strategies from the RAG_Ureap research project using **any
+OpenRouter model with their own OpenRouter key**, on **their own documents** — with an Apple-grade, educational interface. It is
 NOT the existing `frontend/web/` static results dashboard; that one only visualizes the paper's fixed
 numbers. Studio runs approaches *live* and teaches users which approach fits which domain.
 
@@ -17,8 +17,12 @@ package read-only via a FastAPI server and surfaces it through a polished UI.
 - **Backend:** FastAPI (`studio/server/`) reusing `ragureap` (the editable install in repo `.venv`).
   SSE for live trace/cost streaming. In-memory session + per-(session,approach) index cache.
 - **Frontend:** Next.js 14 App Router + TypeScript + Tailwind + Framer Motion + recharts + lucide.
-- **BYO key (hard rule):** Gemini key entered in browser → `sessionStorage` only → sent per-request as
-  `X-Gemini-Key` header → **never persisted server-side, never logged, never in any response/error.**
+- **BYO key (hard rule):** OpenRouter key entered in browser → `sessionStorage` only → sent per-request as
+  `X-OpenRouter-Key` header → **never persisted server-side, never logged, never in any response/error.**
+  Fallback: `OPENROUTER_API_KEY` in repo-root `.env` (gitignored, chmod 600). Never print/commit it; never type it into web forms.
+- **Anonymity to OpenRouter (hard rule, user-requested):** send ONLY `Authorization` + `Content-Type`. Never
+  `HTTP-Referer`, `X-OpenRouter-Title`/`X-Title`, `X-OpenRouter-Categories`, `X-OpenRouter-App-Visibility`, or a `user` field.
+  All calls server-side (`app/openrouter.py`); `tests/test_openrouter.py` enforces it.
 - **No DB, no auth, no 3rd-party services.** History + saved configs are browser-local (IndexedDB).
 - **Local-first:** `studio/run.sh` (and `make studio`) boots server + web together.
 - **Do NOT modify `src/ragureap/` core.** If unavoidable, log in repo `DECISIONS.md` first.
@@ -51,12 +55,57 @@ package read-only via a FastAPI server and surfaces it through a polished UI.
 - ✅ P10 Polish, a11y, perf, docs, QA — DONE. Mobile nav menu (Header). recharts code-split via next/dynamic (ParetoChart/ProbeRadar) → first-load JS dropped ~100kB on heavy routes (evaluate 247→148, compare/profiler ~206→~105, replay 243→144). a11y: darkened ink-muted/faint for AA, Modal focus mgmt + return focus, aria-live on streaming regions, aria-current/labels on nav. Removed /kitchen. FooterHelp (glossary/tour links). Wrote studio/README.md (detailed) + QA_CHECKLIST.md; root README links to studio. lint clean, tsc clean, 24 backend tests pass, all 8 routes 200 + /kitchen 404.
 
 ## ✅ PROJECT COMPLETE — all 10 phases done. RAG Atlas is feature-complete and shippable.
-- ⬜ P5  Playground (ask-anything live runner)
-- ⬜ P6  Comparison & data visualization
-- ⬜ P7  Full evaluation harness UI
-- ⬜ P8  Replay case study, cost/latency profiler & recommendations engine
-- ⬜ P9  Experiment history, saved configs, onboarding & education layer
-- ⬜ P10 Polish, accessibility, performance, docs & QA
+
+## OpenRouter migration (2026-09-10) — DONE in code, GUI test pending
+- Backend: `openrouter.py` (client: reasoning "lowest" = none if allowed else lowest effort; max_tokens scaled by
+  effort fraction to keep 512-token answer budget; retry once on empty+length; cost from usage.cost), `models_catalog.py`
+  (5 curated: google/gemini-3-flash-preview [paper], google/gemini-3.7-flash, google/gemini-3.8-flash, z-ai/glm-5.3-flash,
+  deepseek/deepseek-v4.1-flash; live /models 1h cache + `data/openrouter_models_snapshot.json`), `results_store.py`
+  (`studio/results/*.json`), routers `results.py` (/results, /results/{id}), /models, /models/lookup, /pricing?model=.
+- Evals take `repeats` 1–5 (seeds 0..n-1). Aggregation = paper's `scripts/aggregate_seeds.py` (mean of per-run means,
+  ddof=1 std, pooled bootstrap CI n_boot=2000 seed=0, cost per run). recursive_summary gets a fresh instance per repeat.
+  Question concurrency 4 only for full_context/sliding_window/recursive_summary.
+- Chroma shim in service.py: unique collection names (in-process EphemeralClients shared "ragureap" and clobbered each other).
+- `server/scripts/import_paper_sweep.py` → saved result `20260512T163536Z_replay_google-gemini-3-flash-preview_paper-sweep`
+  (verified == paper/tables/sweep_headline.csv). 45 backend tests pass.
+- Web: `components/run/ModelPicker.tsx` (dropdown + custom slug + reasoning + RunsControl), `lib/model.ts` (useLLMConfig,
+  remembered choice), `components/eval/{SavedResultsModal (“Load the results from a previous test”),ResultMetaCard}`,
+  Replay (model, T, runs, paper-settings button, similarity stats vs paper), Evaluate (Step 4 Model), multi-run Leaderboard/QuestionExplorer.
+- `.claude/launch.json`: rag-atlas-api (:8000) + rag-atlas-web (:3000).
+
+## GLM 5.3 Flash GUI test — DONE 2026-09-11
+- Saved: `studio/results/20260911T062638Z_replay_z-ai-glm-5-3-flash_bebd51.json` (T=0.3, 3 runs, low effort, max_tokens 640,
+  32.7 min, $0.2276, 1147 calls, 13 truncation retries, 0 errors). 61 screenshots + `studio/docs/walkthrough/WALKTHROUGH.md`
+  (built by `automation/build-walkthrough.js` from `capture-log.jsonl`; capture scripts `capture-tour.js`, `capture-replay.js`).
+- F1 GLM vs Gemini(paper): rerank .871/.833, naive .862/.836, hybrid .833/.797, hyde .813/.838, sliding .808/.875,
+  recursive .717/.206, full_context .490/.881 (real model behaviour: full prompt sent, ~9.4K tok/q; GLM says NOT_IN_CONTEXT /
+  misreads numbers). Spearman ρ=-0.36; RAG strategies within ±4 pts; non-RAG swing hugely by model.
+- Follow-up (user-approved) `…glm-5-3-flash_662a06.json`: Full-Context only, **high** effort (max_tokens 2560), 3 runs →
+  F1 .915±.007 EM .755, $0.0070/run, 0 truncation retries, ~61 reasoning tok/call. Low effort (640) had 11 retries, ~209
+  reasoning tok/call, F1 .490 → the collapse was a starved reasoning/token budget, NOT a GLM long-context weakness.
+  "Lowest available" + 512 answer budget starves mandatory-reasoning models on long prompts; flag before paper claims.
+- FIX (user-approved): `openrouter.MIN_REASONING_TOKENS = 1024` → max_tokens ≥ 1024/effort_fraction (GLM low → 5120).
+  Check run `…_0220b6.json` (Full-Context, lowest→low, 5120, 1 run): F1 .931 EM .794, 0 retries, $0.0091. 47 tests pass.
+- Word guide: `studio/docs/walkthrough/RAG-Atlas-User-Guide.docx` (28 pp, 48 figs, 1.9 MB) from `automation/build-guide.js`
+  (hand-written task-based chapters; 2-per-row grid tables; images from `prepare-doc-images.py` → screenshots/doc-images/ JPEG
+  1100px + manifest). USER RULES for the doc: NO file paths under images, NO screenshot appendix, NO folder/file references
+  (doc is shared alone); simulations are a gallery, not "steps"; compact layout. Focused captures: `capture-guide-extras.js`
+  (g-sim-*, compare/eval/recommend/profiler/history panels), `capture-guide-loaded.js` (path lines hidden via DOM).
+- Paper work (paused for the doc): `scripts/export_cross_model_tables.py` → paper/tables/glm53_*.csv, cross_model_f1.csv;
+  figure script rewritten (log-cost Pareto w/ label repel, cross-model F1 forest, 2-panel heatmap, honesty dot plot).
+  Label placement: obstacle-aware 2-pass repel (strict nearest-anchor, then leader lines) + horizontal dodge (disclosed in caption).
+- ✅ PAPER REVISED (2026-09-11): `paper/ieee_draft.tex` rewritten → 11 pp, 0 em dashes, builds clean (only font-shape warnings).
+  Two generators (Gemini sweep $1.09 est.; GLM $0.26 billed). New: Table II cross-model, Fig cross_model_f1, figure* heatmap +
+  Pareto (both models), Sec "Reasoning Headroom". Claims verified vs CSVs: RAG |Δ|≤3.8 (mean 3.1), within-model spread 67.5/38.1,
+  5/7 in Gemini CIs w/ headroom, ρ=0.39, RS 0.206→0.717, SW refusal 0.667 on GLM. Forest_f1 figure dropped from tex.
+  Not updated (not asked): FINDINGS.md, paper/draft.tex (accessible v1).
+- Fixed during test: Next dev proxy gzip buffered SSE → `compress:false` + `Cache-Control: no-cache, no-transform` + 15s keepalive.
+
+## User's pending asks (in order) — see conversation
+1. ✅ GLM GUI test + walkthrough MD.
+2. **STOP and ask before creating the Word "how to use" doc** — user will say when.
+3. Then paper: remove em dashes, fix overlapping scatter/Pareto points, add GLM 5.3 Flash results + similarity to Gemini,
+   frame as model-agnostic (pipeline choice matters more than the LLM).
 
 Legend: ✅ done · 🟡 in progress · ⬜ not started
 
@@ -109,7 +158,7 @@ stream post-hoc per approach). To run: `./studio/run.sh` or `make studio`. QA: s
 ## Decisions confirmed by user (2026-06-02)
 - ✅ Product name: **RAG Atlas** (RAG-oriented, has a homepage — built).
 - ✅ May use repo `.env` `GOOGLE_API_KEY` for dev testing live runs — **be frugal** (minimal calls; always mock in automated tests).
-- ✅ **Gemini-only for v1**; design the LLM layer so other providers can be added later (documented extension point).
+- ~~Gemini-only for v1~~ → superseded 2026-09-10: **OpenRouter for all models** (user request), anonymous (no attribution headers).
 - ✅ Plan approved; agent-first phased workflow.
 
 ## Blockers / open questions

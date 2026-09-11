@@ -34,15 +34,20 @@ export default function ProfilerPage() {
     const id = new URLSearchParams(window.location.search).get("eval");
     if (id) setSelectedId(id);
     window.addEventListener("rag-atlas:evals-change", load);
-    api.pricing().then((p) => {
-      setDefaults({ input_per_m: p.input_per_m, output_per_m: p.output_per_m });
-      setInPrice(p.input_per_m);
-      setOutPrice(p.output_per_m);
-    }).catch(() => {});
     return () => window.removeEventListener("rag-atlas:evals-change", load);
   }, []);
 
   const ev = useMemo(() => evals.find((e) => e.id === selectedId) ?? evals[0], [evals, selectedId]);
+  const evModel = ev?.model;
+
+  // Start from the list price of the model the evaluation ran on.
+  useEffect(() => {
+    api.pricing(evModel).then((p) => {
+      setDefaults({ input_per_m: p.input_per_m, output_per_m: p.output_per_m });
+      setInPrice(p.input_per_m);
+      setOutPrice(p.output_per_m);
+    }).catch(() => {});
+  }, [evModel]);
 
   const rows = useMemo(() => {
     if (!ev) return [];
@@ -99,7 +104,8 @@ export default function ProfilerPage() {
           <p className="eyebrow">Profiling</p>
           <p className="mt-1 font-display text-[20px] tracking-tight">{ev.label}</p>
           <p className="mt-0.5 text-[12.5px] text-ink-faint">
-            {ev.source === "replay" ? "Replay" : "Custom"} · {ev.results.totals.n_questions} questions ·{" "}
+            {ev.source === "replay" ? "Replay" : "Custom"} · {ev.modelLabel ?? ev.model ?? "model not recorded"} ·{" "}
+            {ev.results.totals.n_questions} questions ·{" "}
             {new Date(ev.createdAt).toLocaleString()}
           </p>
         </div>

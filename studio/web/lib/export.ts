@@ -16,7 +16,10 @@ export function exportJSON(results: EvalResults, label = "rag-atlas-eval") {
 }
 
 export function exportCSV(results: EvalResults, label = "rag-atlas-eval") {
-  const headers = ["approach", "n", "em", "em_lo", "em_hi", "f1", "f1_lo", "f1_hi", "cost_usd", "tokens_in", "tokens_out", "p50_ms", "p95_ms"];
+  const headers = [
+    "approach", "n", "n_seeds", "em", "em_seed_std", "em_lo", "em_hi", "f1", "f1_seed_std", "f1_lo", "f1_hi",
+    "cost_usd", "tokens_in", "tokens_out", "reasoning_tokens", "llm_calls", "p50_ms", "p95_ms", "errors",
+  ];
   const lines = [headers.join(",")];
   for (const r of results.headline) {
     lines.push(headers.map((h) => (r as unknown as Record<string, unknown>)[h] ?? "").join(","));

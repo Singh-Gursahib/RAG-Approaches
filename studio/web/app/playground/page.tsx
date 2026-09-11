@@ -14,11 +14,13 @@ import { KeyModal } from "@/components/shell/KeyModal";
 import { CorpusUploader, type CorpusState } from "@/components/run/CorpusUploader";
 import { ApproachPicker } from "@/components/run/ApproachPicker";
 import { RetrievalConfig } from "@/components/run/RetrievalConfig";
+import { ModelPicker } from "@/components/run/ModelPicker";
 import { AnswerCard } from "@/components/run/AnswerCard";
 import type { ApproachRunState } from "@/components/run/runState";
 import { api, ApiError } from "@/lib/api";
 import { useStream } from "@/lib/sse";
 import { useKey } from "@/lib/useKey";
+import { useLLMConfig } from "@/lib/model";
 import { fmtUSD } from "@/lib/format";
 import { saveRun, newId, takePendingConfig, saveConfig } from "@/lib/store";
 import { SAMPLE_QUESTIONS } from "@/lib/samples";
@@ -47,7 +49,7 @@ export default function PlaygroundPage() {
   const [corpus, setCorpus] = useState<CorpusState>(DEFAULT_CORPUS);
   const [approaches, setApproaches] = useState<ApproachKey[]>(["naive", "rerank", "full_context"]);
   const [retrieval, setRetrieval] = useState<RC>({ top_k: 5, top_n_for_rerank: 20 });
-  const [llm, setLLM] = useState<LLMConfig>({ model: "gemini-3-flash-preview", temperature: 0, max_output_tokens: 256 });
+  const [llm, setLLM] = useLLMConfig({ temperature: 0, max_output_tokens: 512 });
   const [question, setQuestion] = useState("");
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [keyModal, setKeyModal] = useState(false);
@@ -246,12 +248,15 @@ export default function PlaygroundPage() {
           onChange={setApproaches}
           corpusTokens={corpus.stats?.est_tokens ?? null}
         />
+        <div className="mt-5 rounded-card border border-line bg-canvas/40 p-4">
+          <ModelPicker llm={llm} onChange={setLLM} disabled={running} />
+        </div>
         <div className="mt-4 flex flex-wrap items-center gap-3">
           <button
             onClick={() => setShowAdvanced((v) => !v)}
             className="text-[12.5px] text-ink-faint hover:text-ink"
           >
-            {showAdvanced ? "Hide" : "Show"} retrieval & model settings
+            {showAdvanced ? "Hide" : "Show"} retrieval & sampling settings
           </button>
           <span className="text-ink-faint">·</span>
           {savingConfig ? (

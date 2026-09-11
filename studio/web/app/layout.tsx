@@ -18,7 +18,7 @@ const jetbrains = JetBrains_Mono({
 export const metadata: Metadata = {
   title: "RAG Atlas — find the right retrieval strategy for your corpus",
   description:
-    "Live-test seven RAG and non-RAG strategies on your own documents with your own Gemini key. Compare answers, cost, latency, and hallucination risk — then get a domain-aware recommendation.",
+    "Live-test seven RAG and non-RAG strategies on your own documents with any OpenRouter model. Compare answers, cost, latency, and hallucination risk, then get a domain-aware recommendation.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

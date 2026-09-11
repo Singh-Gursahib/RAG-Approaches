@@ -1,11 +1,11 @@
 // Bring-Your-Own-Key storage.
 //
-// HARD RULE: the Gemini API key lives only in this browser tab's sessionStorage.
-// It is sent to the backend per-request via the X-Gemini-Key header and is never
+// HARD RULE: the OpenRouter API key lives only in this browser tab's sessionStorage.
+// It is sent to the backend per-request via the X-OpenRouter-Key header and is never
 // persisted to disk server-side, never logged, and never written to localStorage
 // (which would survive tab close). The full key is never rendered after entry.
 
-const KEY_STORAGE = "rag-atlas:gemini-key";
+const KEY_STORAGE = "rag-atlas:openrouter-key";
 
 export function getKey(): string | null {
   if (typeof window === "undefined") return null;

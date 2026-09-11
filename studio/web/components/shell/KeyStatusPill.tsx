@@ -7,7 +7,7 @@ import { useKey } from "@/lib/useKey";
 import { KeyModal } from "./KeyModal";
 
 export function KeyStatusPill() {
-  const { present } = useKey();
+  const { present, browserKey } = useKey();
   const [open, setOpen] = useState(false);
 
   return (
@@ -22,7 +22,7 @@ export function KeyStatusPill() {
         )}
       >
         <KeyRound className="h-3.5 w-3.5" />
-        {present ? "Key connected" : "Add your key"}
+        {browserKey ? "Key connected" : present ? "Server key" : "Add your key"}
       </button>
       <KeyModal open={open} onClose={() => setOpen(false)} />
     </>

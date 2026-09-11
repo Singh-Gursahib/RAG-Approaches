@@ -14,6 +14,10 @@ from typing import Callable
 from starlette.responses import StreamingResponse
 
 _SENTINEL = object()
+# A comment frame sent during quiet stretches (index builds, slow model calls) so
+# proxies and clients don't close an idle stream. Clients ignore comment frames.
+KEEPALIVE_S = 15.0
+_KEEPALIVE_FRAME = ": keepalive\n\n"
 
 
 def format_sse(payload: dict) -> str:
@@ -49,7 +53,11 @@ def sse_response(worker: Callable[[Callable[[dict], None]], None]) -> StreamingR
         fut = loop.run_in_executor(None, run)
         try:
             while True:
-                item = await queue.get()
+                try:
+                    item = await asyncio.wait_for(queue.get(), timeout=KEEPALIVE_S)
+                except asyncio.TimeoutError:
+                    yield _KEEPALIVE_FRAME
+                    continue
                 if item is _SENTINEL:
                     break
                 yield format_sse(item)
@@ -60,7 +68,9 @@ def sse_response(worker: Callable[[Callable[[dict], None]], None]) -> StreamingR
         gen(),
         media_type="text/event-stream",
         headers={
-            "Cache-Control": "no-cache",
+            # no-transform stops compressing proxies (e.g. the Next dev server) from
+            # buffering small events until the stream ends.
+            "Cache-Control": "no-cache, no-transform",
             "Connection": "keep-alive",
             "X-Accel-Buffering": "no",  # disable proxy buffering
         },
