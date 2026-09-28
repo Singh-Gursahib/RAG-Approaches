@@ -319,7 +319,7 @@ See [`QA_CHECKLIST.md`](QA_CHECKLIST.md) for the manual test pass.
 ## How it relates to the research
 
 RAG Atlas is the interactive surface of the **RAG_Ureap** project — a reproducible comparison of these
-seven strategies that culminated in the paper *"Which RAG for Which Domain?"*. The paper's central
+seven strategies that culminated in the paper *"Choosing Retrieval-Augmented Generation Strategies by Domain: An Empirical Comparison"*. The paper's central
 claim is that its evaluation should be **reproducible by anyone, on any domain, in about an hour, with
 whichever model they prefer.** RAG Atlas is how you do exactly that.
 

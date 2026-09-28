@@ -87,9 +87,9 @@ With sliding_window's two missing seeds now in, **full_context overtakes sliding
 
 ### Pareto picture
 
-The figures in `paper/figures/` tell the cost × quality story:
+The figures in `paper/figures_ieee/` tell the cost × quality story:
 
-- **`pareto_cost_quality.pdf`** — full_context and sliding_window both sit far to the upper-right (high quality, high cost). The four "single-LLM-call" RAG approaches cluster tightly around $0.012 / F1 0.80–0.84. Rerank wins among them.
+- **`pareto.pdf`** — full_context and sliding_window both sit far to the upper-right (high quality, high cost). The four "single-LLM-call" RAG approaches cluster tightly around $0.012 / F1 0.80–0.84. Rerank wins among them.
 - **`forest_f1.pdf`** — forest plot with pooled 95% CIs. F1 confidence intervals do *not* overlap recursive_summary; they *do* overlap among the top 6 in places, but the rank order is consistent with point estimates.
 - **`win_loss.pdf`** — head-to-head heatmap. sliding_window and full_context show net-positive cells against all single-call RAG approaches.
 
