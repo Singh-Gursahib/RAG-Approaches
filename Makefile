@@ -1,4 +1,4 @@
-.PHONY: help install lint test ingest run ui studio clean
+.PHONY: help install lint test ingest run ui studio clean paper-ieee paper-ieee-regen
 
 help:  ## Show this help.
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-12s\033[0m %s\n", $$1, $$2}'
@@ -22,14 +22,8 @@ run:  ## Run one approach. Usage: make run config=configs/approaches/naive.yaml
 dashboard-data:  ## Regenerate frontend/web/lib/data.json from runs/.
 	.venv/bin/python scripts/build_dashboard_data.py
 
-paper:  ## Build paper/draft.pdf (accessible v1) from paper/draft.tex.
-	./paper/build.sh
-
 paper-ieee:  ## Build paper/ieee_draft.pdf (IEEE conference, 2-column).
 	./paper/build.sh ieee_draft
-
-paper-regen:  ## Regen all sweep aggregates + figures, then build the accessible v1.
-	./paper/build.sh --regen
 
 paper-ieee-regen:  ## Regen IEEE figures, then build the IEEE paper.
 	./paper/build.sh ieee_draft --regen

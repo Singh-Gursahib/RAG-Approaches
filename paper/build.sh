@@ -2,8 +2,7 @@
 # Compile a paper source (paper/<NAME>.tex → paper/<NAME>.pdf) using tectonic.
 #
 # Usage:
-#   ./paper/build.sh                     # build paper/draft.tex (accessible v1)
-#   ./paper/build.sh ieee_draft          # build paper/ieee_draft.tex (IEEE v2)
+#   ./paper/build.sh                     # build paper/ieee_draft.tex (IEEE paper)
 #   ./paper/build.sh --open              # build then open in default viewer (macOS)
 #   ./paper/build.sh --regen             # regenerate figures + tables first, then build
 #   ./paper/build.sh ieee_draft --regen  # regenerate IEEE figures, then build
@@ -20,7 +19,7 @@ cd "$PROJECT_ROOT"
 
 REGEN=0
 OPEN_AFTER=0
-TARGET="draft"
+TARGET="ieee_draft"
 for arg in "$@"; do
     case "$arg" in
         --regen) REGEN=1 ;;
@@ -55,8 +54,6 @@ if [ "$REGEN" = "1" ]; then
     else
         echo "[paper] no saved RAG Atlas results; keeping existing GLM 5.3 Flash tables."
     fi
-    .venv/bin/python scripts/make_paper_figures.py >/dev/null
-    .venv/bin/python scripts/make_paper_figures_extra.py >/dev/null
     .venv/bin/python scripts/make_paper_figures_ieee.py >/dev/null
     echo "[paper] figures and tables refreshed."
 fi
